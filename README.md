@@ -1,4 +1,4 @@
-# This is my package incrudible
+# Incrudible
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dreammonkey/incrudible.svg?style=flat-square)](https://packagist.org/packages/dreammonkey/incrudible)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/dreammonkey/incrudible/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/dreammonkey/incrudible/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -7,7 +7,7 @@
 
 Incrudible is yet another Admin panel that is based on the laravel inertia react typescript stack.
 It borrows some behavior from Laravel Breeze scaffolding and some from Backpack.
-Its setup is unique because it allows full control over the backend as well as over the frontend of the admin panel, this in contract to some popular livewire / vue based admin panels.
+Its setup is unique because it allows full control over the backend as well as over the frontend of the admin panel, this in contrast to some popular livewire / vue based admin panels.
 
 ## ROADMAP
 
