@@ -3,10 +3,10 @@
 namespace Incrudible\Incrudible\Commands;
 
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class CreateAdmin extends Command
@@ -46,18 +46,18 @@ class CreateAdmin extends Command
 
         $this->info('Creating new admin user...');
 
-        $git_username = trim(Process::run("git config user.name")->output());
-        $git_email = trim(Process::run("git config user.email")->output());
+        $git_username = trim(Process::run('git config user.name')->output());
+        $git_email = trim(Process::run('git config user.email')->output());
 
-        if (!$username = $this->option('username')) {
+        if (! $username = $this->option('username')) {
             $username = $this->ask('Username', $git_username);
         }
 
-        if (!$email = $this->option('email')) {
+        if (! $email = $this->option('email')) {
             $email = $this->ask('Email', $git_email);
         }
 
-        if (!$password = $this->option('password')) {
+        if (! $password = $this->option('password')) {
             $password = $this->secret('Password (leave blank to autogenerate)');
         }
 
@@ -80,7 +80,6 @@ class CreateAdmin extends Command
         $admin->username = $username;
         $admin->email = $email;
         $admin->password = $password_hashed;
-
 
         try {
             $admin->save();

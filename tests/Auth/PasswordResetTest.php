@@ -1,14 +1,13 @@
 <?php
 
-use function Pest\Laravel\assertDatabaseHas;
-use function Pest\Laravel\get;
-use function Pest\Laravel\from;
-use function Pest\Laravel\post;
-
 use App\Incrudible\Models\Admin;
-use Illuminate\Support\Facades\Notification;
 use App\Incrudible\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+
+use function Pest\Laravel\from;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
 
 beforeEach(function () {
     $this->admin = Admin::factory()->create();

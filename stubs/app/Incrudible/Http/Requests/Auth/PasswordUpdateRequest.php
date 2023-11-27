@@ -2,8 +2,8 @@
 
 namespace App\Incrudible\Http\Requests\Auth;
 
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class PasswordUpdateRequest extends FormRequest

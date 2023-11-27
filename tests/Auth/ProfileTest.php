@@ -1,8 +1,8 @@
 <?php
 
+use App\Incrudible\Models\Admin;
 use Carbon\Carbon;
 
-use App\Incrudible\Models\Admin;
 use function Pest\Laravel\actingAs;
 
 beforeEach(function () {

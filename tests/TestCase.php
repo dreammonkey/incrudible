@@ -2,8 +2,8 @@
 
 namespace Incrudible\Incrudible\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use Incrudible\Incrudible\IncrudibleServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -27,7 +27,7 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        $migration = include __DIR__ . '/../database/migrations/create_admins_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/create_admins_table.php.stub';
         $migration->up();
     }
 }

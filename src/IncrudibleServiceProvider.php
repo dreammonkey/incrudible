@@ -3,14 +3,14 @@
 namespace Incrudible\Incrudible;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Spatie\LaravelPackageTools\Package;
 use Incrudible\Incrudible\Commands\CreateAdmin;
 use Incrudible\Incrudible\Commands\ScaffoldIncrudible;
 use Incrudible\Incrudible\Traits\RegistersAuthProvider;
 use Incrudible\Incrudible\Traits\RegistersMiddleware;
 use Incrudible\Incrudible\Traits\RegistersRouteMacros;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class IncrudibleServiceProvider extends PackageServiceProvider
 {
@@ -39,11 +39,10 @@ class IncrudibleServiceProvider extends PackageServiceProvider
 
                 $command
                     ->publishConfigFile()
-                    ->publishMigrations()
-                    // ->publishAssets()
-                    // ->askToRunMigrations()
-                    // ->askToStarRepoOnGitHub('dreammonkey/incrudible')
-                ;
+                    ->publishMigrations();
+                // ->publishAssets()
+                // ->askToRunMigrations()
+                // ->askToStarRepoOnGitHub('dreammonkey/incrudible')
             });
     }
 
@@ -63,6 +62,6 @@ class IncrudibleServiceProvider extends PackageServiceProvider
      */
     public function loadHelpers()
     {
-        require __DIR__ . '/helpers.php';
+        require __DIR__.'/helpers.php';
     }
 }

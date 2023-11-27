@@ -2,13 +2,13 @@
 
 namespace App\Incrudible\Http\Controllers;
 
+use App\Incrudible\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Incrudible\Incrudible\Facades\Incrudible;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Incrudible\Incrudible\Facades\Incrudible;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Incrudible\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {

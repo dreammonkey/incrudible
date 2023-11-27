@@ -28,7 +28,7 @@ class ProfileUpdateRequest extends FormRequest
             'username' => [
                 'required',
                 'string',
-                'max:255'
+                'max:255',
             ],
             'email' => [
                 'required',
@@ -37,7 +37,7 @@ class ProfileUpdateRequest extends FormRequest
                 'email',
                 'max:255',
                 Rule::unique(Admin::class)
-                    ->ignore(Incrudible::admin()->id)
+                    ->ignore(Incrudible::admin()->id),
             ],
         ];
     }

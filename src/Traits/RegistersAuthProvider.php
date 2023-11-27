@@ -22,8 +22,8 @@ trait RegistersAuthProvider
         app()->config['auth.providers'] = app()->config['auth.providers'] +
             [
                 Incrudible::guardName() => [
-                    'driver'  => 'eloquent',
-                    'model'   => config('incrudible.auth.user_model_fqn'),
+                    'driver' => 'eloquent',
+                    'model' => config('incrudible.auth.user_model_fqn'),
                 ],
             ];
 
@@ -31,7 +31,7 @@ trait RegistersAuthProvider
         app()->config['auth.guards'] = app()->config['auth.guards'] +
             [
                 Incrudible::guardName() => [
-                    'driver'   => 'session',
+                    'driver' => 'session',
                     'provider' => Incrudible::guardName(),
                 ],
             ];

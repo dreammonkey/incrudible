@@ -4,8 +4,8 @@ namespace App\Incrudible\Models;
 
 use App\Incrudible\Http\Resources\AdminResource;
 use Database\Factories\AdminFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 

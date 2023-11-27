@@ -9,7 +9,7 @@ trait MustConfirmPassword
 {
     public function confirmPassword(): ?RedirectResponse
     {
-        if (!session()->has('auth.password_confirmed_at')) {
+        if (! session()->has('auth.password_confirmed_at')) {
 
             session()->put('secured.intended', Route::current()->uri());
 

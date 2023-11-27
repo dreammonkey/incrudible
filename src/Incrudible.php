@@ -18,7 +18,7 @@ class Incrudible
     /**
      * Get the currently authenticated admin.
      */
-    public function admin(): Admin | null
+    public function admin(): ?Admin
     {
         return Auth::guard(self::guardName())->user();
     }

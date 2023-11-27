@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * TODO: facade doc blocks
- * 
+ *
  * @method static \Incrudible\Incrudible\Incrudible configNotPublished()
  *
  * @see \Incrudible\Incrudible

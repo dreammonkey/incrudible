@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('incrudible_route')) {
+if (! function_exists('incrudible_route')) {
 
     /**
      * Generate the URL to a named and prefixed incrudible route.
@@ -8,20 +8,17 @@ if (!function_exists('incrudible_route')) {
      * @param  array|string  $name
      * @param  mixed  $parameters
      * @param  bool  $absolute
-     * @return string
      */
     function incrudible_route($name = null, $parameters = [], $absolute = true): string
     {
-        return route(incrudible_route_prefix() . '.' . $name, $parameters, $absolute);
+        return route(incrudible_route_prefix().'.'.$name, $parameters, $absolute);
     }
 }
 
-if (!function_exists('incrudible_route_prefix')) {
+if (! function_exists('incrudible_route_prefix')) {
 
     /**
      * Returns the route prefix from the incrudible config.
-     *
-     * @return string
      */
     function incrudible_route_prefix(): string
     {
@@ -29,14 +26,12 @@ if (!function_exists('incrudible_route_prefix')) {
     }
 }
 
-if (!function_exists('incrudible_middleware')) {
+if (! function_exists('incrudible_middleware')) {
     /**
      * Return the key of the middleware used across incrudible.
      * That middleware checks if the visitor is an admin.
      *
      * @param $path
-     *
-     * @return string
      */
     function incrudible_middleware(): string
     {
@@ -44,7 +39,7 @@ if (!function_exists('incrudible_middleware')) {
     }
 }
 
-if (!function_exists('incrudible_guard_name')) {
+if (! function_exists('incrudible_guard_name')) {
     /*
      * Returns the name of the guard defined
      * by the application config

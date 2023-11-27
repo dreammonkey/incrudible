@@ -2,14 +2,13 @@
 
 namespace Incrudible\Incrudible\Traits;
 
-use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Str;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 
 trait BreezeHelpers
 {
-
     /**
      * Install the middleware to a group in the application Http Kernel.
      *
@@ -25,10 +24,10 @@ trait BreezeHelpers
         $middlewareGroups = Str::before(Str::after($httpKernel, '$middlewareGroups = ['), '];');
         $middlewareGroup = Str::before(Str::after($middlewareGroups, "'$group' => ["), '],');
 
-        if (!Str::contains($middlewareGroup, $name)) {
+        if (! Str::contains($middlewareGroup, $name)) {
             $modifiedMiddlewareGroup = str_replace(
-                $after . ',',
-                $after . ',' . PHP_EOL . '            ' . $name . ',',
+                $after.',',
+                $after.','.PHP_EOL.'            '.$name.',',
                 $middlewareGroup,
             );
 
@@ -57,7 +56,6 @@ trait BreezeHelpers
     /**
      * Installs the given Composer Packages into the application.
      *
-     * @param  array  $packages
      * @param  bool  $asDev
      * @return bool
      */
@@ -85,7 +83,6 @@ trait BreezeHelpers
     /**
      * Removes the given Composer Packages from the application.
      *
-     * @param  array  $packages
      * @param  bool  $asDev
      * @return bool
      */
@@ -113,13 +110,12 @@ trait BreezeHelpers
     /**
      * Update the "package.json" file.
      *
-     * @param  callable  $callback
      * @param  bool  $dev
      * @return void
      */
     protected static function updateNodePackages(callable $callback, $dev = true)
     {
-        if (!file_exists(base_path('package.json'))) {
+        if (! file_exists(base_path('package.json'))) {
             return;
         }
 
@@ -136,7 +132,7 @@ trait BreezeHelpers
 
         file_put_contents(
             base_path('package.json'),
-            json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL
+            json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL
         );
     }
 
@@ -192,12 +188,12 @@ trait BreezeHelpers
             try {
                 $process->setTty(true);
             } catch (\RuntimeException $e) {
-                $this->output->writeln('  <bg=yellow;fg=black> WARN </> ' . $e->getMessage() . PHP_EOL);
+                $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
             }
         }
 
         $process->run(function ($type, $line) {
-            $this->output->write('    ' . $line);
+            $this->output->write('    '.$line);
         });
     }
 }

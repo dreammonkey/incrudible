@@ -16,7 +16,7 @@ class MustConfirmPassword
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session()->has('auth.password_confirmed_at')) {
+        if (! session()->has('auth.password_confirmed_at')) {
 
             session()->put('must-confirm-password.intended', Route::current()->uri());
 

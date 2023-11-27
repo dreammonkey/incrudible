@@ -2,11 +2,11 @@
 
 namespace App\Incrudible\Http\Controllers\Auth;
 
-use Inertia\Inertia;
-use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 use App\Incrudible\Http\Controllers\Controller;
 use App\Incrudible\Http\Requests\Auth\PasswordConfirmRequest;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ConfirmablePasswordController extends Controller
 {

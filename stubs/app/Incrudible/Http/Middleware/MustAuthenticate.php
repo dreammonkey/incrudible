@@ -11,7 +11,6 @@ class MustAuthenticate
      * Answer to unauthorized access request.
      *
      * @param [type] $request [description]
-     *
      * @return [type] [description]
      */
     private function respondToUnauthorizedRequest(Request $request)
@@ -26,16 +25,15 @@ class MustAuthenticate
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  string  $guard
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $guard = "incrudible")
+    public function handle(Request $request, Closure $next, $guard = 'incrudible')
     {
-        if (!auth()->guard($guard)->check()) {
+        if (! auth()->guard($guard)->check()) {
             return $this->respondToUnauthorizedRequest($request);
         }
+
         return $next($request);
     }
 }
