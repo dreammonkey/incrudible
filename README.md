@@ -38,7 +38,10 @@ You can scaffold the admin panel code with:
 
 ```bash
 php artisan incrudible:scaffold
+# npm:
 npm ci && npm run dev
+# yarn:
+yarn && yarn dev
 ```
 
 ## Usage
