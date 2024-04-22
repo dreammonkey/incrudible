@@ -11,7 +11,12 @@
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
         "paths": {
-            "@/*": ["./resources/js/*"]
+            "ziggy-js": ["./vendor/tightenco/ziggy"],
+            "@/*": ["./resources/js/*"],
+            "@Incrudible/Components/*": [
+                "./resources/js/Incrudible/Components/*"
+            ],
+            "@Incrudible/ui/*": ["./resources/js/Incrudible/ui/*"]
         }
     },
     "include": [

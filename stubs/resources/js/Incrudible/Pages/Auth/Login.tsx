@@ -3,10 +3,10 @@ import Checkbox from "@/Incrudible/Components/Checkbox";
 import GuestLayout from "@/Incrudible/Layouts/GuestLayout";
 import InputError from "@/Incrudible/Components/InputError";
 import InputLabel from "@/Incrudible/Components/InputLabel";
-import PrimaryButton from "@/Incrudible/Components/PrimaryButton";
 import TextInput from "@/Incrudible/Components/TextInput";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
+import { Button } from "@/Incrudible/ui/button";
 
 export default function Login({
     status,
@@ -47,7 +47,7 @@ export default function Login({
             )}
 
             <form onSubmit={submit}>
-                <div>
+                <div className="bg-blue">
                     <InputLabel htmlFor="email" value="Email" />
 
                     <TextInput
@@ -105,9 +105,9 @@ export default function Login({
                         </Link>
                     )}
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <Button className="ms-4" disabled={processing}>
                         Log in
-                    </PrimaryButton>
+                    </Button>
 
                     <Link href={route(`${routePrefix}.auth.password.request`)}>
                         Forgot password ?
