@@ -31,6 +31,9 @@ class ScaffoldIncrudible extends Command
             return [
                 '@headlessui/react' => '^1.4.2',
                 '@inertiajs/react' => '^1.0.0',
+                '@radix-ui/react-checkbox' => '^1.0.4',
+                '@radix-ui/react-label' => '^2.0.2',
+                '@radix-ui/react-slot' => '^1.0.2',
                 '@tailwindcss/forms' => '^0.5.3',
                 '@vitejs/plugin-react' => '^4.0.3',
                 'autoprefixer' => '^10.4.12',
