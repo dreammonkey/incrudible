@@ -31,7 +31,7 @@ if (! function_exists('incrudible_middleware')) {
      * Return the key of the middleware used across incrudible.
      * That middleware checks if the visitor is an admin.
      *
-     * @param $path
+     * @param  $path
      */
     function incrudible_middleware(): string
     {
