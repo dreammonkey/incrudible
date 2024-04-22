@@ -1,11 +1,11 @@
 import InputError from "@/Incrudible/Components/InputError";
-import InputLabel from "@/Incrudible/Components/InputLabel";
-import PrimaryButton from "@/Incrudible/Components/PrimaryButton";
-import TextInput from "@/Incrudible/Components/TextInput";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import { FormEventHandler } from "react";
 import { PageProps } from "@/types";
+import { Button } from "@/Incrudible/ui/button";
+import { Input } from "@/Incrudible/ui/input";
+import { Label } from "@/Incrudible/ui/label";
 
 export default function UpdateProfileInformation({
     mustVerifyEmail,
@@ -45,32 +45,32 @@ export default function UpdateProfileInformation({
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="username" value="Username" />
+                    <Label htmlFor="username">Username</Label>
 
-                    <TextInput
+                    <Input
                         id="username"
-                        className="mt-1 block w-full"
+                        type="text"
+                        name="username"
                         value={data.username}
-                        onChange={(e) => setData("username", e.target.value)}
-                        required
-                        isFocused
                         autoComplete="username"
+                        required
+                        onChange={(e) => setData("username", e.target.value)}
                     />
 
                     <InputError className="mt-2" message={errors.username} />
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <Label htmlFor="email">Email</Label>
 
-                    <TextInput
+                    <Input
                         id="email"
                         type="email"
-                        className="mt-1 block w-full"
+                        name="email"
                         value={data.email}
+                        autoComplete="username"
                         onChange={(e) => setData("email", e.target.value)}
                         required
-                        autoComplete="username"
                     />
 
                     <InputError className="mt-2" message={errors.email} />
@@ -102,7 +102,7 @@ export default function UpdateProfileInformation({
                 )}
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                    <Button disabled={processing}>Save</Button>
 
                     <Transition
                         show={recentlySuccessful}

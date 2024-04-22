@@ -1,12 +1,12 @@
 import { useEffect, FormEventHandler } from "react";
-import Checkbox from "@/Incrudible/Components/Checkbox";
 import GuestLayout from "@/Incrudible/Layouts/GuestLayout";
 import InputError from "@/Incrudible/Components/InputError";
-import InputLabel from "@/Incrudible/Components/InputLabel";
-import TextInput from "@/Incrudible/Components/TextInput";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
 import { Button } from "@/Incrudible/ui/button";
+import { Input } from "@/Incrudible/ui/input";
+import { Checkbox } from "@/Incrudible/ui/checkbox";
+import { Label } from "@/Incrudible/ui/label";
 
 export default function Login({
     status,
@@ -48,16 +48,14 @@ export default function Login({
 
             <form onSubmit={submit}>
                 <div className="bg-blue">
-                    <InputLabel htmlFor="email" value="Email" />
+                    <Label htmlFor="email">Email</Label>
 
-                    <TextInput
+                    <Input
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
                         autoComplete="username"
-                        isFocused={true}
                         onChange={(e) => setData("email", e.target.value)}
                     />
 
@@ -65,14 +63,13 @@ export default function Login({
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <Label htmlFor="password">Password</Label>
 
-                    <TextInput
+                    <Input
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
                         autoComplete="current-password"
                         onChange={(e) => setData("password", e.target.value)}
                     />
@@ -80,18 +77,19 @@ export default function Login({
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData("remember", e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                            Remember me
-                        </span>
+                <div className="flex space-x-2 mt-4">
+                    <Checkbox
+                        id="remember"
+                        checked={data.remember}
+                        onCheckedChange={(checked) =>
+                            setData("remember", checked ? true : false)
+                        }
+                    />
+                    <label
+                        htmlFor="remember"
+                        className="text-sm pt-1 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                        Remember me
                     </label>
                 </div>
 
@@ -105,13 +103,16 @@ export default function Login({
                         </Link>
                     )}
 
-                    <Button className="ms-4" disabled={processing}>
-                        Log in
-                    </Button>
-
-                    <Link href={route(`${routePrefix}.auth.password.request`)}>
+                    <Link
+                        className="mr-auto text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                        href={route(`${routePrefix}.auth.password.request`)}
+                    >
                         Forgot password ?
                     </Link>
+
+                    <Button className="" disabled={processing}>
+                        Log in
+                    </Button>
                 </div>
             </form>
         </GuestLayout>

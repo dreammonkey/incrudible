@@ -1,11 +1,11 @@
 import { useEffect, FormEventHandler } from "react";
 import GuestLayout from "@/Incrudible/Layouts/GuestLayout";
 import InputError from "@/Incrudible/Components/InputError";
-import InputLabel from "@/Incrudible/Components/InputLabel";
-import PrimaryButton from "@/Incrudible/Components/PrimaryButton";
-import TextInput from "@/Incrudible/Components/TextInput";
 import { Head, useForm, usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
+import { Button } from "@/Incrudible/ui/button";
+import { Input } from "@/Incrudible/ui/input";
+import { Label } from "@/Incrudible/ui/label";
 
 export default function ConfirmPassword() {
     const { routePrefix } = usePage<PageProps>().props.incrudible;
@@ -37,15 +37,14 @@ export default function ConfirmPassword() {
 
             <form onSubmit={submit}>
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <Label htmlFor="password">Password</Label>
 
-                    <TextInput
+                    <Input
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
-                        isFocused={true}
+                        autoComplete="current-password"
                         onChange={(e) => setData("password", e.target.value)}
                     />
 
@@ -53,9 +52,9 @@ export default function ConfirmPassword() {
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <Button className="ms-4" disabled={processing}>
                         Confirm
-                    </PrimaryButton>
+                    </Button>
                 </div>
             </form>
         </GuestLayout>

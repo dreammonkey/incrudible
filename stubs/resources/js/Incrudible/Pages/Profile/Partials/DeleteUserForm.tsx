@@ -1,12 +1,11 @@
 import { useRef, useState, FormEventHandler } from "react";
-import DangerButton from "@/Incrudible/Components/DangerButton";
 import InputError from "@/Incrudible/Components/InputError";
-import InputLabel from "@/Incrudible/Components/InputLabel";
 import Modal from "@/Incrudible/Components/Modal";
-import SecondaryButton from "@/Incrudible/Components/SecondaryButton";
-import TextInput from "@/Incrudible/Components/TextInput";
 import { useForm, usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
+import { Button } from "@/Incrudible/ui/button";
+import { Input } from "@/Incrudible/ui/input";
+import { Label } from "@/Incrudible/ui/label";
 
 export default function DeleteUserForm({
     className = "",
@@ -64,9 +63,9 @@ export default function DeleteUserForm({
                 </p>
             </header>
 
-            <DangerButton onClick={confirmUserDeletion}>
+            <Button variant="destructive" onClick={confirmUserDeletion}>
                 Delete Account
-            </DangerButton>
+            </Button>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <form onSubmit={deleteUser} className="p-6">
@@ -82,24 +81,21 @@ export default function DeleteUserForm({
                     </p>
 
                     <div className="mt-6">
-                        <InputLabel
-                            htmlFor="password"
-                            value="Password"
-                            className="sr-only"
-                        />
+                        <Label htmlFor="password" className="sr-only">
+                            Password
+                        </Label>
 
-                        <TextInput
+                        <Input
                             id="password"
                             type="password"
                             name="password"
-                            ref={passwordInput}
                             value={data.password}
+                            autoComplete="current-password"
                             onChange={(e) =>
                                 setData("password", e.target.value)
                             }
-                            className="mt-1 block w-3/4"
-                            isFocused
                             placeholder="Password"
+                            autoFocus
                         />
 
                         <InputError
@@ -109,13 +105,17 @@ export default function DeleteUserForm({
                     </div>
 
                     <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeModal}>
+                        <Button variant="outline" onClick={closeModal}>
                             Cancel
-                        </SecondaryButton>
+                        </Button>
 
-                        <DangerButton className="ms-3" disabled={processing}>
+                        <Button
+                            variant="destructive"
+                            className="ms-3"
+                            disabled={processing}
+                        >
                             Delete Account
-                        </DangerButton>
+                        </Button>
                     </div>
                 </form>
             </Modal>

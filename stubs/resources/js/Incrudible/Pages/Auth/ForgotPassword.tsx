@@ -1,10 +1,10 @@
 import GuestLayout from "@/Incrudible/Layouts/GuestLayout";
 import InputError from "@/Incrudible/Components/InputError";
-import PrimaryButton from "@/Incrudible/Components/PrimaryButton";
-import TextInput from "@/Incrudible/Components/TextInput";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import { PageProps } from "@/types";
+import { Button } from "@/Incrudible/ui/button";
+import { Input } from "@/Incrudible/ui/input";
 
 export default function ForgotPassword({
     status,
@@ -38,22 +38,21 @@ export default function ForgotPassword({
             )}
 
             <form onSubmit={submit}>
-                <TextInput
+                <Input
                     id="email"
                     type="email"
                     name="email"
                     value={data.email}
-                    className="mt-1 block w-full"
-                    isFocused={true}
+                    autoComplete="username"
                     onChange={(e) => setData("email", e.target.value)}
                 />
 
                 <InputError message={errors.email} className="mt-2" />
 
                 <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <Button className="ms-4" disabled={processing}>
                         Email Password Reset Link
-                    </PrimaryButton>
+                    </Button>
 
                     <Link href={route(`${routePrefix}.auth.login`)}>
                         Back to login

@@ -1,8 +1,8 @@
 import GuestLayout from "@/Incrudible/Layouts/GuestLayout";
-import PrimaryButton from "@/Incrudible/Components/PrimaryButton";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { FormEventHandler } from "react";
 import { PageProps } from "@/types";
+import { Button } from "@/Incrudible/ui/button";
 
 export default function VerifyEmail({ status }: Readonly<{ status?: string }>) {
     const { routePrefix } = usePage<PageProps>().props.incrudible;
@@ -35,9 +35,9 @@ export default function VerifyEmail({ status }: Readonly<{ status?: string }>) {
 
             <form onSubmit={submit}>
                 <div className="mt-4 flex items-center justify-between">
-                    <PrimaryButton disabled={processing}>
+                    <Button disabled={processing}>
                         Resend Verification Email
-                    </PrimaryButton>
+                    </Button>
 
                     <Link
                         href={route(`${routePrefix}.auth.logout`)}

@@ -1,11 +1,11 @@
 import { useRef, FormEventHandler } from "react";
 import InputError from "@/Incrudible/Components/InputError";
-import InputLabel from "@/Incrudible/Components/InputLabel";
-import PrimaryButton from "@/Incrudible/Components/PrimaryButton";
-import TextInput from "@/Incrudible/Components/TextInput";
 import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import { PageProps } from "@/types";
+import { Button } from "@/Incrudible/ui/button";
+import { Input } from "@/Incrudible/ui/input";
+import { Label } from "@/Incrudible/ui/label";
 
 export default function UpdatePasswordForm({
     className = "",
@@ -14,8 +14,8 @@ export default function UpdatePasswordForm({
 }>) {
     const { routePrefix } = usePage<PageProps>().props.incrudible;
 
-    const passwordInput = useRef<HTMLInputElement>();
-    const currentPasswordInput = useRef<HTMLInputElement>();
+    const passwordInput = useRef<HTMLInputElement>(null!);
+    const currentPasswordInput = useRef<HTMLInputElement>(null!);
 
     const {
         data,
@@ -66,21 +66,18 @@ export default function UpdatePasswordForm({
 
             <form onSubmit={updatePassword} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel
-                        htmlFor="current_password"
-                        value="Current Password"
-                    />
+                    <Label htmlFor="current_password">Current Password</Label>
 
-                    <TextInput
+                    <Input
                         id="current_password"
                         ref={currentPasswordInput}
+                        type="password"
+                        name="current_password"
                         value={data.current_password}
+                        autoComplete="current-password"
                         onChange={(e) =>
                             setData("current_password", e.target.value)
                         }
-                        type="password"
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
                     />
 
                     <InputError
@@ -90,36 +87,35 @@ export default function UpdatePasswordForm({
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="password" value="New Password" />
+                    <Label htmlFor="password">New Password</Label>
 
-                    <TextInput
-                        id="password"
+                    <Input
                         ref={passwordInput}
-                        value={data.password}
-                        onChange={(e) => setData("password", e.target.value)}
+                        id="password"
                         type="password"
-                        className="mt-1 block w-full"
+                        name="password"
+                        value={data.password}
                         autoComplete="new-password"
+                        onChange={(e) => setData("password", e.target.value)}
                     />
 
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div>
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
+                    <Label htmlFor="password_confirmation">
+                        Confirm Password
+                    </Label>
 
-                    <TextInput
+                    <Input
                         id="password_confirmation"
+                        type="password"
+                        name="password_confirmation"
                         value={data.password_confirmation}
+                        autoComplete="new-password"
                         onChange={(e) =>
                             setData("password_confirmation", e.target.value)
                         }
-                        type="password"
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
                     />
 
                     <InputError
@@ -129,7 +125,7 @@ export default function UpdatePasswordForm({
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                    <Button disabled={processing}>Save</Button>
 
                     <Transition
                         show={recentlySuccessful}
