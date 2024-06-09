@@ -30,6 +30,7 @@ return [
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Incrudible\Http\Middleware\HandleIncrudibleRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
         // Alias for that middleware
