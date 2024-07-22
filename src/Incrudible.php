@@ -65,12 +65,21 @@ class Incrudible
     }
 
     /**
+     * Get the incrudible menu items.
+     */
+    public function menu(): array
+    {
+        return config('incrudible.menu', []);
+    }
+
+    /**
      * Convert this Incrudible class to an array.
      */
     public function toArray(): array
     {
         return [
             'routePrefix' => self::routePrefix(),
+            'menu' => self::menu(),
         ];
     }
 }

@@ -2,15 +2,19 @@
 
 namespace Incrudible\Incrudible;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Incrudible\Incrudible\Commands\CreateAdmin;
-use Incrudible\Incrudible\Commands\ScaffoldIncrudible;
-use Incrudible\Incrudible\Traits\RegistersAuthProvider;
-use Incrudible\Incrudible\Traits\RegistersMiddleware;
-use Incrudible\Incrudible\Traits\RegistersRouteMacros;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
+use Incrudible\Incrudible\Commands\CreateAdmin;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Incrudible\Incrudible\Traits\RegistersMiddleware;
+use Incrudible\Incrudible\Commands\ScaffoldIncrudible;
+use Incrudible\Incrudible\Traits\RegistersRouteMacros;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Incrudible\Incrudible\Traits\RegistersAuthProvider;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Incrudible\Incrudible\Commands\GenerateCrudRequests;
+use Incrudible\Incrudible\Commands\CrudIndexRequestMakeCommand;
+use Incrudible\Incrudible\Commands\CrudStoreRequestMakeCommand;
+use Incrudible\Incrudible\Commands\CrudUpdateRequestMakeCommand;
 
 class IncrudibleServiceProvider extends PackageServiceProvider
 {
@@ -34,6 +38,10 @@ class IncrudibleServiceProvider extends PackageServiceProvider
             ->hasCommands([
                 ScaffoldIncrudible::class,
                 CreateAdmin::class,
+                GenerateCrudRequests::class,
+                CrudIndexRequestMakeCommand::class,
+                CrudStoreRequestMakeCommand::class,
+                CrudUpdateRequestMakeCommand::class,
             ])
             ->hasInstallCommand(function (InstallCommand $command) {
 
@@ -48,7 +56,7 @@ class IncrudibleServiceProvider extends PackageServiceProvider
 
     public function bootingPackage()
     {
-        JsonResource::withoutWrapping();
+        // JsonResource::withoutWrapping();
 
         $this->loadHelpers();
         $this->registerAuthProvider();
@@ -62,6 +70,6 @@ class IncrudibleServiceProvider extends PackageServiceProvider
      */
     public function loadHelpers()
     {
-        require __DIR__.'/helpers.php';
+        require __DIR__ . '/helpers.php';
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Incrudible\Http\Controllers\Auth;
 
-use App\Incrudible\Http\Controllers\Controller;
-use App\Incrudible\Http\Requests\Auth\PasswordResetLinkRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Password;
+use App\Incrudible\Http\Controllers\Controller;
+use App\Incrudible\Http\Requests\Auth\PasswordResetLinkRequest;
 
 class PasswordResetLinkController extends Controller
 {
@@ -39,6 +39,6 @@ class PasswordResetLinkController extends Controller
 
         Log::info("Password reset link requested for email: {$email}, status: {$status}");
 
-        return back()->with('status', 'If there is an account for this admin a password reset link has been sent.');
+        return back()->with('status', 'If there is an account for this user a password reset link has been sent.');
     }
 }

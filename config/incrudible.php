@@ -5,6 +5,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Namespace
+    |--------------------------------------------------------------------------
+    */
+
+    // The namespace used in all generated files
+    'namespace' => 'App\Incrudible',
+
+    /*
+    |--------------------------------------------------------------------------
     | Routing
     |--------------------------------------------------------------------------
     */
@@ -42,5 +51,79 @@ return [
         'guard' => 'incrudible',
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Menu Items
+    |--------------------------------------------------------------------------
+    */
+
+    'menu' => [
+
+        // The menu items that will be displayed in the sidebar
+        'items' => [
+            [
+                'label' => 'Dashboard',
+                'icon' => 'Gauge',
+                'route' => 'dashboard',
+            ],
+            [
+                'label' => 'Admin management',
+                'icon' => 'ShieldAlert',
+                'items' => [
+                    [
+                        'label' => 'Admins',
+                        'icon' => 'Users',
+                        'route' => 'admins.index',
+                    ],
+                    // [
+                    //     'label' => 'Roles',
+                    //     'icon' => 'Shield',
+                    //     'route' => 'roles.index',
+                    // ],
+                    // [
+                    //     'label' => 'Permissions',
+                    //     'icon' => 'Lock',
+                    //     'route' => 'permissions.index',
+                    // ],
+                ],
+            ],
+            [
+                'label' => 'Settings',
+                'icon' => 'Settings',
+                'items' => [
+                    [
+                        'label' => 'Profile',
+                        'icon' => 'User',
+                        'route' => 'profile.edit',
+                    ],
+                    [
+                        'label' => 'Settings',
+                        'icon' => 'Settings2',
+                        'route' => 'settings',
+                    ],
+                    [
+                        'label' => 'Logout',
+                        'icon' => 'LogOut',
+                        'route' => 'logout',
+                    ],
+                ],
+            ]
+        ],
+
+        // The menu items that will be displayed in the top right corner
+        'top_right_items' => [
+            [
+                'label' => 'Profile',
+                'route' => 'profile.edit',
+            ],
+            [
+                'label' => 'Logout',
+                'route' => 'logout',
+            ],
+        ],
+
+    ],
+
 
 ];

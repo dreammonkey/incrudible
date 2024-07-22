@@ -2,10 +2,10 @@
 
 namespace App\Incrudible\Http\Middleware;
 
+use Inertia\Middleware;
+use Tighten\Ziggy\Ziggy;
 use Illuminate\Http\Request;
 use Incrudible\Incrudible\Facades\Incrudible;
-use Inertia\Middleware;
-use Tightenco\Ziggy\Ziggy;
 
 class HandleIncrudibleRequests extends Middleware
 {
@@ -42,6 +42,7 @@ class HandleIncrudibleRequests extends Middleware
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
+                'query' => $request->query(),
             ],
             'incrudible' => [
                 ...(Incrudible::toArray()),
