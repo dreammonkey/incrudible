@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.1 || ^8.2",
         "brick/varexporter": "^0.5.0",
         "illuminate/contracts": "^8.12|^9.0|^10.0|^11.0",
         "inertiajs/inertia-laravel": "^0.6.9|^1.2.0",
@@ -26,6 +26,7 @@
     },
     "require-dev": {
         "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.9 || ^8.0",
         "nunomaduro/larastan": "^2.0.1",
         "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0",
         "pestphp/pest": "^2.0",
@@ -76,5 +77,10 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "repositories": []
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:laravel/facade-documenter.git"
+        }
+    ]
 }
