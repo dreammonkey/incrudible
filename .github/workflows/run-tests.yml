@@ -8,20 +8,39 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        php: [8.2]
-        laravel: [11.*]
-        stability: [prefer-lowest, prefer-stable]
+        php: [8.3, 8.2, 8.1, 8.0]
+        laravel: ["^11.0", "^10.0", "^9.0", "^8.12"]
+        dependency-version: [prefer-lowest, prefer-stable]
         include:
-          - laravel: 11.*
+          - laravel: "^11.0"
             testbench: 9.*
             carbon: ^2.63
+          - laravel: "^10.0"
+            testbench: 8.*
+            carbon: ^2.63
+          - laravel: "^9.0"
+            testbench: 7.*
+            carbon: ^2.63
+          - laravel: "^8.12"
+            testbench: "^6.23"
+            carbon: ^2.63
+        exclude:
+          - laravel: "^11.0"
+            php: 8.1
+          - laravel: "^11.0"
+            php: 8.0
+          - laravel: "^10.0"
+            php: 8.0
+          - laravel: "^8.12"
+            php: 8.3
+          - laravel: "^8.12"
+            php: 8.4
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
       - name: Checkout code
