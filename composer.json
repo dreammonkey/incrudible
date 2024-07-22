@@ -82,10 +82,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:laravel/facade-documenter.git"
-        },
-        {
-            "type": "path",
-            "url": "../laravel-schema-rules"
         }
     ]
 }
