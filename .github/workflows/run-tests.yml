@@ -27,13 +27,13 @@ jobs:
           - laravel: 10.*
             testbench: 8.*
             carbon: ^2.63
-        exclude:
-          - php: 8.3
-            laravel: 10.*
-            stability: prefer-lowest
-          - php: 8.2
-            laravel: 10.*
-            stability: prefer-lowest
+        # exclude:
+        #   - php: 8.3
+        #     laravel: 10.*
+        #     stability: prefer-lowest
+        #   - php: 8.2
+        #     laravel: 10.*
+        #     stability: prefer-lowest
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
