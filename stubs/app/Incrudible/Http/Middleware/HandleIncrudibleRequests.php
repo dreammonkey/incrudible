@@ -2,10 +2,10 @@
 
 namespace App\Incrudible\Http\Middleware;
 
-use Inertia\Middleware;
-use Tighten\Ziggy\Ziggy;
 use Illuminate\Http\Request;
 use Incrudible\Incrudible\Facades\Incrudible;
+use Inertia\Middleware;
+use Tighten\Ziggy\Ziggy;
 
 class HandleIncrudibleRequests extends Middleware
 {

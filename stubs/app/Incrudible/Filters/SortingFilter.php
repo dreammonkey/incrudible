@@ -7,6 +7,7 @@ use Closure;
 class SortingFilter
 {
     protected $orderBy;
+
     protected $orderDir;
 
     public function __construct($orderBy, $orderDir)

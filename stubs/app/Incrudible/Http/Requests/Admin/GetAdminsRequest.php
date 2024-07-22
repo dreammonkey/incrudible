@@ -2,8 +2,8 @@
 
 namespace App\Incrudible\Http\Requests\Admin;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class GetAdminsRequest extends FormRequest
@@ -24,8 +24,8 @@ class GetAdminsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "page" => ["nullable", 'integer', 'min:1'],
-            'perPage' => ["nullable", 'integer', 'max:100', 'min:2'],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'perPage' => ['nullable', 'integer', 'max:100', 'min:2'],
             'orderDir' => ['nullable', 'in:desc,asc'],
             'orderBy' => ['nullable',  Rule::in([
                 'id',
@@ -37,7 +37,7 @@ class GetAdminsRequest extends FormRequest
                 'created_at',
                 'updated_at',
             ])],
-            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/']
+            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/'],
         ];
     }
 }

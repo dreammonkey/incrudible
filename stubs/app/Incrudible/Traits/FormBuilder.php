@@ -66,8 +66,8 @@ trait FormBuilder
     /**
      * Get the form field type for the given field.
      *
-     * @param string $field
-     * @param array $rules
+     * @param  string  $field
+     * @param  array  $rules
      * @return string
      */
     protected static function getFormFieldType($field, $rules)
@@ -93,7 +93,7 @@ trait FormBuilder
     /**
      * Get the form field label for the given field.
      *
-     * @param string $field
+     * @param  string  $field
      * @return string
      */
     protected static function getFormFieldLabel($field)
@@ -107,7 +107,7 @@ trait FormBuilder
     /**
      * Get the form field placeholder for the given field.
      *
-     * @param string $field
+     * @param  string  $field
      * @return string
      */
     protected static function getFormFieldPlaceholder($field)
@@ -121,7 +121,7 @@ trait FormBuilder
     /**
      * Get the form field options for the given field.
      *
-     * @param string $field
+     * @param  string  $field
      * @return array|null
      */
     protected static function getFormFieldOptions($field)
@@ -135,8 +135,8 @@ trait FormBuilder
     /**
      * Determine if the form field is required for the given field.
      *
-     * @param string $field
-     * @param array $rules
+     * @param  string  $field
+     * @param  array  $rules
      * @return bool
      */
     protected static function isFormFieldRequired($field, $rules)

@@ -2,9 +2,9 @@
 
 namespace Incrudible\Incrudible\Commands;
 
-use Illuminate\Support\Str;
 use Brick\VarExporter\VarExporter;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
 
 class CrudUpdateRequestMakeCommand extends GeneratorCommand
@@ -40,7 +40,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         // TODO: Implement resolveStubPath() method.
-        return __DIR__ . '/../../resources/stubs/request.store.stub';
+        return __DIR__.'/../../resources/stubs/request.store.stub';
     }
 
     /**
@@ -53,7 +53,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__ . $stub;
+            : __DIR__.$stub;
     }
 
     /**

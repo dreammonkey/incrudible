@@ -2,16 +2,16 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Models\Admin;
-use App\Incrudible\Traits\FormBuilder;
 use App\Incrudible\Filters\SearchFilter;
-use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
-use Incrudible\Incrudible\Facades\Incrudible;
-use App\Incrudible\Http\Resources\AdminResource;
 use App\Incrudible\Http\Requests\Admin\GetAdminsRequest;
 use App\Incrudible\Http\Requests\Admin\StoreAdminRequest;
 use App\Incrudible\Http\Requests\Admin\UpdateAdminRequest;
+use App\Incrudible\Http\Resources\AdminResource;
+use App\Incrudible\Models\Admin;
+use App\Incrudible\Traits\FormBuilder;
+use Illuminate\Support\Facades\Pipeline;
+use Incrudible\Incrudible\Facades\Incrudible;
 
 class AdminController extends Controller
 {
@@ -48,6 +48,7 @@ class AdminController extends Controller
 
             );
         }
+
         return inertia('Admins/Index');
     }
 
@@ -56,7 +57,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $rules =  (new StoreAdminRequest)->rules();
+        $rules = (new StoreAdminRequest)->rules();
         // dd($rules);
 
         $metadata = $this->generateFormMetadata($rules);
@@ -74,6 +75,7 @@ class AdminController extends Controller
     {
         $admin = Admin::create($request->validated());
         $prefix = Incrudible::routePrefix();
+
         return redirect()->route("$prefix.admins.show", $admin)->with('success', 'Admin created successfully.');
     }
 
@@ -95,7 +97,7 @@ class AdminController extends Controller
      */
     public function edit(Admin $admin)
     {
-        $rules =  (new UpdateAdminRequest)->rules();
+        $rules = (new UpdateAdminRequest)->rules();
         // dd($rules);
 
         $metadata = $this->generateFormMetadata($rules);

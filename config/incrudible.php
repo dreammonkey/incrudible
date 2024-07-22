@@ -108,7 +108,7 @@ return [
                         'route' => 'logout',
                     ],
                 ],
-            ]
+            ],
         ],
 
         // The menu items that will be displayed in the top right corner
@@ -124,6 +124,5 @@ return [
         ],
 
     ],
-
 
 ];

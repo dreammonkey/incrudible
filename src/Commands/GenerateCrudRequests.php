@@ -27,16 +27,15 @@ class GenerateCrudRequests extends Command
      */
     protected $description = 'Generate Index, Show, Store, Update, and Destroy requests for a CRUD resource.';
 
-
     public function handle()
     {
         $table = $this->argument('table');
         $force = (bool) $this->option('force');
 
-        $this->call('make:crud-index-request', ['table' => $table, '--force' => $force,]);
+        $this->call('make:crud-index-request', ['table' => $table, '--force' => $force]);
         // $this->call('make:crud-show-request', ['table' => $table, '--force' => $force,]);
-        $this->call('make:crud-store-request', ['table' => $table, '--force' => $force,]);
-        $this->call('make:crud-update-request', ['table' => $table, '--force' => $force,]);
+        $this->call('make:crud-store-request', ['table' => $table, '--force' => $force]);
+        $this->call('make:crud-update-request', ['table' => $table, '--force' => $force]);
         // $this->call('make:crud-destroy-request', ['table' => $table, '--force' => $force,]);
     }
 }

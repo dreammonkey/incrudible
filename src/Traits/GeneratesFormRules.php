@@ -2,17 +2,14 @@
 
 namespace Incrudible\Incrudible\Traits;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use LaracraftTech\LaravelSchemaRules\Contracts\SchemaRulesResolverInterface;
 
 trait GeneratesFormRules
 {
     /**
      * Get the form fields for the given table.
-     *
-     * @param string $table
-     * @return array
      */
     public function getFormFields(string $table): array
     {
@@ -21,9 +18,6 @@ trait GeneratesFormRules
 
     /**
      * Get the form rules for the given table.
-     *
-     * @param string $table
-     * @return array
      */
     public function getFormRules(string $table): array
     {
@@ -35,9 +29,6 @@ trait GeneratesFormRules
 
     /**
      * Augment the form rules with additional validation rules.
-     *
-     * @param array $fields
-     * @return array
      */
     public function augmentFormRules(array $fields, string $table): array
     {

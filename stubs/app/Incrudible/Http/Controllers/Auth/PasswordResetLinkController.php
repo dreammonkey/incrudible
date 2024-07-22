@@ -2,13 +2,13 @@
 
 namespace App\Incrudible\Http\Controllers\Auth;
 
-use Inertia\Inertia;
-use Inertia\Response;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Password;
 use App\Incrudible\Http\Controllers\Controller;
 use App\Incrudible\Http\Requests\Auth\PasswordResetLinkRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PasswordResetLinkController extends Controller
 {
