@@ -2,9 +2,8 @@
 
 namespace Incrudible\Incrudible\Commands;
 
-use Illuminate\Support\Str;
-use Brick\VarExporter\VarExporter;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 
 class CrudResourceControllerMakeCommand extends GeneratorCommand
 {
@@ -49,7 +48,7 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__ . '/../../resources' . $stub;
+            : __DIR__.'/../../resources'.$stub;
     }
 
     /**
@@ -102,14 +101,14 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
                 '{{ model_singular }}',
                 '{{ model_singular_uc_first }}',
                 '{{ model_plural }}',
-                '{{ model_plural_uc_first }}'
+                '{{ model_plural_uc_first }}',
             ],
             [
                 $this->getNamespace($name),
                 $model_singular,
                 $model_singular_uc_first,
                 $model_plural,
-                $model_plural_uc_first
+                $model_plural_uc_first,
             ],
             $stub
         );

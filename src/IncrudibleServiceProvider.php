@@ -2,12 +2,12 @@
 
 namespace Incrudible\Incrudible;
 
-use Spatie\LaravelPackageTools\Package;
+use Incrudible\Incrudible\Traits\RegistersAuthProvider;
 use Incrudible\Incrudible\Traits\RegistersMiddleware;
 use Incrudible\Incrudible\Traits\RegistersRouteMacros;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Incrudible\Incrudible\Traits\RegistersAuthProvider;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class IncrudibleServiceProvider extends PackageServiceProvider
 {
@@ -68,7 +68,7 @@ class IncrudibleServiceProvider extends PackageServiceProvider
         parent::boot();
 
         $this->publishes([
-            __DIR__ . '/../routes/incrudible.php' => base_path('routes/incrudible.php'),
+            __DIR__.'/../routes/incrudible.php' => base_path('routes/incrudible.php'),
         ], 'incrudible-routes');
 
         $this->loadRoutesFrom(base_path('routes/incrudible.php'));
@@ -79,6 +79,6 @@ class IncrudibleServiceProvider extends PackageServiceProvider
      */
     public function loadHelpers()
     {
-        require __DIR__ . '/helpers.php';
+        require __DIR__.'/helpers.php';
     }
 }
