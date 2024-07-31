@@ -35,7 +35,6 @@ trait GeneratesFormRules
         return $rules;
     }
 
-
     /**
      * Augment the form rules with additional validation rules.
      */
