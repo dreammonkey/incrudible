@@ -1,7 +1,7 @@
 import { Filters } from '@/types/incrudible'
 import axios from 'axios'
 
-export async function getAdmins(route: string, filters?: Filters) {
+export async function getCrudIndex(route: string, filters?: Filters) {
   const res = await axios.get(route, {
     params: {
       orderBy: filters?.orderBy ?? undefined,

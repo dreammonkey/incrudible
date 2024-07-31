@@ -3,17 +3,36 @@ import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { Button, buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/Incrudible/ui/dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/Incrudible/ui/dropdown-menu'
 import { Input } from '@/Incrudible/ui/input'
 import { cn, formatDate } from '@/lib/utils'
-import { Admin, Filters, PageProps, PagedResource, TableAction } from '@/types/incrudible'
+import {
+  {{ modelName }},
+  Filters,
+  PageProps,
+  PagedResource,
+  TableAction,
+} from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery } from '@tanstack/react-query'
 import { ColumnDef, SortingState } from '@tanstack/react-table'
-import { Eye, MoreHorizontal, Pencil, Plus, Search, Trash, TriangleAlert } from 'lucide-react'
+import {
+  Eye,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Search,
+  Trash,
+  TriangleAlert,
+} from 'lucide-react'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
-export const createColumns = (actions: TableAction[]): ColumnDef<Admin>[] => [
+export const createColumns = (actions: TableAction[]): ColumnDef<{{ modelName }}>[] => [
   {
     accessorKey: 'id',
     header: 'Id',
@@ -60,7 +79,9 @@ export const createColumns = (actions: TableAction[]): ColumnDef<Admin>[] => [
                     'w-full justify-start rounded-md text-sm',
                   )}
                   onClick={action.onClick?.(item.id) ?? (() => {})}
-                  href={action.route ? route(action.route, { admin: item.id }) : '#'}
+                  href={
+                    action.route ? route(action.route, { {{ instanceSingular }}: item.id }) : '#'
+                  }
                 >
                   <action.icon className="mr-2 h-4 w-4" />
                   &nbsp;{action.label}
@@ -74,7 +95,7 @@ export const createColumns = (actions: TableAction[]): ColumnDef<Admin>[] => [
   },
 ]
 
-export default function AdminIndex({ auth }: PageProps) {
+export default function {{ modelName }}Index({ auth }: PageProps) {
   const props = usePage<PageProps>().props
 
   const {
@@ -85,11 +106,13 @@ export default function AdminIndex({ auth }: PageProps) {
   const params = new URLSearchParams(query)
   // console.log(query)
 
-  const routeKey = 'admins.index'
+  const routeKey = '{{ instancePlural }}.index'
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-    perPage: params.get('perPage') ? parseInt(params.get('perPage') as string) : 10,
+    perPage: params.get('perPage')
+      ? parseInt(params.get('perPage') as string)
+      : 10,
     orderBy: params.get('orderBy') ?? 'created_at',
     orderDir: params.get('orderDir') ?? 'desc',
     search: '',
@@ -122,14 +145,14 @@ export default function AdminIndex({ auth }: PageProps) {
     isLoading,
     isError,
     isSuccess,
-    data: admins,
+    data: {{ instancePlural }},
     error,
-  } = useQuery<PagedResource<Admin>, Error>({
+  } = useQuery<PagedResource<{{ modelName }}>, Error>({
     queryKey: [routeKey, filters],
     queryFn: () => getCrudIndex(baseRoute, filters),
   })
 
-  // console.log({ admins })
+  // console.log({ {{ instancePlural }} })
   // console.log({ error })
 
   // TODO: actions
@@ -137,25 +160,27 @@ export default function AdminIndex({ auth }: PageProps) {
     {
       label: 'Show',
       icon: Eye,
-      route: `${routePrefix}.admins.show`,
+      route: `${routePrefix}.{{ instancePlural }}.show`,
     },
     {
       label: 'Edit',
       icon: Pencil,
-      route: `${routePrefix}.admins.edit`,
+      route: `${routePrefix}.{{ instancePlural }}.edit`,
     },
     {
       // TODO
       label: 'Delete',
       icon: Trash,
-      route: `${routePrefix}.admins.edit`,
+      route: `${routePrefix}.{{ instancePlural }}.edit`,
       // onClick: (id: any) => console.log('Delete', id),
     },
   ]
 
   const columns = useMemo(() => createColumns(actions), [actions])
 
-  const [sorting, setSorting] = useState<SortingState>([{ id: filters.orderBy, desc: filters.orderDir === 'desc' }]) // can set initial sorting state here
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: filters.orderBy, desc: filters.orderDir === 'desc' },
+  ]) // can set initial sorting state here
   // console.log({ sorting })
 
   useEffect(() => {
@@ -172,7 +197,9 @@ export default function AdminIndex({ auth }: PageProps) {
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Admins</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            {{ modelNamePlural }}
+          </h2>
           <form
             className="ml-4 flex-1"
             onChange={(e) => {
@@ -191,15 +218,18 @@ export default function AdminIndex({ auth }: PageProps) {
             </div>
           </form>
           <Link
-            href={route(`${routePrefix}.admins.create`)}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            href={route(`${routePrefix}.{{ instancePlural }}.create`)}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'ml-auto',
+            )}
           >
             <Plus className="h-4 w-4" />
           </Link>
         </>
       }
     >
-      <Head title="Admins" />
+      <Head title="{{ modelNamePlural }}" />
 
       {isLoading && <div className="">Loading...</div>}
       {isError && (
@@ -210,9 +240,14 @@ export default function AdminIndex({ auth }: PageProps) {
       )}
       {isSuccess && (
         <>
-          <DataTable columns={columns} data={admins.data ?? []} sorting={sorting} setSorting={setSorting} />
+          <DataTable
+            columns={columns}
+            data={{{ instancePlural }}.data ?? []}
+            sorting={sorting}
+            setSorting={setSorting}
+          />
           <TablePagination
-            meta={admins.meta}
+            meta={{{ instancePlural }}.meta}
             onPageSelect={(page) =>
               router.get(location, {
                 ...filters,

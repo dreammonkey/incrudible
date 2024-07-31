@@ -30,7 +30,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Generate the update request for a CRUD resource.';
+    protected $description = 'Create a new CRUD update request';
 
     /**
      * Get the stub file for the generator.
@@ -39,8 +39,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        // TODO: Implement resolveStubPath() method.
-        return __DIR__.'/../../resources/stubs/request.store.stub';
+        return $this->resolveStubPath('/stubs/request.store.stub');
     }
 
     /**
@@ -53,7 +52,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.$stub;
+            : __DIR__ . '/../../resources' . $stub;
     }
 
     /**
@@ -76,12 +75,11 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
     {
         $table = trim($this->argument('table'));
 
-        $model_plural = ucfirst(Str::plural($table));
-        $model_singular = ucfirst(Str::singular($table));
+        $modelName = ucfirst(Str::singular($table));
 
         $namespace = $this->getDefaultNamespace('/');
 
-        return "{$namespace}\\Http\\Requests\\{$model_singular}\\Update{$model_singular}{$this->type}";
+        return "$namespace\\Http\\Requests\\$modelName\\Update$modelName{$this->type}";
     }
 
     /**

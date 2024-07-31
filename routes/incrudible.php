@@ -24,7 +24,7 @@ use Incrudible\Incrudible\Facades\Incrudible;
 */
 
 Route::prefix(Incrudible::routePrefix())
-    ->name(Incrudible::routePrefix().'.')
+    ->name(Incrudible::routePrefix() . '.')
     ->middleware([
         // TODO: order seems to matter :/
         Incrudible::middleware(),
@@ -77,7 +77,7 @@ Route::prefix(Incrudible::routePrefix())
 // AUTH
 
 Route::prefix(Incrudible::routePrefix())
-    ->name(Incrudible::routePrefix().'.auth.')
+    ->name(Incrudible::routePrefix() . '.auth.')
     ->middleware([
         Incrudible::middleware(),
         'guest',

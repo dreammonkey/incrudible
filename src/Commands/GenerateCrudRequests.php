@@ -25,7 +25,7 @@ class GenerateCrudRequests extends Command
      *
      * @var string
      */
-    protected $description = 'Generate Index, Show, Store, Update, and Destroy requests for a CRUD resource.';
+    protected $description = 'Create all CRUD resource requests';
 
     public function handle()
     {

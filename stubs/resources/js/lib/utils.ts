@@ -33,6 +33,11 @@ export const convertLaravelToZod = (rules: FormRules): z.ZodObject<any> => {
         schema = z.string().refine((value) => !isNaN(Date.parse(value)), {
           message: `${field} must be a valid date`,
         })
+      } else if (validation.startsWith('date_format:')) {
+        const dateFormat = validation.split(':')[1]
+        schema = z.string().refine((value) => !isNaN(Date.parse(value)), {
+          message: `${field} must be a valid date`,
+        })
       } else if (validation.startsWith('min:')) {
         const minLength = parseInt(validation.split(':')[1])
         if (schema instanceof z.ZodString) {

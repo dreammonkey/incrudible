@@ -2,37 +2,37 @@ import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Admin, FormMetaData, PageProps, Resource } from '@/types/incrudible'
+import { {{ modelName }}, FormMetaData, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
-export default function AdminEdit({
+export default function {{ modelName }}Edit({
   auth,
-  admin,
+  {{ instanceSingular }},
   metadata,
-}: PageProps<{ admin: Resource<Admin>; metadata: FormMetaData }>) {
-  // console.log({ admin })
+}: PageProps<{ {{ instanceSingular }}: Resource<{{ modelName }}>; metadata: FormMetaData }>) {
+  // console.log({ {{ instanceSingular }} })
 
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
-  const { setData, put, data, recentlySuccessful } = useForm<Admin>(admin.data)
+  const { setData, put, data, recentlySuccessful } = useForm<{{ modelName }}>({{ instanceSingular }}.data)
 
-  const formRef = useRef<FormRef<Admin>>(null!)
+  const formRef = useRef<FormRef<{{ modelName }}>>(null!)
 
-  const onSubmit = (data: Admin) => {
+  const onSubmit = (data: {{ modelName }}) => {
     // console.log({ data })
 
     // TODO: mutation instead of put ??
 
-    // PUT `${routePrefix}/admins/${admin.data.id}`
-    put(route(`${routePrefix}.admins.update`, admin.data.id), {
+    // PUT `${routePrefix}/{{ instancePlural }}/${{{ instanceSingular }}.data.id}`
+    put(route(`${routePrefix}.{{ instancePlural }}.update`, {{ instanceSingular }}.data.id), {
       onSuccess: () => {
-        console.log('Admin updated successfully')
+        console.log('{{ modelName }} updated successfully')
         formRef.current?.reset(data)
       },
       onError: (error) => {
-        console.error('Error updating admin', error)
+        console.error('Error updating {{ instanceSingular }}', error)
       },
     })
   }
@@ -42,11 +42,9 @@ export default function AdminEdit({
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Edit Admin
-          </h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit {{ modelName }}</h2>
           <Link
-            href={route(`${routePrefix}.admins.index`)}
+            href={route(`${routePrefix}.{{ instancePlural }}.index`)}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -55,7 +53,7 @@ export default function AdminEdit({
         </>
       }
     >
-      <Head title="Admin Edit" />
+      <Head title="{{ modelName }} Edit" />
 
       <div className="grid gap-y-2 rounded-lg border p-4">
         <IncrudibleForm
@@ -64,14 +62,14 @@ export default function AdminEdit({
           data={data}
           onFormSubmit={onSubmit}
           onChange={setData}
-          className="max-w-xl"
+          className=""
         />
       </div>
 
       {recentlySuccessful && (
         <div className="relative justify-center rounded-xl border px-4 py-3 text-sm">
           <ThumbsUp className="mr-2 inline-block h-5 w-5 text-green-800" />
-          Admin updated successfully
+          {{ modelName }} updated successfully
         </div>
       )}
     </AuthenticatedLayout>
