@@ -71,7 +71,11 @@ class IncrudibleServiceProvider extends PackageServiceProvider
             __DIR__ . '/../routes/incrudible.php' => base_path('routes/incrudible.php'),
         ], 'incrudible-routes');
 
-        $this->loadRoutesFrom(base_path('routes/incrudible.php'));
+        $this->loadRoutesFrom(
+            file_exists(base_path('routes/incrudible.php'))
+                ? base_path('routes/incrudible.php')
+                : __DIR__ . '/../routes/incrudible.php'
+        );
     }
 
     /**
