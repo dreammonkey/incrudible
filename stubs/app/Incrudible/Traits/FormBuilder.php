@@ -18,7 +18,6 @@ trait FormBuilder
     {
         $fields = $this->getFormFields('admins');
         $rules = $this->getFormRules('admins');
-        // dd($rules);
 
         $metadata = [
             'fields' => [],
@@ -85,6 +84,50 @@ trait FormBuilder
 
         if (in_array('date', $rules)) {
             return FieldTypes::DATE;
+        }
+
+        // Define common date and datetime formats
+        $dateFormats = [
+            'Y-m-d',
+            'd/m/Y',
+            'm/d/Y',
+            'd-m-Y',
+            'm-d-Y',
+            'Y/m/d',
+        ];
+
+        $dateTimeFormats = [
+            'Y-m-d H:i:s',
+            'Y-m-d H:i',
+        ];
+
+        $timeFormats = [
+            'H:i:s',
+            'H:i',
+        ];
+
+        // Check if the rules contain any date format
+        foreach ($rules as $rule) {
+            if (strpos($rule, 'date_format:') === 0) {
+                $format = str_replace('date_format:', '', $rule);
+                if (in_array($format, $dateTimeFormats)) {
+                    return FieldTypes::DATETIME;
+                }
+                if (in_array($format, $dateFormats)) {
+                    return FieldTypes::DATE;
+                }
+                if (in_array($format, $timeFormats)) {
+                    return FieldTypes::TIME;
+                }
+            }
+        }
+
+        if (in_array('integer', $rules)) {
+            return FieldTypes::NUMBER;
+        }
+
+        if (in_array('boolean', $rules)) {
+            return FieldTypes::CHECKBOX;
         }
 
         return FieldTypes::TEXT;

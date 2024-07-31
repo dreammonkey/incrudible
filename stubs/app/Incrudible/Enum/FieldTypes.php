@@ -16,7 +16,7 @@ enum FieldTypes: string
     case IMAGE = 'image';
     case DATE = 'date';
     case TIME = 'time';
-    case DATETIME = 'datetime';
+    case DATETIME = 'datetime-local';
     case COLOR = 'color';
     case URL = 'url';
     case TEL = 'tel';

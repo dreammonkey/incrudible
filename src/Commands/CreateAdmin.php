@@ -76,7 +76,7 @@ class CreateAdmin extends Command
 
         $model = config('incrudible.auth.user_model_fqn', \App\Incrudible\Models\Admin::class);
 
-        $admin = new $model();
+        $admin = new $model;
         $admin->username = $username;
         $admin->email = $email;
         $admin->password = $password_hashed;

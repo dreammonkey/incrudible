@@ -2,13 +2,6 @@
 
 namespace Incrudible\Incrudible;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Incrudible\Incrudible\Commands\CreateAdmin;
-use Incrudible\Incrudible\Commands\CrudIndexRequestMakeCommand;
-use Incrudible\Incrudible\Commands\CrudStoreRequestMakeCommand;
-use Incrudible\Incrudible\Commands\CrudUpdateRequestMakeCommand;
-use Incrudible\Incrudible\Commands\GenerateCrudRequests;
-use Incrudible\Incrudible\Commands\ScaffoldIncrudible;
 use Incrudible\Incrudible\Traits\RegistersAuthProvider;
 use Incrudible\Incrudible\Traits\RegistersMiddleware;
 use Incrudible\Incrudible\Traits\RegistersRouteMacros;
@@ -29,19 +22,23 @@ class IncrudibleServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('incrudible')
-            ->hasRoute('incrudible')
+            // ->hasRoute('incrudible')
             ->hasConfigFile()
             ->hasViews()
             ->hasMigrations([
                 'create_admins_table',
             ])
             ->hasCommands([
-                ScaffoldIncrudible::class,
-                CreateAdmin::class,
-                GenerateCrudRequests::class,
-                CrudIndexRequestMakeCommand::class,
-                CrudStoreRequestMakeCommand::class,
-                CrudUpdateRequestMakeCommand::class,
+                \Incrudible\Incrudible\Commands\ScaffoldIncrudible::class,
+                \Incrudible\Incrudible\Commands\CreateAdmin::class,
+                \Incrudible\Incrudible\Commands\CrudMakeCommand::class,
+                \Incrudible\Incrudible\Commands\CrudModelMakeCommand::class,
+                \Incrudible\Incrudible\Commands\CrudFrontEndMakeCommand::class,
+                \Incrudible\Incrudible\Commands\CrudResourceControllerMakeCommand::class,
+                \Incrudible\Incrudible\Commands\GenerateCrudRequests::class,
+                \Incrudible\Incrudible\Commands\CrudIndexRequestMakeCommand::class,
+                \Incrudible\Incrudible\Commands\CrudStoreRequestMakeCommand::class,
+                \Incrudible\Incrudible\Commands\CrudUpdateRequestMakeCommand::class,
             ])
             ->hasInstallCommand(function (InstallCommand $command) {
 
@@ -63,6 +60,21 @@ class IncrudibleServiceProvider extends PackageServiceProvider
         $this->registerMiddlewareGroup($this->app->router);
         $this->registerMiddlewareAliases($this->app->router);
         $this->registerRouteMacros();
+    }
+
+    public function boot()
+    {
+        parent::boot();
+
+        $this->publishes([
+            __DIR__.'/../routes/incrudible.php' => base_path('routes/incrudible.php'),
+        ], 'incrudible-routes');
+
+        $this->loadRoutesFrom(
+            file_exists(base_path('routes/incrudible.php'))
+                ? base_path('routes/incrudible.php')
+                : __DIR__.'/../routes/incrudible.php'
+        );
     }
 
     /**

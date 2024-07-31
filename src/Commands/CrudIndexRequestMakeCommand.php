@@ -30,7 +30,7 @@ class CrudIndexRequestMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Generate the index request for a CRUD resource.';
+    protected $description = 'Create a new CRUD index request';
 
     /**
      * Get the stub file for the generator.
@@ -39,8 +39,7 @@ class CrudIndexRequestMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        // TODO: Implement resolveStubPath() method.
-        return __DIR__.'/../../resources/stubs/request.index.stub';
+        return $this->resolveStubPath('/stubs/request.index.stub');
     }
 
     /**
@@ -53,7 +52,7 @@ class CrudIndexRequestMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.$stub;
+            : __DIR__.'/../../resources'.$stub;
     }
 
     /**
@@ -76,12 +75,12 @@ class CrudIndexRequestMakeCommand extends GeneratorCommand
     {
         $table = trim($this->argument('table'));
 
-        $model_plural = ucfirst(Str::plural($table));
-        $model_singular = ucfirst(Str::singular($table));
+        $modelNamePlural = ucfirst(Str::plural($table));
+        $modelName = ucfirst(Str::singular($table));
 
         $namespace = $this->getDefaultNamespace('/');
 
-        return "{$namespace}\\Http\\Requests\\{$model_singular}\\Get{$model_plural}Request";
+        return "{$namespace}\\Http\\Requests\\{$modelName}\\Get{$modelNamePlural}Request";
     }
 
     /**

@@ -43,15 +43,11 @@ export interface FormField {
     | 'checkbox'
     | 'radio'
     | 'file'
+    | 'datetime-local'
   required?: boolean
   options?: string[]
   rules?: string[]
 }
-
-// export interface Paging {
-//   page: number
-//   perPage: number
-// }
 
 export interface Filters {
   orderBy: string
@@ -91,6 +87,15 @@ export interface Admin {
   updated_at: string
 }
 
+export interface User {
+  id: number
+  name: string
+  email: string
+  email_verified_at: string
+  created_at: string
+  updated_at: string
+}
+
 export interface MenuItem {
   label: string
   icon: keyof typeof Icons
@@ -98,9 +103,7 @@ export interface MenuItem {
   items: MenuItem[]
 }
 
-export type PageProps<
-  T extends Record<string, unknown> = Record<string, unknown>,
-> = T &
+export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T &
   Readonly<{
     auth: {
       admin: {
@@ -120,11 +123,20 @@ export type PageProps<
     }
     ziggy: Config & {
       location: string
-      query:
-        | string
-        | string[][]
-        | Record<string, string>
-        | URLSearchParams
-        | undefined
+      query: string | string[][] | Record<string, string> | URLSearchParams | undefined
     }
   }>
+
+interface Flight {
+  id: number
+  name: string
+  number: string
+  departure: string
+  arrival: string
+  departure_time: string
+  arrival_time: string
+  duration: string
+  price: number
+  created_at: string
+  updated_at: string
+}

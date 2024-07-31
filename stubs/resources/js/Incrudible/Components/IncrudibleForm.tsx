@@ -1,12 +1,14 @@
 import { convertLaravelToZod } from '@/lib/utils'
-import { FormMetaData } from '@/types/incrudible'
+import { FormField as FormFieldType, FormMetaData } from '@/types/incrudible'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { ControllerRenderProps, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/Incrudible/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Incrudible/ui/form'
 import { Input } from '@/Incrudible/ui/input'
 import { forwardRef, useImperativeHandle } from 'react'
+import { DateTimeInput } from '../ui/date-time-input'
+import { Switch } from '../ui/switch'
 
 interface FormProps<T> {
   metadata: FormMetaData
@@ -23,13 +25,54 @@ export interface FormRef<T> {
   setError: (name: string, error: { type: string; message: string }) => void
 }
 
+const renderInput = (
+  fieldData: FormFieldType,
+  field: ControllerRenderProps<
+    {
+      [x: string]: any
+    },
+    string
+  >,
+) => {
+  switch (fieldData.type) {
+    case 'text':
+    case 'number':
+    case 'email':
+    case 'password':
+      return <Input {...field} type={fieldData.type} placeholder={fieldData.placeholder} />
+
+    case 'textarea':
+      return (
+        <textarea
+          className="block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          placeholder={fieldData.placeholder}
+          {...field}
+        />
+      )
+
+    case 'datetime-local':
+      // TODO convert php format to date-fns format
+      return <DateTimeInput {...field} valueFormat="yyyy-MM-dd HH:mm:ss" />
+
+    case 'checkbox':
+      return (
+        <div className="flex h-10 items-center">
+          <Switch {...field} checked={field.value} onCheckedChange={(value) => field.onChange(value)} />
+        </div>
+      )
+
+    default:
+      return <Input {...field} />
+  }
+}
+
 const IncrudibleForm = forwardRef(
   <T extends {}>({ metadata, data, onFormSubmit, onChange, className }: FormProps<T>, ref: React.Ref<FormRef<T>>) => {
     // console.log(metadata)
-    // console.log({ metadata, data })
+    console.log({ metadata, data })
 
     const formSchema = convertLaravelToZod(metadata.rules)
-    // console.log({ formSchema })
+    console.log({ formSchema })
 
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
@@ -69,7 +112,7 @@ const IncrudibleForm = forwardRef(
       <section className={className}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-4">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               {_filteredFields.map((fieldData) => (
                 <FormField
                   key={fieldData.name}
@@ -78,30 +121,21 @@ const IncrudibleForm = forwardRef(
                   render={({ field }) => (
                     <FormItem>
                       <div className="grid gap-2">
-                        <FormLabel htmlFor={fieldData.name}>{fieldData.label}</FormLabel>
-                        <FormControl>
-                          <Input
-                            type={fieldData.type}
-                            // id={field.name}
-                            // name={field.name}
-                            placeholder={fieldData.placeholder}
-                            // required={field.required}
-                            // value={formValues[field.name] || ''}
-                            // onChange={handleChange}
-                            {...field}
-                          />
-                        </FormControl>
+                        <FormLabel htmlFor={fieldData.name}>
+                          {fieldData.label + (fieldData.required ? ' *' : '')}
+                        </FormLabel>
+                        <FormControl>{renderInput(fieldData, field)}</FormControl>
                         <FormMessage />
                       </div>
                     </FormItem>
                   )}
                 />
               ))}
-              <div className="mt-4 flex items-center justify-between">
-                <Button disabled={!isDirty} type="submit">
-                  Save
-                </Button>
-              </div>
+            </div>
+            <div className="mt-4 flex items-center justify-between">
+              <Button disabled={!isDirty} type="submit">
+                Save
+              </Button>
             </div>
           </form>
         </Form>

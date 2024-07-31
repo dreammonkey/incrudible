@@ -169,7 +169,7 @@ trait BreezeHelpers
      */
     protected function phpBinary()
     {
-        return (new PhpExecutableFinder())->find(false) ?: 'php';
+        return (new PhpExecutableFinder)->find(false) ?: 'php';
     }
 
     /**
