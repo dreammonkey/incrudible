@@ -2,11 +2,15 @@
 
 namespace Incrudible\Incrudible\Commands;
 
-use Illuminate\Console\GeneratorCommand;
+use Brick\VarExporter\VarExporter;
 use Illuminate\Support\Str;
+use Illuminate\Console\GeneratorCommand;
+use Incrudible\Incrudible\Traits\GeneratesFormRules;
 
 class CrudResourceControllerMakeCommand extends GeneratorCommand
 {
+    use GeneratesFormRules;
+
     /**
      * The name and signature of the console command.
      *
@@ -48,7 +52,7 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.'/../../resources'.$stub;
+            : __DIR__ . '/../../resources' . $stub;
     }
 
     /**
@@ -80,7 +84,6 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
 
     protected function buildClass($name)
     {
-
         $stub = $this->files->get($this->getStub());
 
         return $this->replaceClass($stub, $name);
@@ -95,6 +98,16 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
         $model_plural = Str::plural($table);
         $model_plural_uc_first = ucfirst($model_plural);
 
+        $searchableFields = collect($this->getFormRules($model_plural, 'string'))
+            ->keys()
+            ->toArray();
+
+        $searchableFields = VarExporter::export(
+            $searchableFields,
+            VarExporter::TRAILING_COMMA_IN_ARRAY,
+            indentLevel: 8
+        );
+
         return str_replace(
             [
                 '{{ namespace }}',
@@ -102,6 +115,7 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
                 '{{ model_singular_uc_first }}',
                 '{{ model_plural }}',
                 '{{ model_plural_uc_first }}',
+                '{{ searchableFields }}',
             ],
             [
                 $this->getNamespace($name),
@@ -109,6 +123,7 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
                 $model_singular_uc_first,
                 $model_plural,
                 $model_plural_uc_first,
+                $searchableFields,
             ],
             $stub
         );

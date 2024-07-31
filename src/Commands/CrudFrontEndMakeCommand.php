@@ -5,9 +5,12 @@ namespace Incrudible\Incrudible\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Incrudible\Incrudible\Traits\GeneratesFormRules;
 
 class CrudFrontEndMakeCommand extends Command
 {
+    use GeneratesFormRules;
+
     /**
      * The name and signature of the console command.
      *
@@ -44,10 +47,18 @@ class CrudFrontEndMakeCommand extends Command
         $modelName = ucfirst($instanceSingular);
         $modelNamePlural = Str::plural($modelName);
 
-        $stubPath = __DIR__."/../../resources/stubs/js/crud/{$fileType}.tsx.stub";
+        $stubPath = __DIR__ . "/../../resources/stubs/js/crud/{$fileType}.tsx.stub";
         $targetPath = resource_path("js/Incrudible/Pages/{$modelNamePlural}/{$fileType}.tsx");
 
-        if (! File::exists(dirname($targetPath))) {
+        $searchableFields = collect($this->getFormRules($instancePlural, 'string'))->keys();
+
+        // TODO: FIX INDENTATION
+        $searchableFields = $searchableFields->map(function ($field) {
+            $header = Str::headline($field);
+            return "{\naccessorKey: '{$field}',\nheader: '{$header}',\n},";
+        })->implode("\n");
+
+        if (!File::exists(dirname($targetPath))) {
             File::makeDirectory(dirname($targetPath), 0755, true);
         }
 
@@ -58,12 +69,14 @@ class CrudFrontEndMakeCommand extends Command
                 '{{ instancePlural }}',
                 '{{ modelName }}',
                 '{{ modelNamePlural }}',
+                '{{ searchableFields }}',
             ],
             [
                 $instanceSingular,
                 $instancePlural,
                 $modelName,
                 $modelNamePlural,
+                $searchableFields,
             ],
             $content
         );

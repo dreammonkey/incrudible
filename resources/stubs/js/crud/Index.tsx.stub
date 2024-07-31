@@ -37,14 +37,7 @@ export const createColumns = (actions: TableAction[]): ColumnDef<{{ modelName }}
     accessorKey: 'id',
     header: 'Id',
   },
-  {
-    accessorKey: 'username',
-    header: 'Username',
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email',
-  },
+  {{ searchableFields }}
   {
     accessorKey: 'created_at',
     header: 'Created',
