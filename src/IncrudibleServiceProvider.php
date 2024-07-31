@@ -44,8 +44,7 @@ class IncrudibleServiceProvider extends PackageServiceProvider
 
                 $command
                     ->publishConfigFile()
-                    ->publishMigrations()
-                    ->publish('routes');
+                    ->publishMigrations();
                 // ->publishAssets()
                 // ->askToRunMigrations()
                 // ->askToStarRepoOnGitHub('dreammonkey/incrudible')
@@ -68,7 +67,7 @@ class IncrudibleServiceProvider extends PackageServiceProvider
         parent::boot();
 
         $this->publishes([
-            __DIR__.'/../routes/incrudible.php' => base_path('routes/incrudible.php'),
+            __DIR__ . '/../routes/incrudible.php' => base_path('routes/incrudible.php'),
         ], 'incrudible-routes');
 
         $this->loadRoutesFrom(
@@ -83,6 +82,6 @@ class IncrudibleServiceProvider extends PackageServiceProvider
      */
     public function loadHelpers()
     {
-        require __DIR__.'/helpers.php';
+        require __DIR__ . '/helpers.php';
     }
 }
