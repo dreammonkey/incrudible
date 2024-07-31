@@ -2,9 +2,9 @@
 
 namespace Incrudible\Incrudible\Commands;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class CrudFrontEndMakeCommand extends Command
 {
@@ -44,10 +44,10 @@ class CrudFrontEndMakeCommand extends Command
         $modelName = ucfirst($instanceSingular);
         $modelNamePlural = Str::plural($modelName);
 
-        $stubPath = __DIR__ . "/../../resources/stubs/js/crud/{$fileType}.tsx.stub";
+        $stubPath = __DIR__."/../../resources/stubs/js/crud/{$fileType}.tsx.stub";
         $targetPath = resource_path("js/Incrudible/Pages/{$modelNamePlural}/{$fileType}.tsx");
 
-        if (!File::exists(dirname($targetPath))) {
+        if (! File::exists(dirname($targetPath))) {
             File::makeDirectory(dirname($targetPath), 0755, true);
         }
 

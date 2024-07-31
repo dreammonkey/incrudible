@@ -93,7 +93,7 @@ trait FormBuilder
             'm/d/Y',
             'd-m-Y',
             'm-d-Y',
-            'Y/m/d'
+            'Y/m/d',
         ];
 
         $dateTimeFormats = [
@@ -103,7 +103,7 @@ trait FormBuilder
 
         $timeFormats = [
             'H:i:s',
-            'H:i'
+            'H:i',
         ];
 
         // Check if the rules contain any date format

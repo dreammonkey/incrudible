@@ -2,18 +2,17 @@
 
 namespace Incrudible\Incrudible\Commands;
 
-use Illuminate\Support\Str;
-use function Laravel\Prompts\suggest;
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
-
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\suggest;
 
 class CrudMakeCommand extends GeneratorCommand
 {
-
     /**
      * The console command name.
      *
@@ -116,10 +115,10 @@ class CrudMakeCommand extends GeneratorCommand
         $this->call('make:crud-requests', ['table' => $table, '--force' => $force]);
         $this->call('make:crud-frontend', ['table' => $table]);
 
-        $this->info("There are a few more steps to complete the setup:");
-        $this->info("1. Add the following route to your routes/web.php file:");
+        $this->info('There are a few more steps to complete the setup:');
+        $this->info('1. Add the following route to your routes/web.php file:');
         $this->comment("Route::resource('{$table}', '{$model}Controller');");
-        $this->info("2. Add the following line to your resources/js/types/incrudible.d.ts file:");
+        $this->info('2. Add the following line to your resources/js/types/incrudible.d.ts file:');
         $this->comment("interface {$model} { ... }");
     }
 }
