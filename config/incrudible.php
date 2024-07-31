@@ -81,11 +81,11 @@ return [
                     //     'icon' => 'Shield',
                     //     'route' => 'roles.index',
                     // ],
-                    // [
-                    //     'label' => 'Permissions',
-                    //     'icon' => 'Lock',
-                    //     'route' => 'permissions.index',
-                    // ],
+                    [
+                        'label' => 'Permissions',
+                        'icon' => 'Lock',
+                        'route' => 'permissions.index',
+                    ],
                 ],
             ],
             [
