@@ -32,8 +32,7 @@ class {{ model_singular_uc_first }}Controller extends Controller
                         new SearchFilter(
                             search: $request->validated('search'),
                             fields: [
-                                'username',
-                                'email',
+                                {{ searchableFields }}
                             ]
                         ),
                         new SortingFilter(

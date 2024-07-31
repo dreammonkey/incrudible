@@ -19,12 +19,20 @@ trait GeneratesFormRules
     /**
      * Get the form rules for the given table.
      */
-    public function getFormRules(string $table): array
+    public function getFormRules(string $table, ?string $filter = null): array
     {
-        return app()->make(SchemaRulesResolverInterface::class, [
+        $rules = app()->make(SchemaRulesResolverInterface::class, [
             'table' => $table,
             'columns' => [],
         ])->generate();
+
+        if ($filter) {
+            $rules = collect($rules)->filter(function ($rules) use ($filter) {
+                return in_array($filter, $rules);
+            })->toArray();
+        }
+
+        return $rules;
     }
 
     /**
