@@ -9,7 +9,11 @@ import { useRef } from 'react'
 
 // import { laravelFormRulesToZodSchema } from '@/lib/utils'
 
-export default function PermissionCreate({ auth, permission, metadata }: PageProps<{ permission: any; metadata: FormMetaData }>) {
+export default function PermissionCreate({
+  auth,
+  permission,
+  metadata,
+}: PageProps<{ permission: any; metadata: FormMetaData }>) {
   // console.log({ auth, permission, metadata })
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
@@ -44,7 +48,9 @@ export default function PermissionCreate({ auth, permission, metadata }: PagePro
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Create Permission</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Create Permission
+          </h2>
           <Link
             href={route(`${routePrefix}.permissions.index`)}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}

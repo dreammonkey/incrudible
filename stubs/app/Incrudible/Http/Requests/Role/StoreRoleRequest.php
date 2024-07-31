@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Incrudible\Http\Requests\Permission;
+namespace App\Incrudible\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class UpdatePermissionRequest extends FormRequest
+class StoreRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

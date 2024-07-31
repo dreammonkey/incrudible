@@ -4,30 +4,30 @@ namespace App\Incrudible\Http\Controllers;
 
 use App\Incrudible\Filters\SearchFilter;
 use App\Incrudible\Filters\SortingFilter;
-use App\Incrudible\Http\Requests\Permission\GetPermissionsRequest;
-use App\Incrudible\Http\Requests\Permission\StorePermissionRequest;
-use App\Incrudible\Http\Requests\Permission\UpdatePermissionRequest;
-use App\Incrudible\Http\Resources\PermissionResource;
-use App\Incrudible\Models\Permission;
+use App\Incrudible\Http\Requests\Role\GetRolesRequest;
+use App\Incrudible\Http\Requests\Role\StoreRoleRequest;
+use App\Incrudible\Http\Requests\Role\UpdateRoleRequest;
+use App\Incrudible\Http\Resources\RoleResource;
+use App\Incrudible\Models\Role;
 use App\Incrudible\Traits\FormBuilder;
 use Illuminate\Support\Facades\Pipeline;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class PermissionController extends Controller
+class RoleController extends Controller
 {
     use FormBuilder;
 
     /**
      * Display a listing of the resource.
      */
-    public function index(GetPermissionsRequest $request)
+    public function index(GetRolesRequest $request)
     {
         if ($request->wantsJson()) {
 
-            return PermissionResource::collection(
+            return RoleResource::collection(
 
                 Pipeline::send(
-                    Permission::query(),
+                    Role::query(),
                 )
                     ->through([
                         new SearchFilter(
@@ -47,7 +47,7 @@ class PermissionController extends Controller
             );
         }
 
-        return inertia('Permissions/Index');
+        return inertia('Roles/Index');
     }
 
     /**
@@ -55,12 +55,12 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        $rules = (new StorePermissionRequest)->rules();
+        $rules = (new StoreRoleRequest)->rules();
 
         $metadata = $this->generateFormMetadata($rules);
 
-        return inertia('Permissions/Create', [
-            'permission' => Permission::make()->toResource(),
+        return inertia('Roles/Create', [
+            'role' => Role::make()->toResource(),
             'metadata' => $metadata,
         ]);
     }
@@ -68,23 +68,23 @@ class PermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePermissionRequest $request)
+    public function store(StoreRoleRequest $request)
     {
-        $permission = Permission::create($request->validated());
+        $role = Role::create($request->validated());
         $prefix = Incrudible::routePrefix();
 
-        return redirect()->route("$prefix.permissions.show", $permission)->with('success', 'Permission created successfully.');
+        return redirect()->route("$prefix.roles.show", $role)->with('success', 'Role created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Permission $permission)
+    public function show(Role $role)
     {
-        $metadata = $this->getFormMetaData('permissions');
+        $metadata = $this->getFormMetaData('roles');
 
-        return inertia('Permissions/Show', [
-            'permission' => $permission->toResource(),
+        return inertia('Roles/Show', [
+            'role' => $role->toResource(),
             'metadata' => $metadata,
         ]);
     }
@@ -92,14 +92,14 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Permission $permission)
+    public function edit(Role $role)
     {
-        $rules = (new UpdatePermissionRequest)->rules();
+        $rules = (new UpdateRoleRequest)->rules();
 
         $metadata = $this->generateFormMetadata($rules);
 
-        return inertia('Permissions/Edit', [
-            'permission' => $permission->toResource(),
+        return inertia('Roles/Edit', [
+            'role' => $role->toResource(),
             'metadata' => $metadata,
         ]);
     }
@@ -107,17 +107,17 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePermissionRequest $request, Permission $permission)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
-        $permission->update($request->validated());
+        $role->update($request->validated());
 
-        return redirect()->back()->with('success', 'Permission updated successfully.');
+        return redirect()->back()->with('success', 'Role updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy(Role $role)
     {
         //
     }

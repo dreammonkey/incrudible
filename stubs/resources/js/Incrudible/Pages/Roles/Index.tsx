@@ -6,14 +6,14 @@ import { DataTable } from '@/Incrudible/ui/data-table'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/Incrudible/ui/dropdown-menu'
 import { Input } from '@/Incrudible/ui/input'
 import { cn, formatDate } from '@/lib/utils'
-import { Permission, Filters, PageProps, PagedResource, TableAction } from '@/types/incrudible'
+import { Role, Filters, PageProps, PagedResource, TableAction } from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery } from '@tanstack/react-query'
 import { ColumnDef, SortingState } from '@tanstack/react-table'
 import { Eye, MoreHorizontal, Pencil, Plus, Search, Trash, TriangleAlert } from 'lucide-react'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
-export const createColumns = (actions: TableAction[]): ColumnDef<Permission>[] => [
+export const createColumns = (actions: TableAction[]): ColumnDef<Role>[] => [
   {
     accessorKey: 'id',
     header: 'Id',
@@ -60,7 +60,7 @@ export const createColumns = (actions: TableAction[]): ColumnDef<Permission>[] =
                     'w-full justify-start rounded-md text-sm',
                   )}
                   onClick={action.onClick?.(item.id) ?? (() => {})}
-                  href={action.route ? route(action.route, { permission: item.id }) : '#'}
+                  href={action.route ? route(action.route, { role: item.id }) : '#'}
                 >
                   <action.icon className="mr-2 h-4 w-4" />
                   &nbsp;{action.label}
@@ -74,7 +74,7 @@ export const createColumns = (actions: TableAction[]): ColumnDef<Permission>[] =
   },
 ]
 
-export default function PermissionIndex({ auth }: PageProps) {
+export default function RoleIndex({ auth }: PageProps) {
   const props = usePage<PageProps>().props
 
   const {
@@ -85,7 +85,7 @@ export default function PermissionIndex({ auth }: PageProps) {
   const params = new URLSearchParams(query)
   // console.log(query)
 
-  const routeKey = 'permissions.index'
+  const routeKey = 'roles.index'
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
@@ -122,14 +122,14 @@ export default function PermissionIndex({ auth }: PageProps) {
     isLoading,
     isError,
     isSuccess,
-    data: permissions,
+    data: roles,
     error,
-  } = useQuery<PagedResource<Permission>, Error>({
+  } = useQuery<PagedResource<Role>, Error>({
     queryKey: [routeKey, filters],
     queryFn: () => getCrudIndex(baseRoute, filters),
   })
 
-  // console.log({ permissions })
+  // console.log({ roles })
   // console.log({ error })
 
   // TODO: actions
@@ -137,18 +137,18 @@ export default function PermissionIndex({ auth }: PageProps) {
     {
       label: 'Show',
       icon: Eye,
-      route: `${routePrefix}.permissions.show`,
+      route: `${routePrefix}.roles.show`,
     },
     {
       label: 'Edit',
       icon: Pencil,
-      route: `${routePrefix}.permissions.edit`,
+      route: `${routePrefix}.roles.edit`,
     },
     {
       // TODO
       label: 'Delete',
       icon: Trash,
-      route: `${routePrefix}.permissions.edit`,
+      route: `${routePrefix}.roles.edit`,
       // onClick: (id: any) => console.log('Delete', id),
     },
   ]
@@ -172,9 +172,7 @@ export default function PermissionIndex({ auth }: PageProps) {
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Permissions
-          </h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Roles</h2>
           <form
             className="ml-4 flex-1"
             onChange={(e) => {
@@ -193,7 +191,7 @@ export default function PermissionIndex({ auth }: PageProps) {
             </div>
           </form>
           <Link
-            href={route(`${routePrefix}.permissions.create`)}
+            href={route(`${routePrefix}.roles.create`)}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
           >
             <Plus className="h-4 w-4" />
@@ -201,7 +199,7 @@ export default function PermissionIndex({ auth }: PageProps) {
         </>
       }
     >
-      <Head title="Permissions" />
+      <Head title="Roles" />
 
       {isLoading && <div className="">Loading...</div>}
       {isError && (
@@ -212,9 +210,9 @@ export default function PermissionIndex({ auth }: PageProps) {
       )}
       {isSuccess && (
         <>
-          <DataTable columns={columns} data={permissions.data ?? []} sorting={sorting} setSorting={setSorting} />
+          <DataTable columns={columns} data={roles.data ?? []} sorting={sorting} setSorting={setSorting} />
           <TablePagination
-            meta={permissions.meta}
+            meta={roles.meta}
             onPageSelect={(page) =>
               router.get(location, {
                 ...filters,

@@ -69,10 +69,10 @@ const renderInput = (
 const IncrudibleForm = forwardRef(
   <T extends {}>({ metadata, data, onFormSubmit, onChange, className }: FormProps<T>, ref: React.Ref<FormRef<T>>) => {
     // console.log(metadata)
-    console.log({ metadata, data })
+    // console.log({ metadata, data })
 
     const formSchema = convertLaravelToZod(metadata.rules)
-    console.log({ formSchema })
+    // console.log({ formSchema })
 
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
@@ -112,7 +112,7 @@ const IncrudibleForm = forwardRef(
       <section className={className}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2">
               {_filteredFields.map((fieldData) => (
                 <FormField
                   key={fieldData.name}
@@ -120,7 +120,7 @@ const IncrudibleForm = forwardRef(
                   name={fieldData.name}
                   render={({ field }) => (
                     <FormItem>
-                      <div className="grid gap-2">
+                      <div className="flex flex-col gap-2">
                         <FormLabel htmlFor={fieldData.name}>
                           {fieldData.label + (fieldData.required ? ' *' : '')}
                         </FormLabel>

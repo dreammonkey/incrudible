@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Incrudible\Http\Requests\Permission;
+namespace App\Incrudible\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class UpdatePermissionRequest extends FormRequest
+class GetRolesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,19 +24,17 @@ class UpdatePermissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
-            'guard_name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'perPage' => ['nullable', 'integer', 'max:100', 'min:5'],
+            'orderDir' => ['nullable', 'in:desc,asc'],
+            'orderBy' => ['nullable',  Rule::in([
+                'id',
+                'name',
+                'guard_name',
+                'created_at',
+                'updated_at',
+            ])],
+            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/']
         ];
-
     }
 }
