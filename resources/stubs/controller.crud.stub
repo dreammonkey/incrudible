@@ -1,4 +1,5 @@
 <?php
+
 namespace {{ namespace }};
 
 use App\Incrudible\Filters\SearchFilter;
@@ -31,9 +32,7 @@ class {{ model_singular_uc_first }}Controller extends Controller
                     ->through([
                         new SearchFilter(
                             search: $request->validated('search'),
-                            fields: [
-                                {{ searchableFields }}
-                            ]
+                            fields: {{ searchableFields }}
                         ),
                         new SortingFilter(
                             orderBy: $request->validated('orderBy'),
@@ -54,7 +53,6 @@ class {{ model_singular_uc_first }}Controller extends Controller
     public function create()
     {
         $rules = (new Store{{ model_singular_uc_first }}Request)->rules();
-        // dd($rules);
 
         $metadata = $this->generateFormMetadata($rules);
 
@@ -94,7 +92,6 @@ class {{ model_singular_uc_first }}Controller extends Controller
     public function edit({{ model_singular_uc_first }} ${{ model_singular }})
     {
         $rules = (new Update{{ model_singular_uc_first }}Request)->rules();
-        // dd($rules);
 
         $metadata = $this->generateFormMetadata($rules);
 

@@ -105,7 +105,7 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
         $searchableFields = VarExporter::export(
             $searchableFields,
             VarExporter::TRAILING_COMMA_IN_ARRAY,
-            indentLevel: 8
+            indentLevel: 7
         );
 
         return str_replace(
