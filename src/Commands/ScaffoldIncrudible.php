@@ -21,7 +21,7 @@ class ScaffoldIncrudible extends Command
         // composer require...
         if (version_compare(App::version(), '11.0.0', '>=')) {
             // Laravel >= 11
-            if (!$this->requireComposerPackages([
+            if (! $this->requireComposerPackages([
                 'inertiajs/inertia-laravel:^1.0',
                 'laravel/sanctum:^4.0',
                 'tightenco/ziggy:^2.0',
@@ -32,7 +32,7 @@ class ScaffoldIncrudible extends Command
             }
         } else {
             // Laravel < 11
-            if (!$this->requireComposerPackages([
+            if (! $this->requireComposerPackages([
                 'inertiajs/inertia-laravel:^0.6.8',
                 'laravel/sanctum:^3.2',
                 'tightenco/ziggy:^2.0',
@@ -44,8 +44,8 @@ class ScaffoldIncrudible extends Command
         }
 
         // Publish vendor assets...
-        $this->call("vendor:publish", [
-            '--provider'    => "Spatie\Permission\PermissionServiceProvider",
+        $this->call('vendor:publish', [
+            '--provider' => "Spatie\Permission\PermissionServiceProvider",
         ]);
 
         // NPM Packages...
@@ -112,7 +112,7 @@ class ScaffoldIncrudible extends Command
         // Copy Incrudible App...
         (new Filesystem)->ensureDirectoryExists(app_path('Incrudible'));
         (new Filesystem)->copyDirectory(
-            __DIR__ . '/../../stubs/app/Incrudible',
+            __DIR__.'/../../stubs/app/Incrudible',
             app_path('Incrudible')
         );
 
@@ -126,33 +126,33 @@ class ScaffoldIncrudible extends Command
         // Components + Pages...
         (new Filesystem)->ensureDirectoryExists(resource_path('js/Incrudible'));
         (new Filesystem)->copyDirectory(
-            __DIR__ . '/../../stubs/resources/js/Incrudible',
+            __DIR__.'/../../stubs/resources/js/Incrudible',
             resource_path('js/Incrudible')
         );
         (new Filesystem)->copyDirectory(
-            __DIR__ . '/../../stubs/resources/js/types',
+            __DIR__.'/../../stubs/resources/js/types',
             resource_path('js/types')
         );
         (new Filesystem)->copyDirectory(
-            __DIR__ . '/../../stubs/resources/js/lib',
+            __DIR__.'/../../stubs/resources/js/lib',
             resource_path('js/lib')
         );
         copy(
-            __DIR__ . '/../../stubs/resources/js/incrudible.tsx',
+            __DIR__.'/../../stubs/resources/js/incrudible.tsx',
             resource_path('js/incrudible.tsx')
         );
         copy(
-            __DIR__ . '/../../stubs/resources/js/bootstrap.ts',
+            __DIR__.'/../../stubs/resources/js/bootstrap.ts',
             resource_path('js/bootstrap.ts')
         );
 
         // Tailwind / Vite / Typescript / shadcn...
-        copy(__DIR__ . '/../../stubs/resources/css/app.css', resource_path('css/app.css'));
-        copy(__DIR__ . '/../../stubs/postcss.config.js', base_path('postcss.config.js'));
-        copy(__DIR__ . '/../../stubs/tailwind.config.js', base_path('tailwind.config.js'));
-        copy(__DIR__ . '/../../stubs/vite.config.js', base_path('vite.config.js'));
-        copy(__DIR__ . '/../../stubs/tsconfig.json', base_path('tsconfig.json'));
-        copy(__DIR__ . '/../../stubs/components.json', base_path('components.json'));
+        copy(__DIR__.'/../../stubs/resources/css/app.css', resource_path('css/app.css'));
+        copy(__DIR__.'/../../stubs/postcss.config.js', base_path('postcss.config.js'));
+        copy(__DIR__.'/../../stubs/tailwind.config.js', base_path('tailwind.config.js'));
+        copy(__DIR__.'/../../stubs/vite.config.js', base_path('vite.config.js'));
+        copy(__DIR__.'/../../stubs/tsconfig.json', base_path('tsconfig.json'));
+        copy(__DIR__.'/../../stubs/components.json', base_path('components.json'));
 
         $this->replaceInFile('"vite build"', '"vite build && vite build --ssr"', base_path('package.json'));
 

@@ -24,8 +24,8 @@ class GetPermissionsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "page" => ["nullable", 'integer', 'min:1'],
-            'perPage' => ["nullable", 'integer', 'max:100', 'min:5'],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'perPage' => ['nullable', 'integer', 'max:100', 'min:5'],
             'orderDir' => ['nullable', 'in:desc,asc'],
             'orderBy' => ['nullable',  Rule::in([
                 'id',
@@ -34,7 +34,7 @@ class GetPermissionsRequest extends FormRequest
                 'created_at',
                 'updated_at',
             ])],
-            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/']
+            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/'],
         ];
     }
 }
