@@ -39,6 +39,7 @@ class IncrudibleServiceProvider extends PackageServiceProvider
                 \Incrudible\Incrudible\Commands\CrudIndexRequestMakeCommand::class,
                 \Incrudible\Incrudible\Commands\CrudStoreRequestMakeCommand::class,
                 \Incrudible\Incrudible\Commands\CrudUpdateRequestMakeCommand::class,
+                \Incrudible\Incrudible\Commands\CrudDeleteRequestMakeCommand::class,
             ])
             ->hasInstallCommand(function (InstallCommand $command) {
 
