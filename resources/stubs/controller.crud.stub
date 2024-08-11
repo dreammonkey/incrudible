@@ -78,7 +78,7 @@ class {{ model_singular_uc_first }}Controller extends Controller
      */
     public function show({{ model_singular_uc_first }} ${{ model_singular }})
     {
-        $metadata = $this->getFormMetaData();
+        $metadata = $this->getFormMetaData('{{ model_plural }}');
 
         return inertia('{{ model_plural_uc_first }}/Show', [
             '{{ model_singular }}' => ${{ model_singular }}->toResource(),
