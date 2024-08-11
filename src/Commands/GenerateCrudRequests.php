@@ -36,6 +36,6 @@ class GenerateCrudRequests extends Command
         // $this->call('make:crud-show-request', ['table' => $table, '--force' => $force,]);
         $this->call('make:crud-store-request', ['table' => $table, '--force' => $force]);
         $this->call('make:crud-update-request', ['table' => $table, '--force' => $force]);
-        $this->call('make:crud-destroy-request', ['table' => $table, '--force' => $force,]);
+        $this->call('make:crud-destroy-request', ['table' => $table, '--force' => $force]);
     }
 }
