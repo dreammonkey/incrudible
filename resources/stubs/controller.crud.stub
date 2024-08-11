@@ -116,6 +116,8 @@ class {{ model_singular_uc_first }}Controller extends Controller
      */
     public function destroy({{ model_singular_uc_first }} ${{ model_singular }})
     {
-        //
+        ${{ model_singular }}->delete();
+
+        return redirect()->back()->with('success', '{{ model_singular_uc_first }} deleted successfully.');
     }
 }
