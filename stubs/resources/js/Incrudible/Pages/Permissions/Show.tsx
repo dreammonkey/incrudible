@@ -5,11 +5,7 @@ import { FormMetaData, PageProps } from '@/types/incrudible'
 import { Head, Link, usePage } from '@inertiajs/react'
 import { ArrowLeft } from 'lucide-react'
 
-export default function PermissionShow({
-  auth,
-  permission,
-  metadata,
-}: PageProps<{ permission: any; metadata: FormMetaData }>) {
+export default function PermissionShow({ auth, permission, metadata }: PageProps<{ permission: any; metadata: FormMetaData }>) {
   // console.log(permission)
 
   const { routePrefix } = usePage<PageProps>().props.incrudible
@@ -18,9 +14,7 @@ export default function PermissionShow({
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Show Permission
-          </h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Show Permission</h2>
           <Link
             href={route(`${routePrefix}.permissions.index`)}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}

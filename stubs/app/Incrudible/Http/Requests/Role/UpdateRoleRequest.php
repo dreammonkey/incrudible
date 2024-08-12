@@ -3,6 +3,7 @@
 namespace App\Incrudible\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class UpdateRoleRequest extends FormRequest
@@ -35,7 +36,8 @@ class UpdateRoleRequest extends FormRequest
                 'min:1',
                 'max:255',
             ],
+            'permissions' => ['sometimes', 'array'],
+            'permissions.*' => ['exists:permissions,id'],
         ];
-
     }
 }

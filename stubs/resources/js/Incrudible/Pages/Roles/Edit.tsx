@@ -1,8 +1,9 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { BelongsToMany } from '@/Incrudible/Components/Relations/BelongsToMany'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Role, FormMetaData, PageProps, Resource } from '@/types/incrudible'
+import { Role, FormMetaData, PageProps, Resource, CrudRelation } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -11,8 +12,9 @@ export default function RoleEdit({
   auth,
   role,
   metadata,
-}: PageProps<{ role: Resource<Role>; metadata: FormMetaData }>) {
-  // console.log({ role })
+  relations,
+}: PageProps<{ role: Resource<Role>; metadata: FormMetaData; relations: CrudRelation<any>[] }>) {
+  console.log({ metadata, role, relations })
 
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
@@ -66,7 +68,28 @@ export default function RoleEdit({
           onChange={setData}
           className=""
         />
+        <pre className="text-xs">{JSON.stringify(role, null, 2)}</pre>
       </div>
+
+      {relations?.map((relation) => {
+        switch (relation.type) {
+          case 'BelongsToMany':
+            return (
+              <BelongsToMany
+                key={relation.name}
+                relation={relation}
+                onChange={(value) =>
+                  setData({
+                    ...data,
+                    [relation.name]: value,
+                  })
+                }
+              />
+            )
+          default:
+            return null
+        }
+      })}
 
       {recentlySuccessful && (
         <div className="relative justify-center rounded-xl border px-4 py-3 text-sm">

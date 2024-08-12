@@ -61,6 +61,20 @@ const renderInput = (
         </div>
       )
 
+    // case 'select':
+    //   return (
+    //     <select
+    //       {...field}
+    //       className="block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    //     >
+    //       {fieldData.options?.map((option) => (
+    //         <option key={option} value={option}>
+    //           {option}
+    //         </option>
+    //       ))}
+    //     </select>
+    //   )
+
     default:
       return <Input {...field} />
   }

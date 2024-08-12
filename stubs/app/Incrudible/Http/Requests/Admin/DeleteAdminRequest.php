@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Incrudible\Http\Requests\Permission;
+namespace App\Incrudible\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class UpdatePermissionRequest extends FormRequest
+class DeleteAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth(Incrudible::guardName())->check();
+        return auth(Incrudible::guardName())->check() && $this->user()->id !== $this->route('admin')->id;
     }
 
     /**
@@ -24,19 +23,7 @@ class UpdatePermissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
-            'guard_name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
+            //
         ];
-
     }
 }

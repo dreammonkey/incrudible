@@ -4,6 +4,7 @@ namespace App\Incrudible\Http\Controllers;
 
 use App\Incrudible\Filters\SearchFilter;
 use App\Incrudible\Filters\SortingFilter;
+use App\Incrudible\Http\Requests\Admin\DeleteAdminRequest;
 use App\Incrudible\Http\Requests\Admin\GetAdminsRequest;
 use App\Incrudible\Http\Requests\Admin\StoreAdminRequest;
 use App\Incrudible\Http\Requests\Admin\UpdateAdminRequest;
@@ -121,8 +122,10 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Admin $admin)
+    public function destroy(DeleteAdminRequest $request, Admin $admin)
     {
-        //
+        $admin->delete();
+
+        return redirect()->back()->with('success', 'Admin deleted successfully.');
     }
 }

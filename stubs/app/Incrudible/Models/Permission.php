@@ -2,20 +2,26 @@
 
 namespace App\Incrudible\Models;
 
+use Database\Factories\AdminFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Incrudible\Http\Resources\PermissionResource;
+use Database\Factories\PermissionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 
-class Permission extends Model
+class Permission extends SpatiePermission
 {
     use HasFactory;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'guard_name',
+    ];
 
     /**
      * Transform model into a resource.
@@ -23,5 +29,13 @@ class Permission extends Model
     public function toResource(): PermissionResource
     {
         return new PermissionResource($this);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return PermissionFactory::new();
     }
 }

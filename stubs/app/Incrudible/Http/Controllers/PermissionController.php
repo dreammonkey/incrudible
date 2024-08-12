@@ -4,6 +4,7 @@ namespace App\Incrudible\Http\Controllers;
 
 use App\Incrudible\Filters\SearchFilter;
 use App\Incrudible\Filters\SortingFilter;
+use App\Incrudible\Http\Requests\Permission\DeletePermissionRequest;
 use App\Incrudible\Http\Requests\Permission\GetPermissionsRequest;
 use App\Incrudible\Http\Requests\Permission\StorePermissionRequest;
 use App\Incrudible\Http\Requests\Permission\UpdatePermissionRequest;
@@ -117,8 +118,10 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy(DeletePermissionRequest $request, Permission $permission)
     {
-        //
+        $permission->delete();
+
+        return redirect()->back()->with('success', 'Permission deleted successfully.');
     }
 }

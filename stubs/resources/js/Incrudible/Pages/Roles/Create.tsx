@@ -1,16 +1,22 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { BelongsToMany } from '@/Incrudible/Components/Relations/BelongsToMany'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Role, FormMetaData, PageProps } from '@/types/incrudible'
+import { Role, FormMetaData, PageProps, CrudRelation } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
-import { ArrowLeft, ArrowLeftSquare, ThumbsUp } from 'lucide-react'
+import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
 // import { laravelFormRulesToZodSchema } from '@/lib/utils'
 
-export default function RoleCreate({ auth, role, metadata }: PageProps<{ role: any; metadata: FormMetaData }>) {
-  // console.log({ auth, role, metadata })
+export default function RoleCreate({
+  auth,
+  role,
+  metadata,
+  relations,
+}: PageProps<{ role: any; metadata: FormMetaData; relations: CrudRelation<any>[] }>) {
+  console.log({ auth, role, metadata, relations })
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
   const { setData, post, data, recentlySuccessful } = useForm<Role>(
@@ -69,6 +75,15 @@ export default function RoleCreate({ auth, role, metadata }: PageProps<{ role: a
           className=""
         />
       </div>
+
+      {relations?.map((relation) => {
+        switch (relation.type) {
+          case 'BelongsToMany':
+            return <BelongsToMany key={relation.name} relation={relation} />
+          default:
+            return null
+        }
+      })}
 
       {recentlySuccessful && (
         <div className="relative justify-center rounded-lg border px-4 py-3 text-sm">

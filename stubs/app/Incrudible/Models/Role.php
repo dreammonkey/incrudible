@@ -2,20 +2,25 @@
 
 namespace App\Incrudible\Models;
 
+use Database\Factories\PermissionFactory;
 use App\Incrudible\Http\Resources\RoleResource;
+use Spatie\Permission\Models\Role as SpatieRole;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Role extends SpatieRole
 {
     use HasFactory;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'guard_name',
+    ];
 
     /**
      * Transform model into a resource.
@@ -23,5 +28,13 @@ class Role extends Model
     public function toResource(): RoleResource
     {
         return new RoleResource($this);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return PermissionFactory::new();
     }
 }

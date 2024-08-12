@@ -10,14 +10,12 @@ trait FormBuilder
     use GeneratesFormRules;
 
     /**
-     * Get the form metadata for the model.
-     *
-     * @return array
+     * Get the form metadata for the database model.
      */
-    public function getFormMetaData()
+    public function getFormMetaData(string $table)
     {
-        $fields = $this->getFormFields('admins');
-        $rules = $this->getFormRules('admins');
+        $fields = $this->getFormFields($table);
+        $rules = $this->getFormRules($table);
 
         $metadata = [
             'fields' => [],
@@ -40,6 +38,9 @@ trait FormBuilder
         return $metadata;
     }
 
+    /**
+     * Generate the form metadata for the given rules.
+     */
     public function generateFormMetadata($rules)
     {
         $metadata = [

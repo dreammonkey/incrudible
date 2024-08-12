@@ -8,6 +8,7 @@ use App\Incrudible\Http\Requests\Role\GetRolesRequest;
 use App\Incrudible\Http\Requests\Role\StoreRoleRequest;
 use App\Incrudible\Http\Requests\Role\UpdateRoleRequest;
 use App\Incrudible\Http\Resources\RoleResource;
+use App\Incrudible\Models\Permission;
 use App\Incrudible\Models\Role;
 use App\Incrudible\Traits\FormBuilder;
 use Illuminate\Support\Facades\Pipeline;
@@ -57,11 +58,21 @@ class RoleController extends Controller
     {
         $rules = (new StoreRoleRequest)->rules();
 
-        $metadata = $this->generateFormMetadata($rules);
+        $metadata = $this->getFormMetaData('roles');
 
         return inertia('Roles/Create', [
             'role' => Role::make()->toResource(),
             'metadata' => $metadata,
+            'relations' => [
+                [
+                    'name' => 'permissions',
+                    'enabled' => false,
+                    'type' => 'BelongsToMany',
+                    'model' => Permission::class,
+                    'routeKey' => Incrudible::routePrefix() . '.permissions.index',
+                    'value' => []
+                ]
+            ],
         ]);
     }
 
@@ -97,10 +108,23 @@ class RoleController extends Controller
         $rules = (new UpdateRoleRequest)->rules();
 
         $metadata = $this->generateFormMetadata($rules);
+        dump($metadata);
+
+        $role->load('permissions');  // Eager loading the permissions
 
         return inertia('Roles/Edit', [
             'role' => $role->toResource(),
             'metadata' => $metadata,
+            'relations' => [
+                [
+                    'name' => 'permissions',
+                    'enabled' => true,
+                    'type' => 'BelongsToMany',
+                    'model' => Permission::class,
+                    'routeKey' => Incrudible::routePrefix() . '.permissions.index',
+                    'value' => $role->permissions,
+                ]
+            ],
         ]);
     }
 
@@ -109,6 +133,13 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
+        $validated = $request->validated();
+
+        // Sync permissions
+        if (isset($validated['permissions'])) {
+            $role->permissions()->sync($validated['permissions']);
+        }
+
         $role->update($request->validated());
 
         return redirect()->back()->with('success', 'Role updated successfully.');

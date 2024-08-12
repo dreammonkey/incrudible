@@ -40,12 +40,13 @@ export interface FormField {
     | 'password'
     | 'textarea'
     | 'select'
+    | 'multi-select'
     | 'checkbox'
     | 'radio'
     | 'file'
     | 'datetime-local'
   required?: boolean
-  options?: string[]
+  options?: { label: string; value: string }[]
   rules?: string[]
 }
 
@@ -78,6 +79,18 @@ export interface PagedResource<T> {
   }
 }
 
+export interface CrudRelation<T> {
+  name: string
+  type: string
+  model: string
+  enabled: boolean
+  options?: any[]
+  routeKey?: string
+  // foreign_key: string
+  // local_key: string
+  value: T[]
+}
+
 export interface Admin {
   id: number
   username: string
@@ -93,6 +106,7 @@ export interface Role {
   guard_name: string
   created_at: string
   updated_at: string
+  permissions: Permission[]
 }
 
 export interface Permission {

@@ -34,7 +34,7 @@ class GetRolesRequest extends FormRequest
                 'created_at',
                 'updated_at',
             ])],
-            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/'],
+            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/']
         ];
     }
 }

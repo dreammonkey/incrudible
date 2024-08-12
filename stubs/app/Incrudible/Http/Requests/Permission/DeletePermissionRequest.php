@@ -3,10 +3,9 @@
 namespace App\Incrudible\Http\Requests\Permission;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class UpdatePermissionRequest extends FormRequest
+class DeletePermissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,19 +23,7 @@ class UpdatePermissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
-            'guard_name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
+            //
         ];
-
     }
 }
