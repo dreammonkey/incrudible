@@ -3,7 +3,6 @@
 namespace App\Incrudible\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class StoreRoleRequest extends FormRequest

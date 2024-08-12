@@ -2,10 +2,10 @@
 
 namespace Incrudible\Incrudible\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use Incrudible\Incrudible\IncrudibleServiceProvider;
-use LaracraftTech\LaravelSchemaRules\Resolvers\SchemaRulesResolverSqlite;
 use LaracraftTech\LaravelSchemaRules\Contracts\SchemaRulesResolverInterface;
+use LaracraftTech\LaravelSchemaRules\Resolvers\SchemaRulesResolverSqlite;
+use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Permission\PermissionServiceProvider;
 
 class TestCase extends Orchestra
@@ -34,10 +34,10 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        $migration = include __DIR__ . '/../database/migrations/create_admins_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/create_admins_table.php.stub';
         $migration->up();
 
-        $migration = include __DIR__ . '/../vendor/spatie/laravel-permission/database/migrations/create_permission_tables.php.stub';
+        $migration = include __DIR__.'/../vendor/spatie/laravel-permission/database/migrations/create_permission_tables.php.stub';
         $migration->up();
     }
 }

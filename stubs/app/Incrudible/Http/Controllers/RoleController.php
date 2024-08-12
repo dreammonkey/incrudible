@@ -69,9 +69,9 @@ class RoleController extends Controller
                     'enabled' => false,
                     'type' => 'BelongsToMany',
                     'model' => Permission::class,
-                    'routeKey' => Incrudible::routePrefix() . '.permissions.index',
-                    'value' => []
-                ]
+                    'routeKey' => Incrudible::routePrefix().'.permissions.index',
+                    'value' => [],
+                ],
             ],
         ]);
     }
@@ -121,9 +121,9 @@ class RoleController extends Controller
                     'enabled' => true,
                     'type' => 'BelongsToMany',
                     'model' => Permission::class,
-                    'routeKey' => Incrudible::routePrefix() . '.permissions.index',
+                    'routeKey' => Incrudible::routePrefix().'.permissions.index',
                     'value' => $role->permissions,
-                ]
+                ],
             ],
         ]);
     }

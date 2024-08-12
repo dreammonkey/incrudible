@@ -88,7 +88,7 @@ it('can create a new admin', function () {
         'username' => 'john.doe',
         'email' => 'john.doe@example.com',
         'password' => 'password',
-        'password_confirmation' => 'password'
+        'password_confirmation' => 'password',
     ];
 
     $this->actingAs($this->admin, incrudible_guard_name())
