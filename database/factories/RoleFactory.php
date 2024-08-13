@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Incrudible\Incrudible\Facades\Incrudible;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Incrudible\Incrudible\Facades\Incrudible;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Incrudible\Models\Role>
