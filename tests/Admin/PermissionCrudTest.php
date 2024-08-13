@@ -10,7 +10,6 @@ beforeEach(function () {
 
 it('prevents guests from accessing any of the permission crud routes', function () {
 
-
     $this->get(incrudible_route('permissions.index'))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
