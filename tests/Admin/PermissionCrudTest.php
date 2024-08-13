@@ -90,7 +90,7 @@ it('can create a new permission', function () {
     $this->actingAs($this->admin, incrudible_guard_name())
         ->postJson(incrudible_route('permissions.store'), $permission->toArray())
         ->assertStatus(302)
-        ->assertRedirect(incrudible_route('permissions.show', Permission::first()))
+        ->assertRedirect(incrudible_route('permissions.show', 2))
         ->assertSessionHas('success', 'Permission created successfully.');
 
     $this->assertDatabaseHas('permissions', $permission->toArray());
