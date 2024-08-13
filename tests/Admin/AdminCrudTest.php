@@ -60,7 +60,6 @@ it('returns the admin crud index as json', function () {
 });
 
 it('renders the admin crud create', function () {
-
     $this->actingAs($this->admin, incrudible_guard_name())
         ->get(incrudible_route('admins.create'))
         ->assertStatus(200);

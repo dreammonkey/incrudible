@@ -5,10 +5,11 @@ use App\Incrudible\Models\Permission;
 
 beforeEach(function () {
     $this->admin = Admin::factory()->create();
+    $this->permission = Permission::factory()->create();
 });
 
 it('prevents guests from accessing any of the permission crud routes', function () {
-    $permission = Permission::factory()->create();
+
 
     $this->get(incrudible_route('permissions.index'))
         ->assertStatus(302)
@@ -18,11 +19,11 @@ it('prevents guests from accessing any of the permission crud routes', function 
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
-    $this->get(incrudible_route('permissions.edit', $permission))
+    $this->get(incrudible_route('permissions.edit', $this->permission))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
-    $this->get(incrudible_route('permissions.show', $permission))
+    $this->get(incrudible_route('permissions.show', $this->permission))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
@@ -30,11 +31,11 @@ it('prevents guests from accessing any of the permission crud routes', function 
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
-    $this->put(incrudible_route('permissions.update', $permission))
+    $this->put(incrudible_route('permissions.update', $this->permission))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
-    $this->delete(incrudible_route('permissions.destroy', $permission))
+    $this->delete(incrudible_route('permissions.destroy', $this->permission))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 });
@@ -63,28 +64,22 @@ it('returns the permission crud index as json', function () {
 });
 
 it('renders the permission crud create', function () {
-    $permission = Permission::factory()->create();
-
     $this->actingAs($this->admin, incrudible_guard_name())
         ->get(incrudible_route('permissions.create'))
         ->assertStatus(200);
 });
 
 it('renders the permission crud edit', function () {
-    $permission = Permission::factory()->create();
-
     $this->actingAs($this->admin, incrudible_guard_name())
-        ->get(incrudible_route('permissions.edit', $permission))
+        ->get(incrudible_route('permissions.edit', $this->permission))
         ->assertStatus(200);
 
     // TODO: Assert Inertia props
 });
 
 it('renders the permission crud show', function () {
-    $permission = Permission::factory()->create();
-
     $this->actingAs($this->admin, incrudible_guard_name())
-        ->get(incrudible_route('permissions.show', $permission))
+        ->get(incrudible_route('permissions.show', $this->permission))
         ->assertStatus(200);
 
     // TODO: Assert Inertia props
@@ -103,11 +98,10 @@ it('can create a new permission', function () {
 });
 
 it('can update a permission', function () {
-    $permission = Permission::factory()->create();
     $newPermission = Permission::factory()->make();
 
     $this->actingAs($this->admin, incrudible_guard_name())
-        ->putJson(incrudible_route('permissions.update', $permission), $newPermission->toArray())
+        ->putJson(incrudible_route('permissions.update', $this->permission), $newPermission->toArray())
         ->assertStatus(302)
         ->assertSessionHas('success', 'Permission updated successfully.');
 
