@@ -53,7 +53,6 @@ class {{ model_singular_uc_first }}Controller extends Controller
     public function create()
     {
         $rules = (new Store{{ model_singular_uc_first }}Request)->rules();
-
         $metadata = $this->generateFormMetadata($rules);
 
         return inertia('{{ model_plural_uc_first }}/Create', [
@@ -78,7 +77,8 @@ class {{ model_singular_uc_first }}Controller extends Controller
      */
     public function show({{ model_singular_uc_first }} ${{ model_singular }})
     {
-        $metadata = $this->getFormMetaData('{{ model_plural }}');
+        $rules = (new Store{{ model_singular_uc_first }}Request)->rules();
+        $metadata = $this->generateFormMetadata($rules);
 
         return inertia('{{ model_plural_uc_first }}/Show', [
             '{{ model_singular }}' => ${{ model_singular }}->toResource(),

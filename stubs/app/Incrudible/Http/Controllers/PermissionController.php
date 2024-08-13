@@ -2,17 +2,17 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Filters\SearchFilter;
-use App\Incrudible\Filters\SortingFilter;
-use App\Incrudible\Http\Requests\Permission\DeletePermissionRequest;
-use App\Incrudible\Http\Requests\Permission\GetPermissionsRequest;
-use App\Incrudible\Http\Requests\Permission\StorePermissionRequest;
-use App\Incrudible\Http\Requests\Permission\UpdatePermissionRequest;
-use App\Incrudible\Http\Resources\PermissionResource;
 use App\Incrudible\Models\Permission;
 use App\Incrudible\Traits\FormBuilder;
+use App\Incrudible\Filters\SearchFilter;
 use Illuminate\Support\Facades\Pipeline;
+use App\Incrudible\Filters\SortingFilter;
 use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Resources\PermissionResource;
+use App\Incrudible\Http\Requests\Permission\GetPermissionsRequest;
+use App\Incrudible\Http\Requests\Permission\StorePermissionRequest;
+use App\Incrudible\Http\Requests\Permission\DeletePermissionRequest;
+use App\Incrudible\Http\Requests\Permission\UpdatePermissionRequest;
 
 class PermissionController extends Controller
 {
@@ -57,7 +57,6 @@ class PermissionController extends Controller
     public function create()
     {
         $rules = (new StorePermissionRequest)->rules();
-
         $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Permissions/Create', [
@@ -82,7 +81,8 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission)
     {
-        $metadata = $this->getFormMetaData('permissions');
+        $rules = (new StorePermissionRequest)->rules();
+        $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Permissions/Show', [
             'permission' => $permission->toResource(),
@@ -95,8 +95,7 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        $rules = (new UpdatePermissionRequest)->rules();
-
+        $rules = (new StorePermissionRequest)->rules();
         $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Permissions/Edit', [

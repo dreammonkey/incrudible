@@ -2,17 +2,17 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Filters\SearchFilter;
-use App\Incrudible\Filters\SortingFilter;
-use App\Incrudible\Http\Requests\Admin\DeleteAdminRequest;
-use App\Incrudible\Http\Requests\Admin\GetAdminsRequest;
-use App\Incrudible\Http\Requests\Admin\StoreAdminRequest;
-use App\Incrudible\Http\Requests\Admin\UpdateAdminRequest;
-use App\Incrudible\Http\Resources\AdminResource;
 use App\Incrudible\Models\Admin;
 use App\Incrudible\Traits\FormBuilder;
+use App\Incrudible\Filters\SearchFilter;
 use Illuminate\Support\Facades\Pipeline;
+use App\Incrudible\Filters\SortingFilter;
 use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Resources\AdminResource;
+use App\Incrudible\Http\Requests\Admin\GetAdminsRequest;
+use App\Incrudible\Http\Requests\Admin\StoreAdminRequest;
+use App\Incrudible\Http\Requests\Admin\DeleteAdminRequest;
+use App\Incrudible\Http\Requests\Admin\UpdateAdminRequest;
 
 class AdminController extends Controller
 {
@@ -59,8 +59,6 @@ class AdminController extends Controller
     public function create()
     {
         $rules = (new StoreAdminRequest)->rules();
-        // dd($rules);
-
         $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Admins/Create', [
@@ -85,7 +83,8 @@ class AdminController extends Controller
      */
     public function show(Admin $admin)
     {
-        $metadata = $this->getFormMetaData('admins');
+        $rules = (new UpdateAdminRequest)->rules();
+        $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Admins/Show', [
             'admin' => $admin->toResource(),
@@ -99,8 +98,6 @@ class AdminController extends Controller
     public function edit(Admin $admin)
     {
         $rules = (new UpdateAdminRequest)->rules();
-        // dd($rules);
-
         $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Admins/Edit', [
