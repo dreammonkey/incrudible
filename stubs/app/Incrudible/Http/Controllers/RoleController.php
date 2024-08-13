@@ -2,18 +2,18 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Models\Role;
-use App\Incrudible\Models\Permission;
-use App\Incrudible\Traits\FormBuilder;
 use App\Incrudible\Filters\SearchFilter;
-use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
-use Incrudible\Incrudible\Facades\Incrudible;
-use App\Incrudible\Http\Resources\RoleResource;
+use App\Incrudible\Http\Requests\Role\DeleteRoleRequest;
 use App\Incrudible\Http\Requests\Role\GetRolesRequest;
 use App\Incrudible\Http\Requests\Role\StoreRoleRequest;
-use App\Incrudible\Http\Requests\Role\DeleteRoleRequest;
 use App\Incrudible\Http\Requests\Role\UpdateRoleRequest;
+use App\Incrudible\Http\Resources\RoleResource;
+use App\Incrudible\Models\Permission;
+use App\Incrudible\Models\Role;
+use App\Incrudible\Traits\FormBuilder;
+use Illuminate\Support\Facades\Pipeline;
+use Incrudible\Incrudible\Facades\Incrudible;
 
 class RoleController extends Controller
 {
@@ -70,7 +70,7 @@ class RoleController extends Controller
                     'enabled' => false,
                     'type' => 'BelongsToMany',
                     'model' => Permission::class,
-                    'routeKey' => Incrudible::routePrefix() . '.permissions.index',
+                    'routeKey' => Incrudible::routePrefix().'.permissions.index',
                     'value' => [],
                 ],
             ],

@@ -1,7 +1,7 @@
 <?php
 
-use Carbon\Carbon;
 use App\Incrudible\Models\Admin;
+use Carbon\Carbon;
 
 use function Pest\Laravel\actingAs;
 
