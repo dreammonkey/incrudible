@@ -34,8 +34,6 @@ export default function Login({
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
-    console.log(data)
-
     post(route(`${routePrefix}.auth.login`))
   }
 
@@ -46,7 +44,7 @@ export default function Login({
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>Enter your email below to login to your account</CardDescription>
-          {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+          {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
         </CardHeader>
         <CardContent>
           <form onSubmit={submit}>
@@ -108,7 +106,7 @@ export default function Login({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end mt-4">
+              <div className="mt-4 flex items-center justify-end">
                 <Button className="" disabled={processing}>
                   Log in
                 </Button>

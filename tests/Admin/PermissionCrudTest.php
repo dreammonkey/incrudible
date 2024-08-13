@@ -104,7 +104,7 @@ it('can update a permission', function () {
     $permission = Permission::factory()->create();
     $newPermission = Permission::factory()->make();
 
-    $response = $this->actingAs($this->admin, incrudible_guard_name())
+    $this->actingAs($this->admin, incrudible_guard_name())
         ->putJson(incrudible_route('permissions.update', $permission), $newPermission->toArray())
         ->assertStatus(302)
         ->assertSessionHas('success', 'Permission updated successfully.');

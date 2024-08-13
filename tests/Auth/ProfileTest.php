@@ -1,7 +1,7 @@
 <?php
 
-use App\Incrudible\Models\Admin;
 use Carbon\Carbon;
+use App\Incrudible\Models\Admin;
 
 use function Pest\Laravel\actingAs;
 
@@ -31,6 +31,7 @@ it('allows admins to update their profile', function () {
 });
 
 it('leaves the email verification status unchanged when the email address is unchanged', function () {
+    $this->markTestIncomplete('Email verification was removed since admins can only be created manually via cli...');
     actingAs($this->admin, incrudible_guard_name())
         ->from(incrudible_route('profile.edit'))
         ->patch(incrudible_route('profile.update'), [

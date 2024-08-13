@@ -41,7 +41,6 @@ export const BelongsToMany: React.FC<BelongsToManyProps> = ({ relation, onChange
           options={(options?.data as Permission[]) ?? []}
           getKey={(option) => option.id.toString()}
           getLabel={(option) => option.name}
-          getValue={(option) => option}
           onChange={(value) => {
             // setSelected(value)
             // onChange?.(value)

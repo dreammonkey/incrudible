@@ -76,11 +76,11 @@ return [
                         'icon' => 'Users',
                         'route' => 'admins.index',
                     ],
-                    // [
-                    //     'label' => 'Roles',
-                    //     'icon' => 'Shield',
-                    //     'route' => 'roles.index',
-                    // ],
+                    [
+                        'label' => 'Roles',
+                        'icon' => 'Shield',
+                        'route' => 'roles.index',
+                    ],
                     [
                         'label' => 'Permissions',
                         'icon' => 'Lock',
@@ -108,7 +108,7 @@ return [
                         'route' => 'logout',
                     ],
                 ],
-            ],
+            ]
         ],
 
         // The menu items that will be displayed in the top right corner
@@ -124,5 +124,6 @@ return [
         ],
 
     ],
+
 
 ];

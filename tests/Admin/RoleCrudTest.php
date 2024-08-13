@@ -1,6 +1,11 @@
 <?php
 
 use App\Incrudible\Models\Role;
+use App\Incrudible\Models\Admin;
+
+beforeEach(function () {
+    $this->admin = Admin::factory()->create();
+});
 
 it('prevents guests from accessing any of the role crud routes', function () {
     $this->get(incrudible_route('roles.index'))
@@ -30,4 +35,10 @@ it('prevents guests from accessing any of the role crud routes', function () {
     $this->delete(incrudible_route('roles.destroy', Role::factory()->create()))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
+});
+
+it('renders the role crud index', function () {
+    $this->actingAs($this->admin, incrudible_guard_name())
+        ->get(incrudible_route('roles.index'))
+        ->assertStatus(200);
 });

@@ -17,9 +17,9 @@ export type UseSelectParams<V, Option, Multiple extends boolean> = {
 
 export type UseSelectOptionsParams<V, Option> = {
   options: readonly Option[]
-  getLabel: (option: Option) => string
-  getKey: (option: Option) => string
-  getValue: (option: Option) => V
+  getLabel?: (option: Option) => string
+  getKey?: (option: Option) => string
+  getValue?: (option: Option) => V
 }
 
 // More native props should pass through the props
@@ -30,9 +30,9 @@ function ComboboxInner<V, Option, Multiple extends boolean = false>(
     value,
     options,
     onChange,
-    getLabel,
-    getKey,
-    getValue,
+    getLabel = (option: Option) => option as unknown as string,
+    getKey = (option: Option) => option as unknown as string,
+    getValue = (option: Option) => option as unknown as V,
     placeholder,
     disabled,
     required,
