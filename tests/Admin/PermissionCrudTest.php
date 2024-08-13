@@ -8,6 +8,8 @@ beforeEach(function () {
 });
 
 it('prevents guests from accessing any of the permission crud routes', function () {
+    $permission = Permission::factory()->create();
+
     $this->get(incrudible_route('permissions.index'))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
@@ -16,11 +18,11 @@ it('prevents guests from accessing any of the permission crud routes', function 
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
-    $this->get(incrudible_route('permissions.edit', Permission::factory()->create()))
+    $this->get(incrudible_route('permissions.edit', $permission))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
-    $this->get(incrudible_route('permissions.show', Permission::factory()->create()))
+    $this->get(incrudible_route('permissions.show', $permission))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
@@ -28,11 +30,11 @@ it('prevents guests from accessing any of the permission crud routes', function 
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
-    $this->put(incrudible_route('permissions.update', Permission::factory()->create()))
+    $this->put(incrudible_route('permissions.update', $permission))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 
-    $this->delete(incrudible_route('permissions.destroy', Permission::factory()->create()))
+    $this->delete(incrudible_route('permissions.destroy', $permission))
         ->assertStatus(302)
         ->assertRedirect(incrudible_route('auth.login'));
 });
