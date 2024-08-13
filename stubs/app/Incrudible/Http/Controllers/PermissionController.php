@@ -2,17 +2,17 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Models\Permission;
-use App\Incrudible\Traits\FormBuilder;
 use App\Incrudible\Filters\SearchFilter;
-use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
-use Incrudible\Incrudible\Facades\Incrudible;
-use App\Incrudible\Http\Resources\PermissionResource;
+use App\Incrudible\Http\Requests\Permission\DeletePermissionRequest;
 use App\Incrudible\Http\Requests\Permission\GetPermissionsRequest;
 use App\Incrudible\Http\Requests\Permission\StorePermissionRequest;
-use App\Incrudible\Http\Requests\Permission\DeletePermissionRequest;
 use App\Incrudible\Http\Requests\Permission\UpdatePermissionRequest;
+use App\Incrudible\Http\Resources\PermissionResource;
+use App\Incrudible\Models\Permission;
+use App\Incrudible\Traits\FormBuilder;
+use Illuminate\Support\Facades\Pipeline;
+use Incrudible\Incrudible\Facades\Incrudible;
 
 class PermissionController extends Controller
 {
