@@ -5,7 +5,7 @@ namespace App\Incrudible\Http\Requests\Permission;
 use Illuminate\Foundation\Http\FormRequest;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class StorePermissionRequest extends FormRequest
+class DestroyPermissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,6 @@ class StorePermissionRequest extends FormRequest
      */
     public function rules(): array
     {
-        return config('incrudible.permissions.store.rules');
+        return [];
     }
 }

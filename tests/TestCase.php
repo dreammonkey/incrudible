@@ -37,6 +37,7 @@ class TestCase extends Orchestra
 
         // Manually set the configuration for builtin cruds
         config()->set('incrudible.admins', require __DIR__ . '/../config/incrudible/admins.php');
+        config()->set('incrudible.permissions', require __DIR__ . '/../config/incrudible/permissions.php');
 
         $migration = include __DIR__ . '/../database/migrations/create_admins_table.php.stub';
         $migration->up();

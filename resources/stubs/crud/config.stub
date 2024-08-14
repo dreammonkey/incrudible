@@ -10,13 +10,10 @@ return [
             'default' => 25,
             'options' => [10, 25, 50, 100],
         ],
-        // 'resource' => \App\Incrudible\Http\Resources\{{ model }}Resource::class,
     ],
 
     //
-    'show' => [
-        // 'resource' => \App\Incrudible\Http\Resources\{{ model }}Resource::class,
-    ],
+    'show' => [],
 
     //
     'store' => [

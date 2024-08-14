@@ -73,7 +73,7 @@ export default function {{ modelName }}Create({
       {recentlySuccessful && (
         <div className="flex items-center rounded-lg border px-4 py-3 text-sm">
           <ThumbsUp className="mr-2 inline-block size-4 text-green-800" />
-          Admin created successfully
+          {{ modelName }} created successfully
         </div>
       )}
     </AuthenticatedLayout>

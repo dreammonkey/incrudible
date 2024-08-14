@@ -110,8 +110,8 @@ class CrudMakeCommand extends GeneratorCommand
 
         $namespace = $this->getDefaultNamespace('/');
 
-        // $this->call('crud:config', ['table' => $table, '--force' => $force]);
-        // $this->call('crud:model', ['name' => "$namespace\Models\\$model", '--force' => $force]);
+        $this->call('crud:config', ['table' => $table, '--force' => $force]);
+        $this->call('crud:model', ['name' => "$namespace\Models\\$model", '--force' => $force]);
         $this->call('make:resource', ['name' => "$namespace\Http\Resources\\{$model}Resource", '--force' => $force]);
         $this->call('crud:controller', ['table' => $table, '--force' => $force]);
         $this->call('crud:index-request', ['table' => $table, '--force' => $force]);

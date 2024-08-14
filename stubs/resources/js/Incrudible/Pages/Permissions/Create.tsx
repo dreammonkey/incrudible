@@ -2,19 +2,23 @@ import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Permission, FormMetaData, PageProps } from '@/types/incrudible'
+import { Permission, FormField, FormRules, PageProps } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
-import { ArrowLeft, ArrowLeftSquare, ThumbsUp } from 'lucide-react'
+import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
 // import { laravelFormRulesToZodSchema } from '@/lib/utils'
 
-export default function PermissionCreate({ auth, permission, metadata }: PageProps<{ permission: any; metadata: FormMetaData }>) {
-  // console.log({ auth, permission, metadata })
+export default function PermissionCreate({ 
+  auth, 
+  fields,
+  rules,
+  }: PageProps<{ fields: FormField[]; rules: FormRules }>) {
+  // console.log({ auth, fields, rules })
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
   const { setData, post, data, recentlySuccessful } = useForm<Permission>(
-    metadata.fields.reduce((acc, field) => {
+    fields.reduce((acc, field) => {
       return { ...acc, [field.name]: '' }
     }, {} as Permission),
   )
@@ -25,9 +29,6 @@ export default function PermissionCreate({ auth, permission, metadata }: PagePro
   const onSubmit = (data: Permission) => {
     // console.log({ data })
 
-    // TODO: mutation instead of post ??
-
-    // POST `${routePrefix}/permissions`}`
     post(route(`${routePrefix}.permissions.store`), {
       onSuccess: () => {
         console.log('Permission created successfully')
@@ -60,7 +61,8 @@ export default function PermissionCreate({ auth, permission, metadata }: PagePro
       <div className="grid gap-y-2 rounded-lg border p-4">
         <IncrudibleForm
           ref={formRef}
-          metadata={metadata}
+          fields={fields}
+          rules={rules}
           data={data}
           onFormSubmit={onSubmit}
           onChange={setData}
@@ -69,8 +71,8 @@ export default function PermissionCreate({ auth, permission, metadata }: PagePro
       </div>
 
       {recentlySuccessful && (
-        <div className="relative justify-center rounded-lg border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-2 inline-block h-5 w-5 text-green-800" />
+        <div className="flex items-center rounded-lg border px-4 py-3 text-sm">
+          <ThumbsUp className="mr-2 inline-block size-4 text-green-800" />
           Permission created successfully
         </div>
       )}

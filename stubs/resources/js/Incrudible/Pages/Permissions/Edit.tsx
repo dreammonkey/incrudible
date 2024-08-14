@@ -2,7 +2,7 @@ import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Permission, FormMetaData, PageProps, Resource } from '@/types/incrudible'
+import { Permission, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -10,8 +10,9 @@ import { useRef } from 'react'
 export default function PermissionEdit({
   auth,
   permission,
-  metadata,
-}: PageProps<{ permission: Resource<Permission>; metadata: FormMetaData }>) {
+  fields,
+  rules,
+}: PageProps<{ permission: Resource<Permission>; fields: FormField[]; rules: FormRules }>) {
   // console.log({ permission })
 
   const { routePrefix } = usePage<PageProps>().props.incrudible
@@ -23,9 +24,6 @@ export default function PermissionEdit({
   const onSubmit = (data: Permission) => {
     // console.log({ data })
 
-    // TODO: mutation instead of put ??
-
-    // PUT `${routePrefix}/permissions/${permission.data.id}`
     put(route(`${routePrefix}.permissions.update`, permission.data.id), {
       onSuccess: () => {
         console.log('Permission updated successfully')
@@ -58,7 +56,8 @@ export default function PermissionEdit({
       <div className="grid gap-y-2 rounded-lg border p-4">
         <IncrudibleForm
           ref={formRef}
-          metadata={metadata}
+          fields={fields}
+          rules={rules}
           data={data}
           onFormSubmit={onSubmit}
           onChange={setData}
@@ -67,8 +66,8 @@ export default function PermissionEdit({
       </div>
 
       {recentlySuccessful && (
-        <div className="relative justify-center rounded-xl border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-2 inline-block h-5 w-5 text-green-800" />
+        <div className="flex items-center rounded-xl border px-4 py-3 text-sm">
+          <ThumbsUp className="mr-2 inline-block size-4 text-green-800" />
           Permission updated successfully
         </div>
       )}

@@ -33,7 +33,7 @@ import {
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
 
-export const createColumns = (actions: TableAction[], listable: string[] = []): ColumnDef<Admin>[] => {
+export const createColumns = (actions: TableAction[], listable: string[] = []): ColumnDef<{{ modelName }}>[] => {
   const fields = listable.map((field) => {
     return {
       accessorKey: field,
@@ -81,7 +81,7 @@ export const createColumns = (actions: TableAction[], listable: string[] = []): 
                       'w-full justify-start rounded-md text-sm',
                     )}
                     onClick={action.onClick?.(item.id) ?? (() => {})}
-                    href={action.route ? route(action.route, { admin: item.id }) : '#'}
+                    href={action.route ? route(action.route, {  {{ instanceSingular }}: item.id }) : '#'}
                   >
                     <action.icon className="mr-2 h-4 w-4" />
                     &nbsp;{action.label}

@@ -2,17 +2,17 @@
 
 namespace App\Incrudible\Http\Controllers;
 
+use App\Incrudible\Models\Permission;
+use App\Incrudible\Traits\FormBuilder;
 use App\Incrudible\Filters\SearchFilter;
+use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
-use App\Incrudible\Http\Requests\Permission\DeletePermissionRequest;
+use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Resources\PermissionResource;
 use App\Incrudible\Http\Requests\Permission\GetPermissionsRequest;
 use App\Incrudible\Http\Requests\Permission\StorePermissionRequest;
 use App\Incrudible\Http\Requests\Permission\UpdatePermissionRequest;
-use App\Incrudible\Http\Resources\PermissionResource;
-use App\Incrudible\Models\Permission;
-use App\Incrudible\Traits\FormBuilder;
-use Illuminate\Support\Facades\Pipeline;
-use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Requests\Permission\DestroyPermissionRequest;
 
 class PermissionController extends Controller
 {
@@ -33,10 +33,7 @@ class PermissionController extends Controller
                     ->through([
                         new SearchFilter(
                             search: $request->validated('search'),
-                            fields: [
-                                'name',
-                                'guard_name',
-                            ]
+                            fields: config('incrudible.permissions.index.searchable')
                         ),
                         new SortingFilter(
                             orderBy: $request->validated('orderBy'),
@@ -48,7 +45,9 @@ class PermissionController extends Controller
             );
         }
 
-        return inertia('Permissions/Index');
+        return inertia('Permissions/Index', [
+            'listable' => config('incrudible.permissions.index.listable'),
+        ]);
     }
 
     /**
@@ -56,12 +55,9 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        $rules = (new StorePermissionRequest)->rules();
-        $metadata = $this->generateFormMetadata($rules);
-
         return inertia('Permissions/Create', [
-            'permission' => Permission::make()->toResource(),
-            'metadata' => $metadata,
+            'fields' => config('incrudible.permissions.store.fields'),
+            'rules' => config('incrudible.permissions.store.rules'),
         ]);
     }
 
@@ -95,12 +91,10 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        $rules = (new StorePermissionRequest)->rules();
-        $metadata = $this->generateFormMetadata($rules);
-
         return inertia('Permissions/Edit', [
             'permission' => $permission->toResource(),
-            'metadata' => $metadata,
+            'fields' => config('incrudible.permissions.update.fields'),
+            'rules' => config('incrudible.permissions.update.rules'),
         ]);
     }
 
@@ -117,7 +111,7 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DeletePermissionRequest $request, Permission $permission)
+    public function destroy(DestroyPermissionRequest $request, Permission $permission)
     {
         $permission->delete();
 

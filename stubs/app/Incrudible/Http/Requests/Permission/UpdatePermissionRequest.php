@@ -22,20 +22,6 @@ class UpdatePermissionRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
-            'guard_name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
-        ];
-
+        return config('incrudible.permissions.update.rules');
     }
 }

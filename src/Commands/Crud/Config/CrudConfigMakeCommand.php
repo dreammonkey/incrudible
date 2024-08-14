@@ -133,8 +133,13 @@ class CrudConfigMakeCommand extends GeneratorCommand
             indentLevel: 2
         );
 
+        // filter out id, created_at, updated_at
+        $formFields = array_filter($metadata['fields'], function ($field) {
+            return !in_array($field['name'], ['id', 'created_at', 'updated_at']);
+        });
+
         $fields = VarExporter::export(
-            $metadata['fields'],
+            array_values($formFields),
             VarExporter::TRAILING_COMMA_IN_ARRAY,
             indentLevel: 2
         );
