@@ -60,8 +60,8 @@ class IncrudibleServiceProvider extends PackageServiceProvider
 
         $this->loadHelpers();
         $this->registerAuthProvider();
-        $this->registerMiddlewareGroup($this->app->router);
-        $this->registerMiddlewareAliases($this->app->router);
+        $this->registerMiddlewareGroup(app()->router);
+        $this->registerMiddlewareAliases(app()->router);
         $this->registerRouteMacros();
     }
 
@@ -70,18 +70,18 @@ class IncrudibleServiceProvider extends PackageServiceProvider
         parent::boot();
 
         $this->publishes([
-            __DIR__.'/../routes/incrudible.php' => base_path('routes/incrudible.php'),
+            __DIR__ . '/../routes/incrudible.php' => base_path('routes/incrudible.php'),
         ], 'incrudible-routes');
 
         $this->publishes([
-            __DIR__.'/../config/incrudible/admins.php' => config_path('incrudible/admins.php'),
-            __DIR__.'/../config/incrudible/permission.php' => config_path('incrudible/permission.php'),
+            __DIR__ . '/../config/incrudible/admins.php' => config_path('incrudible/admins.php'),
+            __DIR__ . '/../config/incrudible/permission.php' => config_path('incrudible/permission.php'),
         ], 'incrudible-config');
 
         $this->loadRoutesFrom(
             file_exists(base_path('routes/incrudible.php'))
                 ? base_path('routes/incrudible.php')
-                : __DIR__.'/../routes/incrudible.php'
+                : __DIR__ . '/../routes/incrudible.php'
         );
     }
 
@@ -90,6 +90,6 @@ class IncrudibleServiceProvider extends PackageServiceProvider
      */
     public function loadHelpers()
     {
-        require __DIR__.'/helpers.php';
+        require __DIR__ . '/helpers.php';
     }
 }
