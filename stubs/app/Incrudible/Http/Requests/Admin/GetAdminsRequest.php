@@ -28,7 +28,7 @@ class GetAdminsRequest extends FormRequest
             'perPage' => ['nullable', 'integer', 'max:100', 'min:5'],
             'orderDir' => ['nullable', 'in:desc,asc'],
             'orderBy' => ['nullable',  Rule::in(config('incrudible.admins.index.sortable'))],
-            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/']
+            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/'],
         ];
     }
 }

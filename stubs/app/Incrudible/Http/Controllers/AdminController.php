@@ -26,7 +26,6 @@ class AdminController extends Controller
         if ($request->wantsJson()) {
 
             return AdminResource::collection(
-
                 Pipeline::send(
                     Admin::query(),
                 )
@@ -77,7 +76,7 @@ class AdminController extends Controller
      */
     public function show(Admin $admin)
     {
-        $rules = (new StoreAdminRequest)->rules();
+        $rules = (new StoreAdminRequest())->rules();
         $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Admins/Show', [

@@ -27,7 +27,6 @@ class RoleController extends Controller
         if ($request->wantsJson()) {
 
             return RoleResource::collection(
-
                 Pipeline::send(
                     Role::query(),
                 )
@@ -57,7 +56,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $rules = (new StoreRoleRequest)->rules();
+        $rules = (new StoreRoleRequest())->rules();
 
         $metadata = $this->generateFormMetadata($rules);
 
@@ -106,7 +105,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $rules = (new StoreRoleRequest)->rules();
+        $rules = (new StoreRoleRequest())->rules();
 
         $metadata = $this->generateFormMetadata($rules);
 

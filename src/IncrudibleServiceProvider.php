@@ -11,7 +11,9 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class IncrudibleServiceProvider extends PackageServiceProvider
 {
-    use RegistersAuthProvider, RegistersMiddleware, RegistersRouteMacros;
+    use RegistersAuthProvider;
+    use RegistersMiddleware;
+    use RegistersRouteMacros;
 
     public function configurePackage(Package $package): void
     {

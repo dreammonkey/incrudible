@@ -110,8 +110,8 @@ class ScaffoldIncrudible extends Command
         }, 'prettier');
 
         // Copy Incrudible App...
-        (new Filesystem)->ensureDirectoryExists(app_path('Incrudible'));
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->ensureDirectoryExists(app_path('Incrudible'));
+        (new Filesystem())->copyDirectory(
             __DIR__.'/../../stubs/app/Incrudible',
             app_path('Incrudible')
         );
@@ -124,16 +124,16 @@ class ScaffoldIncrudible extends Command
 
         // Resources...
         // Components + Pages...
-        (new Filesystem)->ensureDirectoryExists(resource_path('js/Incrudible'));
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->ensureDirectoryExists(resource_path('js/Incrudible'));
+        (new Filesystem())->copyDirectory(
             __DIR__.'/../../stubs/resources/js/Incrudible',
             resource_path('js/Incrudible')
         );
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->copyDirectory(
             __DIR__.'/../../stubs/resources/js/types',
             resource_path('js/types')
         );
-        (new Filesystem)->copyDirectory(
+        (new Filesystem())->copyDirectory(
             __DIR__.'/../../stubs/resources/js/lib',
             resource_path('js/lib')
         );

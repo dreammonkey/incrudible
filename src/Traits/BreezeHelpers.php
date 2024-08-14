@@ -141,7 +141,7 @@ trait BreezeHelpers
      */
     protected static function flushNodeModules()
     {
-        tap(new Filesystem, function ($files) {
+        tap(new Filesystem(), function ($files) {
             $files->deleteDirectory(base_path('node_modules'));
 
             $files->delete(base_path('yarn.lock'));
@@ -169,7 +169,7 @@ trait BreezeHelpers
      */
     protected function phpBinary()
     {
-        return (new PhpExecutableFinder)->find(false) ?: 'php';
+        return (new PhpExecutableFinder())->find(false) ?: 'php';
     }
 
     /**

@@ -26,7 +26,6 @@ class PermissionController extends Controller
         if ($request->wantsJson()) {
 
             return PermissionResource::collection(
-
                 Pipeline::send(
                     Permission::query(),
                 )
@@ -77,7 +76,7 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission)
     {
-        $rules = (new StorePermissionRequest)->rules();
+        $rules = (new StorePermissionRequest())->rules();
         $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Permissions/Show', [
