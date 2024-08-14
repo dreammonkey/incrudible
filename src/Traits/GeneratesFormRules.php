@@ -2,9 +2,9 @@
 
 namespace Incrudible\Incrudible\Traits;
 
-use Illuminate\Support\Str;
 use App\Incrudible\Enum\FieldTypes;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use LaracraftTech\LaravelSchemaRules\Contracts\SchemaRulesResolverInterface;
 
 trait GeneratesFormRules

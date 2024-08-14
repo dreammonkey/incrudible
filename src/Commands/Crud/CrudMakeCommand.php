@@ -2,14 +2,14 @@
 
 namespace Incrudible\Incrudible\Commands\Crud;
 
-use Illuminate\Support\Str;
-use function Laravel\Prompts\suggest;
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputOption;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\suggest;
 
 class CrudMakeCommand extends GeneratorCommand
 {
