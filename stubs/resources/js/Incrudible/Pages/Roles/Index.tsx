@@ -1,4 +1,4 @@
-import { getCrudIndex } from '@/Incrudible/Api/Crud'
+import { getCrudIndex } from '@/Incrudible/Api/services/getCrudIndex'
 import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { Button, buttonVariants } from '@/Incrudible/ui/button'
@@ -18,8 +18,8 @@ import {
   PagedResource,
   TableAction,
 } from '@/types/incrudible'
-import { Head, Link, router, usePage } from '@inertiajs/react'
-import { useQuery } from '@tanstack/react-query'
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ColumnDef, SortingState } from '@tanstack/react-table'
 import {
   Eye,
@@ -32,71 +32,80 @@ import {
 } from 'lucide-react'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
-export const createColumns = (actions: TableAction[]): ColumnDef<Role>[] => [
-  {
-    accessorKey: 'id',
-    header: 'Id',
-  },
-  {
-accessorKey: 'name',
-header: 'Name',
-},
-{
-accessorKey: 'guard_name',
-header: 'Guard Name',
-},
-  {
-    accessorKey: 'created_at',
-    header: 'Created',
-    cell: ({ row }) => formatDate(row.original.created_at),
-  },
-  {
-    accessorKey: 'updated_at',
-    header: 'Updated',
-    cell: ({ row }) => formatDate(row.original.updated_at),
-  },
-  {
-    id: 'actions',
-    header: 'Actions',
-    enableSorting: false,
-    cell: ({ row }) => {
-      const item = row.original
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {actions.map((action, index) => (
-              <DropdownMenuItem key={index}>
-                <Link
-                  className={cn(
-                    buttonVariants({ variant: 'ghost', size: 'sm' }),
-                    'w-full justify-start rounded-md text-sm',
-                  )}
-                  onClick={action.onClick?.(item.id) ?? (() => {})}
-                  href={
-                    action.route ? route(action.route, { role: item.id }) : '#'
-                  }
-                >
-                  <action.icon className="mr-2 h-4 w-4" />
-                  &nbsp;{action.label}
-                </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+export const createColumns = (actions: TableAction[], listable: string[] = []): ColumnDef<Role>[] => {
+  const fields = listable.map((field) => {
+    return {
+      accessorKey: field,
+      header: field,
+    }
+  })
+
+  return [
+    {
+      accessorKey: 'id',
+      header: 'Id',
     },
-  },
-]
+    ...fields,
+    {
+      accessorKey: 'created_at',
+      header: 'Created',
+      cell: ({ row }) => formatDate(row.original.created_at),
+    },
+    {
+      accessorKey: 'updated_at',
+      header: 'Updated',
+      cell: ({ row }) => formatDate(row.original.updated_at),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      enableSorting: false,
+      cell: ({ row }) => {
+        const item = row.original
 
-export default function RoleIndex({ auth }: PageProps) {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {actions.map((action, index) => (
+                <DropdownMenuItem key={index}>
+                  {action.onClick ? (
+                    <Button variant={action.variant ?? 'ghost'} onClick={() => action.onClick?.(item.id)}>
+                      <action.icon className="mr-2 size-4" />
+                      &nbsp;{action.label}
+                    </Button>
+                  ) : (
+                    <Link
+                      href={action.route ? route(action.route, { role: item.id }) : '#'}
+                      className={cn(
+                        buttonVariants({ variant: action.variant ?? 'ghost', size: 'sm' }),
+                        'w-full justify-start rounded-md text-sm',
+                      )}
+                    >
+                      <action.icon className="mr-2 size-4" />
+                      &nbsp;{action.label}
+                    </Link>
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
+}
+
+export default function RoleIndex({ auth, listable }: PageProps<{ listable: string[] }>) {
   const props = usePage<PageProps>().props
+
+  const queryClient = useQueryClient()
 
   const {
     incrudible: { routePrefix },
@@ -104,7 +113,6 @@ export default function RoleIndex({ auth }: PageProps) {
   } = props
 
   const params = new URLSearchParams(query)
-  // console.log(query)
 
   const routeKey = 'roles.index'
 
@@ -117,7 +125,6 @@ export default function RoleIndex({ auth }: PageProps) {
     orderDir: params.get('orderDir') ?? 'desc',
     search: '',
   })
-  // console.log({ filters })
 
   // Sync filters state with URL search params
   useLayoutEffect(() => {
@@ -152,39 +159,50 @@ export default function RoleIndex({ auth }: PageProps) {
     queryFn: () => getCrudIndex(baseRoute, filters),
   })
 
-  // console.log({ roles })
-  // console.log({ error })
+  const { delete: destroy } = useForm()
 
-  // TODO: actions
-  const actions = [
+  const onDelete = async (id: any) => {
+    if (!confirm('Are you sure you want to delete this item?')) {
+      return
+    }
+
+    destroy(route(`${routePrefix}.roles.destroy`, { role: id }), {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [routeKey, filters],
+        })
+      },
+    })
+  }
+
+  const actions: TableAction[] = [
     {
       label: 'Show',
+      variant: 'ghost',
       icon: Eye,
       route: `${routePrefix}.roles.show`,
     },
     {
       label: 'Edit',
+      variant: 'ghost',
       icon: Pencil,
       route: `${routePrefix}.roles.edit`,
     },
     {
-      // TODO
       label: 'Delete',
+      variant: 'destructive',
       icon: Trash,
-      route: `${routePrefix}.roles.edit`,
-      // onClick: (id: any) => console.log('Delete', id),
+      onClick: onDelete,
     },
   ]
 
-  const columns = useMemo(() => createColumns(actions), [actions])
+  const columns = useMemo(() => createColumns(actions, listable), [actions, listable])
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: filters.orderBy, desc: filters.orderDir === 'desc' },
   ]) // can set initial sorting state here
-  // console.log({ sorting })
 
   useEffect(() => {
-    // console.log({ sorting })
     setFilters({
       ...filters,
       orderBy: sorting[0]?.id ?? 'created_at',

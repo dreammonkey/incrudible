@@ -22,21 +22,6 @@ class UpdateRoleRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
-            'guard_name' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-            ],
-            'permissions' => ['sometimes', 'array'],
-            'permissions.*' => ['exists:permissions,id'],
-        ];
+        return config('incrudible.roles.update.rules');
     }
 }

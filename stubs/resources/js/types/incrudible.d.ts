@@ -85,9 +85,8 @@ export interface CrudRelation<T> {
   model: string
   enabled: boolean
   options?: any[]
-  routeKey?: string
-  // foreign_key: string
-  // local_key: string
+  indexRoute?: string
+  storeRoute?: string
   value: T[]
 }
 

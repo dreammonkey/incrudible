@@ -3,7 +3,7 @@ import { BelongsToMany } from '@/Incrudible/Components/Relations/BelongsToMany'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Role, FormMetaData, PageProps, Resource, CrudRelation } from '@/types/incrudible'
+import { Role, FormField, FormRules, PageProps, Resource, CrudRelation } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -11,10 +11,11 @@ import { useRef } from 'react'
 export default function RoleEdit({
   auth,
   role,
-  metadata,
+  fields,
+  rules,
   relations,
-}: PageProps<{ role: Resource<Role>; metadata: FormMetaData; relations: CrudRelation<any>[] }>) {
-  console.log({ metadata, role, relations })
+}: PageProps<{ role: Resource<Role>; fields: FormField[]; rules: FormRules; relations: CrudRelation<any>[] }>) {
+  // console.log({ role })
 
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
@@ -25,9 +26,6 @@ export default function RoleEdit({
   const onSubmit = (data: Role) => {
     // console.log({ data })
 
-    // TODO: mutation instead of put ??
-
-    // PUT `${routePrefix}/roles/${role.data.id}`
     put(route(`${routePrefix}.roles.update`, role.data.id), {
       onSuccess: () => {
         console.log('Role updated successfully')
@@ -62,13 +60,15 @@ export default function RoleEdit({
       <div className="grid gap-y-2 rounded-lg border p-4">
         <IncrudibleForm
           ref={formRef}
-          metadata={metadata}
+          fields={fields}
+          rules={rules}
           data={data}
           onFormSubmit={onSubmit}
           onChange={setData}
           className=""
         />
-        <pre className="text-xs">{JSON.stringify(role, null, 2)}</pre>
+
+        {/* <pre className="text-xs">{JSON.stringify(role, null, 2)}</pre> */}
       </div>
 
       {relations?.map((relation) => {
@@ -92,8 +92,8 @@ export default function RoleEdit({
       })}
 
       {recentlySuccessful && (
-        <div className="relative justify-center rounded-xl border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-2 inline-block h-5 w-5 text-green-800" />
+        <div className="flex items-center rounded-xl border px-4 py-3 text-sm">
+          <ThumbsUp className="mr-2 inline-block size-4 text-green-800" />
           Role updated successfully
         </div>
       )}

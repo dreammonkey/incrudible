@@ -1,27 +1,13 @@
-import {
-  ColumnDef,
-  OnChangeFn,
-  SortingState,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { ColumnDef, OnChangeFn, SortingState, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/Incrudible/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/Incrudible/ui/table'
 import { SortAsc, SortDesc } from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  sorting: SortingState
-  setSorting: OnChangeFn<SortingState>
+  sorting?: SortingState
+  setSorting?: OnChangeFn<SortingState>
 }
 
 export function DataTable<TData, TValue>({
@@ -57,9 +43,7 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder ? null : (
                       <div
                         className={`flex items-center ${
-                          header.column.getCanSort()
-                            ? 'cursor-pointer select-none'
-                            : ''
+                          header.column.getCanSort() ? 'cursor-pointer select-none' : ''
                         }`}
                         onClick={header.column.getToggleSortingHandler()}
                         title={
@@ -72,10 +56,7 @@ export function DataTable<TData, TValue>({
                             : undefined
                         }
                       >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        {flexRender(header.column.columnDef.header, header.getContext())}
                         {{
                           asc: (
                             <div className="ml-auto flex">
@@ -99,14 +80,9 @@ export function DataTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
+              <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+                  <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                 ))}
               </TableRow>
             ))
