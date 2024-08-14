@@ -78,6 +78,8 @@ export default function RoleEdit({
               <BelongsToMany
                 key={relation.name}
                 relation={relation}
+                idKey="id"
+                nameKey="name"
                 onChange={(value) =>
                   setData({
                     ...data,

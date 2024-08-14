@@ -53,7 +53,7 @@ it('updates the role permissions with full permission objects', function () {
     $permissions = Permission::factory()->count(3)->create();
 
     $response = $this->put(incrudible_route('roles.permissions.update', $role), [
-        'permissions' => $permissions->toArray(),
+        'items' => $permissions->toArray(),
     ]);
 
     $response->assertStatus(302)

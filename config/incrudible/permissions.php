@@ -59,7 +59,7 @@ return [
                 ],
             ],
         ],
-        'rules' => [
+        'rules' =>  [
             'name' => [
                 'required',
                 'string',
@@ -107,7 +107,7 @@ return [
                 ],
             ],
         ],
-        'rules' => [
+        'rules' =>  [
             'name' => [
                 'required',
                 'string',

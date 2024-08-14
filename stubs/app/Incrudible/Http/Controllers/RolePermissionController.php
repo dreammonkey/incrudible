@@ -2,8 +2,8 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Models\Role;
 use Illuminate\Http\Request;
+use App\Incrudible\Models\Role;
 
 class RolePermissionController extends Controller
 {
@@ -12,12 +12,12 @@ class RolePermissionController extends Controller
     {
         // Validate that permissions is an array of objects, each with an id
         $request->validate([
-            'permissions' => 'array',
-            'permissions.*.id' => 'required|exists:permissions,id',
+            'items' => 'array',
+            'items.*.id' => 'required|exists:permissions,id',
         ]);
 
         // Extract the ids from the full permission objects
-        $permissionIds = collect($request->input('permissions'))->pluck('id')->all();
+        $permissionIds = collect($request->input('items'))->pluck('id')->all();
 
         // Sync the permissions using the extracted ids
         $role->permissions()->sync($permissionIds);

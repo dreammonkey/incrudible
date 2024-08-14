@@ -2,35 +2,38 @@ import { getCrudIndex } from '@/Incrudible/Api/Crud'
 import { Button } from '@/Incrudible/ui/button'
 import { Combobox } from '@/Incrudible/ui/combobox'
 import { DataTable } from '@/Incrudible/ui/data-table'
-import { CrudRelation, Permission } from '@/types/incrudible'
+import { CrudRelation } from '@/types/incrudible'
 import { useForm } from '@inertiajs/react'
 import { useQuery } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
 
-interface BelongsToManyProps {
-  relation: CrudRelation<Permission>
-  onChange?: (value: Permission[]) => void
+interface BelongsToManyProps<T> {
+  relation: CrudRelation<T>
+  idKey: keyof T
+  nameKey: keyof T
+  onChange?: (value: T[]) => void
 }
 
-export const BelongsToMany: React.FC<BelongsToManyProps> = ({ relation, onChange }) => {
+export const BelongsToMany = <T extends Record<string, any>>({
+  relation,
+  idKey,
+  nameKey,
+  onChange,
+}: BelongsToManyProps<T>) => {
   const { data: options } = useQuery({
     queryFn: () => getCrudIndex(relation?.indexRoute ?? ''),
     queryKey: [relation?.indexRoute],
   })
 
-  const { data, put, setData, isDirty, setDefaults } = useForm<{ permissions: Permission[] }>({
-    permissions: relation.value,
+  const { data, put, setData, isDirty, setDefaults } = useForm<{ items: T[] }>({
+    items: relation.value,
   })
 
-  const columns: ColumnDef<Permission>[] = [
+  const columns: ColumnDef<T>[] = [
     {
-      accessorKey: 'name',
+      accessorKey: nameKey as string,
       header: 'Name',
-    },
-    {
-      accessorKey: 'guard_name',
-      header: 'Guard Name',
     },
     {
       id: 'actions',
@@ -43,7 +46,7 @@ export const BelongsToMany: React.FC<BelongsToManyProps> = ({ relation, onChange
             <Button
               onClick={() =>
                 setData({
-                  permissions: data.permissions.filter((d) => d.id !== item.id),
+                  items: data.items.filter((d) => d[idKey] !== item[idKey]),
                 })
               }
               variant="destructive"
@@ -66,39 +69,34 @@ export const BelongsToMany: React.FC<BelongsToManyProps> = ({ relation, onChange
 
       <div className="grid gap-4">
         <Combobox
-          // TODO: make it uncontrolled ?
-          value={undefined as unknown as Permission}
-          options={((options?.data as Permission[]) ?? []).filter(
-            (option) => !data.permissions.find((d) => d.id === option.id),
+          value={undefined as unknown as T}
+          options={((options?.data as T[]) ?? []).filter(
+            (option) => !data.items.find((d) => d[idKey] === option[idKey]),
           )}
-          getKey={(option) => option.id.toString()}
-          getLabel={(option) => option.name}
+          getKey={(option) => option[idKey].toString()}
+          getLabel={(option) => option[nameKey]}
           onChange={(value) => {
             setData({
-              permissions: [...data.permissions, value],
+              items: [...data.items, value],
             })
-            onChange?.([...data.permissions, value])
+            onChange?.([...data.items, value])
           }}
           placeholder={`Select ${relation.name}`}
         />
 
         <div>
-          <DataTable data={data.permissions} columns={columns} />
+          <DataTable data={data.items} columns={columns} />
         </div>
 
         <div>
           <Button
             onClick={() => {
               if (relation.storeRoute) {
-                put(
-                  relation.storeRoute,
-
-                  {
-                    onSuccess: () => {
-                      setDefaults()
-                    },
+                put(relation.storeRoute, {
+                  onSuccess: () => {
+                    setDefaults()
                   },
-                )
+                })
               }
             }}
             disabled={!isDirty}
