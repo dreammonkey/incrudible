@@ -1,13 +1,12 @@
 <?php
 
-namespace Incrudible\Incrudible\Commands;
+namespace Incrudible\Incrudible\Commands\Crud\Request;
 
-use Brick\VarExporter\VarExporter;
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
+use Illuminate\Console\GeneratorCommand;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
 
-class CrudUpdateRequestMakeCommand extends GeneratorCommand
+class CrudDestroyRequestMakeCommand extends GeneratorCommand
 {
     use GeneratesFormRules;
 
@@ -16,7 +15,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'make:crud-update-request {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
+    protected $signature = 'crud:destroy-request {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
 
     /**
      * The type of class being generated.
@@ -30,7 +29,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create a new CRUD update request';
+    protected $description = 'Create a new CRUD destroy request';
 
     /**
      * Get the stub file for the generator.
@@ -39,7 +38,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return $this->resolveStubPath('/stubs/request.store.stub');
+        return $this->resolveStubPath('/stubs/crud/request.destroy.stub');
     }
 
     /**
@@ -52,7 +51,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.'/../../resources'.$stub;
+            : __DIR__ . '/../../../../resources' . $stub;
     }
 
     /**
@@ -79,27 +78,7 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
 
         $namespace = $this->getDefaultNamespace('/');
 
-        return "$namespace\\Http\\Requests\\$modelName\\Update$modelName{$this->type}";
-    }
-
-    /**
-     * Replace the rulesFields.
-     *
-     * @param  string  $stub
-     * @param  array  $rulesFields
-     * @return $this
-     */
-    protected function replaceRulesFields(&$stub, $rulesFields)
-    {
-        $fields = VarExporter::export(
-            $rulesFields,
-            VarExporter::ADD_RETURN | VarExporter::TRAILING_COMMA_IN_ARRAY,
-            indentLevel: 2
-        );
-
-        $stub = str_replace(['{{ rulesFields }}', '{{rulesFields}}'], $fields, $stub);
-
-        return $this;
+        return "$namespace\\Http\\Requests\\$modelName\\Destroy$modelName{$this->type}";
     }
 
     /**
@@ -119,7 +98,6 @@ class CrudUpdateRequestMakeCommand extends GeneratorCommand
         $fields = $this->augmentFormRules($fields, $table);
 
         return $this->replaceNamespace($stub, $name)
-            ->replaceRulesFields($stub, $fields)
             ->replaceClass($stub, $name);
     }
 }

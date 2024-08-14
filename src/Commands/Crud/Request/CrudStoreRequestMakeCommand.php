@@ -1,22 +1,18 @@
 <?php
 
-namespace Incrudible\Incrudible\Commands;
+namespace Incrudible\Incrudible\Commands\Crud\Request;
 
-use Brick\VarExporter\VarExporter;
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
-use Incrudible\Incrudible\Traits\GeneratesFormRules;
+use Illuminate\Console\GeneratorCommand;
 
 class CrudStoreRequestMakeCommand extends GeneratorCommand
 {
-    use GeneratesFormRules;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:crud-store-request {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
+    protected $signature = 'crud:store-request {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
 
     /**
      * The type of class being generated.
@@ -39,8 +35,7 @@ class CrudStoreRequestMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        // TODO: store is identical to update
-        return $this->resolveStubPath('/stubs/request.store.stub');
+        return $this->resolveStubPath('/stubs/crud/request.store.stub');
     }
 
     /**
@@ -53,7 +48,7 @@ class CrudStoreRequestMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.'/../../resources'.$stub;
+            : __DIR__ . '/../../../../resources' . $stub;
     }
 
     /**
@@ -84,21 +79,16 @@ class CrudStoreRequestMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Replace the rulesFields.
+     * Replace the placeholder fields.
      *
      * @param  string  $stub
-     * @param  array  $rulesFields
      * @return $this
      */
-    protected function replaceRulesFields(&$stub, $rulesFields)
+    protected function replaceFields(&$stub)
     {
-        $fields = VarExporter::export(
-            $rulesFields,
-            VarExporter::ADD_RETURN | VarExporter::TRAILING_COMMA_IN_ARRAY,
-            indentLevel: 2
-        );
+        $model_plural = Str::plural(trim($this->argument('table')));
 
-        $stub = str_replace(['{{ rulesFields }}', '{{rulesFields}}'], $fields, $stub);
+        $stub = str_replace('{{ model_plural }}', $model_plural, $stub);
 
         return $this;
     }
@@ -113,14 +103,10 @@ class CrudStoreRequestMakeCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
-        $table = trim($this->argument('table'));
         $stub = $this->files->get($this->getStub());
 
-        $fields = $this->getFormRules($table);
-        $fields = $this->augmentFormRules($fields, $table);
-
         return $this->replaceNamespace($stub, $name)
-            ->replaceRulesFields($stub, $fields)
+            ->replaceFields($stub)
             ->replaceClass($stub, $name);
     }
 }

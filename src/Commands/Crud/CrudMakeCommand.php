@@ -1,15 +1,15 @@
 <?php
 
-namespace Incrudible\Incrudible\Commands;
+namespace Incrudible\Incrudible\Commands\Crud;
 
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
+use function Laravel\Prompts\suggest;
+use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 
-use function Laravel\Prompts\suggest;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class CrudMakeCommand extends GeneratorCommand
 {
@@ -101,6 +101,7 @@ class CrudMakeCommand extends GeneratorCommand
     public function handle()
     {
         $model = $this->argument('model');
+        $model = Str::studly(Str::singular($model));
 
         $this->info("Generating CRUD for model: {$model}");
 
@@ -109,11 +110,16 @@ class CrudMakeCommand extends GeneratorCommand
 
         $namespace = $this->getDefaultNamespace('/');
 
-        $this->call('make:crud-model', ['name' => "$namespace\Models\\$model", '--force' => $force]);
+        // $this->call('crud:config', ['table' => $table, '--force' => $force]);
+        // $this->call('crud:model', ['name' => "$namespace\Models\\$model", '--force' => $force]);
         $this->call('make:resource', ['name' => "$namespace\Http\Resources\\{$model}Resource", '--force' => $force]);
-        $this->call('make:crud-controller', ['table' => $table, '--force' => $force]);
-        $this->call('make:crud-requests', ['table' => $table, '--force' => $force]);
-        $this->call('make:crud-frontend', ['table' => $table]);
+        $this->call('crud:controller', ['table' => $table, '--force' => $force]);
+        $this->call('crud:index-request', ['table' => $table, '--force' => $force]);
+        // $this->call('crud:show-request', ['table' => $table, '--force' => $force,]);
+        $this->call('crud:store-request', ['table' => $table, '--force' => $force]);
+        $this->call('crud:update-request', ['table' => $table, '--force' => $force]);
+        $this->call('crud:destroy-request', ['table' => $table, '--force' => $force]);
+        $this->call('crud:frontend', ['table' => $table]);
 
         $this->info('There are a few more steps to complete the setup:');
         $this->info('1. Add the following route to your routes/web.php file:');

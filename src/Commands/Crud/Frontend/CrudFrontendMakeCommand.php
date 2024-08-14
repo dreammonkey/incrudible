@@ -1,13 +1,13 @@
 <?php
 
-namespace Incrudible\Incrudible\Commands;
+namespace Incrudible\Incrudible\Commands\Crud\Frontend;
 
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
 
-class CrudFrontEndMakeCommand extends Command
+class CrudFrontendMakeCommand extends Command
 {
     use GeneratesFormRules;
 
@@ -16,7 +16,7 @@ class CrudFrontEndMakeCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:crud-frontend {table : The table name of the CRUD resource.}';
+    protected $signature = 'crud:frontend {table : The table name of the CRUD resource.}';
 
     /**
      * The console command description.
@@ -47,7 +47,7 @@ class CrudFrontEndMakeCommand extends Command
         $modelName = ucfirst($instanceSingular);
         $modelNamePlural = Str::plural($modelName);
 
-        $stubPath = __DIR__."/../../resources/stubs/js/crud/{$fileType}.tsx.stub";
+        $stubPath = __DIR__ . "/../../../../resources/stubs/js/crud/{$fileType}.tsx.stub";
         $targetPath = resource_path("js/Incrudible/Pages/{$modelNamePlural}/{$fileType}.tsx");
 
         $searchableFields = collect($this->getFormRules($instancePlural, 'string'))->keys();

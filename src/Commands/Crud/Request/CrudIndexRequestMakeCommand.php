@@ -1,22 +1,18 @@
 <?php
 
-namespace Incrudible\Incrudible\Commands;
+namespace Incrudible\Incrudible\Commands\Crud\Request;
 
-use Brick\VarExporter\VarExporter;
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
-use Incrudible\Incrudible\Traits\GeneratesFormRules;
+use Illuminate\Console\GeneratorCommand;
 
 class CrudIndexRequestMakeCommand extends GeneratorCommand
 {
-    use GeneratesFormRules;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:crud-index-request {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
+    protected $signature = 'crud:index-request {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
 
     /**
      * The type of class being generated.
@@ -39,7 +35,7 @@ class CrudIndexRequestMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return $this->resolveStubPath('/stubs/request.index.stub');
+        return $this->resolveStubPath('/stubs/crud/request.index.stub');
     }
 
     /**
@@ -52,7 +48,7 @@ class CrudIndexRequestMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.'/../../resources'.$stub;
+            : __DIR__ . '/../../../../resources' . $stub;
     }
 
     /**
@@ -84,21 +80,16 @@ class CrudIndexRequestMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Replace the orderFields.
+     * Replace the placeholder fields.
      *
      * @param  string  $stub
-     * @param  array  $orderFields
      * @return $this
      */
-    protected function replaceOrderFields(&$stub, $orderFields)
+    protected function replaceFields(&$stub)
     {
-        $fields = VarExporter::export(
-            $orderFields,
-            VarExporter::TRAILING_COMMA_IN_ARRAY,
-            indentLevel: 3
-        );
+        $model_plural = Str::plural(trim($this->argument('table')));
 
-        $stub = str_replace(['{{ orderFields }}', '{{orderFields}}'], $fields, $stub);
+        $stub = str_replace('{{ model_plural }}', $model_plural, $stub);
 
         return $this;
     }
@@ -113,14 +104,10 @@ class CrudIndexRequestMakeCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
-        $table = trim($this->argument('table'));
-
         $stub = $this->files->get($this->getStub());
 
-        $fields = $this->getFormFields($table);
-
         return $this->replaceNamespace($stub, $name)
-            ->replaceOrderFields($stub, $fields)
+            ->replaceFields($stub)
             ->replaceClass($stub, $name);
     }
 }

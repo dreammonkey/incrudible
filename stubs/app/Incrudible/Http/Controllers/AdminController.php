@@ -2,17 +2,17 @@
 
 namespace App\Incrudible\Http\Controllers;
 
+use App\Incrudible\Models\Admin;
+use App\Incrudible\Traits\FormBuilder;
 use App\Incrudible\Filters\SearchFilter;
+use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
-use App\Incrudible\Http\Requests\Admin\DeleteAdminRequest;
+use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Resources\AdminResource;
 use App\Incrudible\Http\Requests\Admin\GetAdminsRequest;
 use App\Incrudible\Http\Requests\Admin\StoreAdminRequest;
 use App\Incrudible\Http\Requests\Admin\UpdateAdminRequest;
-use App\Incrudible\Http\Resources\AdminResource;
-use App\Incrudible\Models\Admin;
-use App\Incrudible\Traits\FormBuilder;
-use Illuminate\Support\Facades\Pipeline;
-use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Requests\Admin\DestroyAdminRequest;
 
 class AdminController extends Controller
 {
@@ -29,15 +29,11 @@ class AdminController extends Controller
 
                 Pipeline::send(
                     Admin::query(),
-
                 )
                     ->through([
                         new SearchFilter(
                             search: $request->validated('search'),
-                            fields: [
-                                'username',
-                                'email',
-                            ]
+                            fields: config('incrudible.admins.index.searchable')
                         ),
                         new SortingFilter(
                             orderBy: $request->validated('orderBy'),
@@ -46,11 +42,12 @@ class AdminController extends Controller
                     ])
                     ->thenReturn()
                     ->paginate($request->validated('perPage', 25))
-
             );
         }
 
-        return inertia('Admins/Index');
+        return inertia('Admins/Index', [
+            'listable' => config('incrudible.admins.index.listable'),
+        ]);
     }
 
     /**
@@ -58,12 +55,9 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $rules = (new StoreAdminRequest)->rules();
-        $metadata = $this->generateFormMetadata($rules);
-
         return inertia('Admins/Create', [
-            'admin' => Admin::make()->toResource(),
-            'metadata' => $metadata,
+            'fields' => config('incrudible.admins.store.fields'),
+            'rules' => config('incrudible.admins.store.rules'),
         ]);
     }
 
@@ -83,7 +77,7 @@ class AdminController extends Controller
      */
     public function show(Admin $admin)
     {
-        $rules = (new UpdateAdminRequest)->rules();
+        $rules = (new StoreAdminRequest)->rules();
         $metadata = $this->generateFormMetadata($rules);
 
         return inertia('Admins/Show', [
@@ -97,12 +91,10 @@ class AdminController extends Controller
      */
     public function edit(Admin $admin)
     {
-        $rules = (new UpdateAdminRequest)->rules();
-        $metadata = $this->generateFormMetadata($rules);
-
         return inertia('Admins/Edit', [
             'admin' => $admin->toResource(),
-            'metadata' => $metadata,
+            'fields' => config('incrudible.admins.update.fields'),
+            'rules' => config('incrudible.admins.update.rules'),
         ]);
     }
 
@@ -119,7 +111,7 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DeleteAdminRequest $request, Admin $admin)
+    public function destroy(DestroyAdminRequest $request, Admin $admin)
     {
         $admin->delete();
 

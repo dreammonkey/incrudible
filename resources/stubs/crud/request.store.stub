@@ -2,7 +2,6 @@
 
 namespace {{ namespace }};
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Incrudible\Incrudible\Facades\Incrudible;
 
@@ -23,6 +22,6 @@ class {{ class }} extends FormRequest
      */
     public function rules(): array
     {
-        {{ rulesFields }}
+        return config('incrudible.{{ model_plural }}.store.rules');
     }
 }

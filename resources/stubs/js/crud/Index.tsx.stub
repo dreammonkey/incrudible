@@ -32,63 +32,71 @@ import {
 } from 'lucide-react'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
-export const createColumns = (actions: TableAction[]): ColumnDef<{{ modelName }}>[] => [
-  {
-    accessorKey: 'id',
-    header: 'Id',
-  },
-  {{ searchableFields }}
-  {
-    accessorKey: 'created_at',
-    header: 'Created',
-    cell: ({ row }) => formatDate(row.original.created_at),
-  },
-  {
-    accessorKey: 'updated_at',
-    header: 'Updated',
-    cell: ({ row }) => formatDate(row.original.updated_at),
-  },
-  {
-    id: 'actions',
-    header: 'Actions',
-    enableSorting: false,
-    cell: ({ row }) => {
-      const item = row.original
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {actions.map((action, index) => (
-              <DropdownMenuItem key={index}>
-                <Link
-                  className={cn(
-                    buttonVariants({ variant: 'ghost', size: 'sm' }),
-                    'w-full justify-start rounded-md text-sm',
-                  )}
-                  onClick={action.onClick?.(item.id) ?? (() => {})}
-                  href={
-                    action.route ? route(action.route, { {{ instanceSingular }}: item.id }) : '#'
-                  }
-                >
-                  <action.icon className="mr-2 h-4 w-4" />
-                  &nbsp;{action.label}
-                </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+export const createColumns = (actions: TableAction[], listable: string[] = []): ColumnDef<Admin>[] => {
+  const fields = listable.map((field) => {
+    return {
+      accessorKey: field,
+      header: field,
+    }
+  })
+
+  return [
+    {
+      accessorKey: 'id',
+      header: 'Id',
     },
-  },
-]
+    ...fields,
+    {
+      accessorKey: 'created_at',
+      header: 'Created',
+      cell: ({ row }) => formatDate(row.original.created_at),
+    },
+    {
+      accessorKey: 'updated_at',
+      header: 'Updated',
+      cell: ({ row }) => formatDate(row.original.updated_at),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      enableSorting: false,
+      cell: ({ row }) => {
+        const item = row.original
 
-export default function {{ modelName }}Index({ auth }: PageProps) {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {actions.map((action, index) => (
+                <DropdownMenuItem key={index}>
+                  <Link
+                    className={cn(
+                      buttonVariants({ variant: 'ghost', size: 'sm' }),
+                      'w-full justify-start rounded-md text-sm',
+                    )}
+                    onClick={action.onClick?.(item.id) ?? (() => {})}
+                    href={action.route ? route(action.route, { admin: item.id }) : '#'}
+                  >
+                    <action.icon className="mr-2 h-4 w-4" />
+                    &nbsp;{action.label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
+}
+
+export default function {{ modelName }}Index({ auth, listable }: PageProps<{ listable: string[] }>) {
   const props = usePage<PageProps>().props
 
   const {
@@ -169,7 +177,7 @@ export default function {{ modelName }}Index({ auth }: PageProps) {
     },
   ]
 
-  const columns = useMemo(() => createColumns(actions), [actions])
+  const columns = useMemo(() => createColumns(actions, listable), [actions, listable])
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: filters.orderBy, desc: filters.orderDir === 'desc' },

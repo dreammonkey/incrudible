@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Incrudible\Http\Requests\Admin;
+namespace {{ namespace }};
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class UpdateAdminRequest extends FormRequest
+class {{ class }} extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +23,12 @@ class UpdateAdminRequest extends FormRequest
      */
     public function rules(): array
     {
-        return config('incrudible.admins.update.rules');
+        return [
+            'page' => ['nullable', 'integer', 'min:1'],
+            'perPage' => ['nullable', 'integer', 'max:100', 'min:5'],
+            'orderDir' => ['nullable', 'in:desc,asc'],
+            'orderBy' => ['nullable',  Rule::in(config('incrudible.{{ model_plural }}.index.sortable'))],
+            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/']
+        ];
     }
 }

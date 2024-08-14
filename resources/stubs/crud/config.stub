@@ -1,0 +1,32 @@
+<?php
+
+return [
+    //
+    'index' => [
+        'listable' => {{ listable }},
+        'searchable' => {{ searchable }},
+        'sortable' => {{ sortable }},
+        'perPage' => [
+            'default' => 25,
+            'options' => [10, 25, 50, 100],
+        ],
+        // 'resource' => \App\Incrudible\Http\Resources\{{ model }}Resource::class,
+    ],
+
+    //
+    'show' => [
+        // 'resource' => \App\Incrudible\Http\Resources\{{ model }}Resource::class,
+    ],
+
+    //
+    'store' => [
+        'fields' => {{ fields }},
+        'rules' =>  {{ rules }},
+    ],
+
+    //
+    'update' => [
+        'fields' => {{ fields }},
+        'rules' =>  {{ rules }},
+    ],
+];

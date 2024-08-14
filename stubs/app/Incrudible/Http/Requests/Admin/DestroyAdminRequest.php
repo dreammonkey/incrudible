@@ -1,19 +1,20 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Incrudible\Http\Requests\Admin;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class {{ class }} extends FormRequest
+class DestroyAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth(Incrudible::guardName())->check();
+        return auth(Incrudible::guardName())->check()
+            && $this->route('admin')->id !== auth(Incrudible::guardName())->id();
     }
 
     /**
@@ -23,12 +24,6 @@ class {{ class }} extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'page' => ['nullable', 'integer', 'min:1'],
-            'perPage' => ['nullable', 'integer', 'max:100', 'min:5'],
-            'orderDir' => ['nullable', 'in:desc,asc'],
-            'orderBy' => ['nullable',  Rule::in({{ orderFields }})],
-            'search' => ['nullable', 'string', 'regex:/^[0-9a-zA-Z ]/']
-        ];
+        return [];
     }
 }

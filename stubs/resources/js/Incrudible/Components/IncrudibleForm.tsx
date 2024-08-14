@@ -1,5 +1,5 @@
 import { convertLaravelToZod } from '@/lib/utils'
-import { FormField as FormFieldType, FormMetaData } from '@/types/incrudible'
+import { FormField as FormFieldType, FormRules } from '@/types/incrudible'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ControllerRenderProps, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -11,7 +11,8 @@ import { DateTimeInput } from '../ui/date-time-input'
 import { Switch } from '../ui/switch'
 
 interface FormProps<T> {
-  metadata: FormMetaData
+  fields: FormFieldType[]
+  rules: FormRules
   data?: T
   onFormSubmit?: (data: T) => void
   onChange?: (data: T) => void
@@ -44,7 +45,7 @@ const renderInput = (
     case 'textarea':
       return (
         <textarea
-          className="block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="block w-full rounded-md border px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           placeholder={fieldData.placeholder}
           {...field}
         />
@@ -81,11 +82,14 @@ const renderInput = (
 }
 
 const IncrudibleForm = forwardRef(
-  <T extends {}>({ metadata, data, onFormSubmit, onChange, className }: FormProps<T>, ref: React.Ref<FormRef<T>>) => {
+  <T extends {}>(
+    { fields, rules, data, onFormSubmit, onChange, className }: FormProps<T>,
+    ref: React.Ref<FormRef<T>>,
+  ) => {
     // console.log(metadata)
     // console.log({ metadata, data })
 
-    const formSchema = convertLaravelToZod(metadata.rules)
+    const formSchema = convertLaravelToZod(rules)
     // console.log({ formSchema })
 
     // 1. Define your form.
@@ -117,7 +121,7 @@ const IncrudibleForm = forwardRef(
 
     // console.log(metadata.fields[0])
     // console.log('username' in metadata.rules)
-    const _filteredFields = metadata.fields.filter((field) => field.name in metadata.rules)
+    const _filteredFields = fields.filter((field) => field.name in rules)
     // console.log({ _filteredFields })
 
     const isDirty = form.formState.isDirty

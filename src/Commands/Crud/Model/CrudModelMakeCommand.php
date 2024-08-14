@@ -1,6 +1,6 @@
 <?php
 
-namespace Incrudible\Incrudible\Commands;
+namespace Incrudible\Incrudible\Commands\Crud\Model;
 
 use Illuminate\Foundation\Console\ModelMakeCommand;
 
@@ -11,7 +11,7 @@ class CrudModelMakeCommand extends ModelMakeCommand
      *
      * @var string
      */
-    protected $name = 'make:crud-model';
+    protected $name = 'crud:model';
 
     /**
      * The console command description.
@@ -34,7 +34,7 @@ class CrudModelMakeCommand extends ModelMakeCommand
      */
     protected function getStub()
     {
-        return $this->resolveStubPath('/stubs/model.crud.stub');
+        return $this->resolveStubPath('/stubs/crud/model.crud.stub');
     }
 
     /**
@@ -47,6 +47,6 @@ class CrudModelMakeCommand extends ModelMakeCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.'/../../resources'.$stub;
+            : __DIR__ . '/../../../../resources' . $stub;
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Incrudible\Http\Requests\Admin;
+namespace {{ namespace }};
 
 use Illuminate\Foundation\Http\FormRequest;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-class UpdateAdminRequest extends FormRequest
+class {{ class }} extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,6 @@ class UpdateAdminRequest extends FormRequest
      */
     public function rules(): array
     {
-        return config('incrudible.admins.update.rules');
+        return config('incrudible.{{ model_plural }}.update.rules');
     }
 }

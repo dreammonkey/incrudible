@@ -2,12 +2,12 @@
 
 namespace Incrudible\Incrudible;
 
-use Incrudible\Incrudible\Traits\RegistersAuthProvider;
+use Spatie\LaravelPackageTools\Package;
 use Incrudible\Incrudible\Traits\RegistersMiddleware;
 use Incrudible\Incrudible\Traits\RegistersRouteMacros;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
-use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Incrudible\Incrudible\Traits\RegistersAuthProvider;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class IncrudibleServiceProvider extends PackageServiceProvider
 {
@@ -31,15 +31,15 @@ class IncrudibleServiceProvider extends PackageServiceProvider
             ->hasCommands([
                 \Incrudible\Incrudible\Commands\ScaffoldIncrudible::class,
                 \Incrudible\Incrudible\Commands\CreateAdmin::class,
-                \Incrudible\Incrudible\Commands\CrudMakeCommand::class,
-                \Incrudible\Incrudible\Commands\CrudModelMakeCommand::class,
-                \Incrudible\Incrudible\Commands\CrudFrontEndMakeCommand::class,
-                \Incrudible\Incrudible\Commands\CrudResourceControllerMakeCommand::class,
-                \Incrudible\Incrudible\Commands\GenerateCrudRequests::class,
-                \Incrudible\Incrudible\Commands\CrudIndexRequestMakeCommand::class,
-                \Incrudible\Incrudible\Commands\CrudStoreRequestMakeCommand::class,
-                \Incrudible\Incrudible\Commands\CrudUpdateRequestMakeCommand::class,
-                \Incrudible\Incrudible\Commands\CrudDeleteRequestMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\CrudMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\Config\CrudConfigMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\Model\CrudModelMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\Frontend\CrudFrontEndMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\Controller\CrudControllerMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\Request\CrudIndexRequestMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\Request\CrudStoreRequestMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\Request\CrudUpdateRequestMakeCommand::class,
+                \Incrudible\Incrudible\Commands\Crud\Request\CrudDestroyRequestMakeCommand::class,
             ])
             ->hasInstallCommand(function (InstallCommand $command) {
 
@@ -68,13 +68,13 @@ class IncrudibleServiceProvider extends PackageServiceProvider
         parent::boot();
 
         $this->publishes([
-            __DIR__.'/../routes/incrudible.php' => base_path('routes/incrudible.php'),
+            __DIR__ . '/../routes/incrudible.php' => base_path('routes/incrudible.php'),
         ], 'incrudible-routes');
 
         $this->loadRoutesFrom(
             file_exists(base_path('routes/incrudible.php'))
                 ? base_path('routes/incrudible.php')
-                : __DIR__.'/../routes/incrudible.php'
+                : __DIR__ . '/../routes/incrudible.php'
         );
     }
 
@@ -83,6 +83,6 @@ class IncrudibleServiceProvider extends PackageServiceProvider
      */
     public function loadHelpers()
     {
-        require __DIR__.'/helpers.php';
+        require __DIR__ . '/helpers.php';
     }
 }

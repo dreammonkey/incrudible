@@ -1,21 +1,18 @@
 <?php
 
-namespace Incrudible\Incrudible\Commands;
+namespace Incrudible\Incrudible\Commands\Crud\Request;
 
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
-use Incrudible\Incrudible\Traits\GeneratesFormRules;
+use Illuminate\Console\GeneratorCommand;
 
-class CrudDeleteRequestMakeCommand extends GeneratorCommand
+class CrudUpdateRequestMakeCommand extends GeneratorCommand
 {
-    use GeneratesFormRules;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:crud-destroy-request {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
+    protected $signature = 'crud:update-request {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
 
     /**
      * The type of class being generated.
@@ -29,7 +26,7 @@ class CrudDeleteRequestMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create a new CRUD destroy request';
+    protected $description = 'Create a new CRUD update request';
 
     /**
      * Get the stub file for the generator.
@@ -38,7 +35,7 @@ class CrudDeleteRequestMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return $this->resolveStubPath('/stubs/request.destroy.stub');
+        return $this->resolveStubPath('/stubs/crud/request.update.stub');
     }
 
     /**
@@ -51,7 +48,7 @@ class CrudDeleteRequestMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.'/../../resources'.$stub;
+            : __DIR__ . '/../../../../resources' . $stub;
     }
 
     /**
@@ -78,7 +75,22 @@ class CrudDeleteRequestMakeCommand extends GeneratorCommand
 
         $namespace = $this->getDefaultNamespace('/');
 
-        return "$namespace\\Http\\Requests\\$modelName\\Delete$modelName{$this->type}";
+        return "$namespace\\Http\\Requests\\$modelName\\Update$modelName{$this->type}";
+    }
+
+    /**
+     * Replace the placeholder fields.
+     *
+     * @param  string  $stub
+     * @return $this
+     */
+    protected function replaceFields(&$stub)
+    {
+        $model_plural = Str::plural(trim($this->argument('table')));
+
+        $stub = str_replace('{{ model_plural }}', $model_plural, $stub);
+
+        return $this;
     }
 
     /**
@@ -91,13 +103,10 @@ class CrudDeleteRequestMakeCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
-        $table = trim($this->argument('table'));
         $stub = $this->files->get($this->getStub());
 
-        $fields = $this->getFormRules($table);
-        $fields = $this->augmentFormRules($fields, $table);
-
         return $this->replaceNamespace($stub, $name)
+            ->replaceFields($stub)
             ->replaceClass($stub, $name);
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Incrudible\Incrudible\Commands;
+namespace Incrudible\Incrudible\Commands\Crud\Controller;
 
+use Illuminate\Support\Str;
 use Brick\VarExporter\VarExporter;
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
 
-class CrudResourceControllerMakeCommand extends GeneratorCommand
+class CrudControllerMakeCommand extends GeneratorCommand
 {
     use GeneratesFormRules;
 
@@ -16,7 +16,7 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'make:crud-controller {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
+    protected $signature = 'crud:controller {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
 
     /**
      * The type of class being generated.
@@ -39,7 +39,7 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return $this->resolveStubPath('/stubs/controller.crud.stub');
+        return $this->resolveStubPath('/stubs/crud/controller.crud.stub');
     }
 
     /**
@@ -52,7 +52,7 @@ class CrudResourceControllerMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.'/../../resources'.$stub;
+            : __DIR__ . '/../../../../resources' . $stub;
     }
 
     /**

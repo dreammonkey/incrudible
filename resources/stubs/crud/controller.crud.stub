@@ -2,16 +2,17 @@
 
 namespace {{ namespace }};
 
+use App\Incrudible\Models\{{ model_singular_uc_first }};
+use App\Incrudible\Traits\FormBuilder;
 use App\Incrudible\Filters\SearchFilter;
+use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
+use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Resources\{{ model_singular_uc_first }}Resource;
 use App\Incrudible\Http\Requests\{{ model_singular_uc_first }}\Get{{ model_plural_uc_first }}Request;
 use App\Incrudible\Http\Requests\{{ model_singular_uc_first }}\Store{{ model_singular_uc_first }}Request;
 use App\Incrudible\Http\Requests\{{ model_singular_uc_first }}\Update{{ model_singular_uc_first }}Request;
-use App\Incrudible\Http\Resources\{{ model_singular_uc_first }}Resource;
-use App\Incrudible\Models\{{ model_singular_uc_first }};
-use App\Incrudible\Traits\FormBuilder;
-use Illuminate\Support\Facades\Pipeline;
-use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Requests\{{ model_singular_uc_first }}\Destroy{{ model_singular_uc_first }}Request;
 
 class {{ model_singular_uc_first }}Controller extends Controller
 {
@@ -32,7 +33,7 @@ class {{ model_singular_uc_first }}Controller extends Controller
                     ->through([
                         new SearchFilter(
                             search: $request->validated('search'),
-                            fields: {{ searchableFields }}
+                            fields: config('incrudible.{{ model_plural }}.index.searchable')
                         ),
                         new SortingFilter(
                             orderBy: $request->validated('orderBy'),
@@ -44,7 +45,9 @@ class {{ model_singular_uc_first }}Controller extends Controller
             );
         }
 
-        return inertia('{{ model_plural_uc_first }}/Index');
+        return inertia('{{ model_plural_uc_first }}/Index', [
+            'listable' => config('incrudible.{{ model_plural }}.index.listable'),
+        ]);
     }
 
     /**
@@ -52,12 +55,9 @@ class {{ model_singular_uc_first }}Controller extends Controller
      */
     public function create()
     {
-        $rules = (new Store{{ model_singular_uc_first }}Request)->rules();
-        $metadata = $this->generateFormMetadata($rules);
-
         return inertia('{{ model_plural_uc_first }}/Create', [
-            '{{ model_singular }}' => {{ model_singular_uc_first }}::make()->toResource(),
-            'metadata' => $metadata,
+            'fields' => config('incrudible.{{ model_plural }}.store.fields'),
+            'rules' => config('incrudible.{{ model_plural }}.store.rules'),
         ]);
     }
 
@@ -91,13 +91,10 @@ class {{ model_singular_uc_first }}Controller extends Controller
      */
     public function edit({{ model_singular_uc_first }} ${{ model_singular }})
     {
-        $rules = (new Update{{ model_singular_uc_first }}Request)->rules();
-
-        $metadata = $this->generateFormMetadata($rules);
-
         return inertia('{{ model_plural_uc_first }}/Edit', [
             '{{ model_singular }}' => ${{ model_singular }}->toResource(),
-            'metadata' => $metadata,
+            'fields' => config('incrudible.{{ model_plural }}.update.fields'),
+            'rules' => config('incrudible.{{ model_plural }}.update.rules'),
         ]);
     }
 
@@ -114,7 +111,7 @@ class {{ model_singular_uc_first }}Controller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy({{ model_singular_uc_first }} ${{ model_singular }})
+    public function destroy(Destroy{{ model_singular_uc_first }}Request $request, {{ model_singular_uc_first }} ${{ model_singular }})
     {
         ${{ model_singular }}->delete();
 
