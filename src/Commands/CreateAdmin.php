@@ -2,11 +2,11 @@
 
 namespace Incrudible\Incrudible\Commands;
 
-use Illuminate\Support\Str;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class CreateAdmin extends Command
@@ -76,7 +76,7 @@ class CreateAdmin extends Command
 
         $model = config('incrudible.auth.user_model_fqn', \App\Incrudible\Models\Admin::class);
 
-        $admin = new $model();
+        $admin = new $model;
         $admin->username = $username;
         $admin->email = $email;
         $admin->password = $password_hashed;

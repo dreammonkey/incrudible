@@ -2,9 +2,9 @@
 
 namespace Incrudible\Incrudible\Commands\Crud\Config;
 
-use Illuminate\Support\Str;
 use Brick\VarExporter\VarExporter;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
 
 class CrudConfigMakeCommand extends GeneratorCommand
@@ -52,7 +52,7 @@ class CrudConfigMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__ . '/../../../../resources' . $stub;
+            : __DIR__.'/../../../../resources'.$stub;
     }
 
     /**
@@ -75,13 +75,13 @@ class CrudConfigMakeCommand extends GeneratorCommand
     public function handle()
     {
         $name = $this->getNameInput();
-        $path = config_path('incrudible/' . $name . '.php');
+        $path = config_path('incrudible/'.$name.'.php');
 
         if ((! $this->hasOption('force') ||
                 ! $this->option('force')) &&
             $this->alreadyExists($path)
         ) {
-            $this->error($this->type . ' already exists!');
+            $this->error($this->type.' already exists!');
 
             return false;
         }
@@ -90,7 +90,7 @@ class CrudConfigMakeCommand extends GeneratorCommand
 
         $this->files->put($path, $this->buildClass($name));
 
-        $this->info($this->type . ' created successfully.');
+        $this->info($this->type.' created successfully.');
     }
 
     /**
@@ -135,7 +135,7 @@ class CrudConfigMakeCommand extends GeneratorCommand
 
         // filter out id, created_at, updated_at
         $formFields = array_filter($metadata['fields'], function ($field) {
-            return !in_array($field['name'], ['id', 'created_at', 'updated_at']);
+            return ! in_array($field['name'], ['id', 'created_at', 'updated_at']);
         });
 
         $fields = VarExporter::export(

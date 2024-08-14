@@ -2,11 +2,11 @@
 
 namespace App\Incrudible\Models;
 
-use Database\Factories\RoleFactory;
 use App\Incrudible\Http\Resources\RoleResource;
-use Spatie\Permission\Models\Role as SpatieRole;
+use Database\Factories\RoleFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Models\Role as SpatieRole;
 
 class Role extends SpatieRole
 {
