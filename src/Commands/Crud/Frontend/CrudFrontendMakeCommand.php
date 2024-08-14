@@ -47,7 +47,7 @@ class CrudFrontendMakeCommand extends Command
         $modelName = ucfirst($instanceSingular);
         $modelNamePlural = Str::plural($modelName);
 
-        $stubPath = __DIR__ . "/../../../../resources/stubs/js/crud/{$fileType}.tsx.stub";
+        $stubPath = __DIR__."/../../../../resources/stubs/js/crud/{$fileType}.tsx.stub";
         $targetPath = resource_path("js/Incrudible/Pages/{$modelNamePlural}/{$fileType}.tsx");
 
         $searchableFields = collect($this->getFormRules($instancePlural, 'string'))->keys();
