@@ -2,16 +2,16 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Models\Admin;
 use App\Incrudible\Filters\SearchFilter;
-use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
-use Incrudible\Incrudible\Facades\Incrudible;
-use App\Incrudible\Http\Resources\AdminResource;
+use App\Incrudible\Http\Requests\Admin\DestroyAdminRequest;
 use App\Incrudible\Http\Requests\Admin\GetAdminsRequest;
 use App\Incrudible\Http\Requests\Admin\StoreAdminRequest;
 use App\Incrudible\Http\Requests\Admin\UpdateAdminRequest;
-use App\Incrudible\Http\Requests\Admin\DestroyAdminRequest;
+use App\Incrudible\Http\Resources\AdminResource;
+use App\Incrudible\Models\Admin;
+use Illuminate\Support\Facades\Pipeline;
+use Incrudible\Incrudible\Facades\Incrudible;
 
 class AdminController extends Controller
 {
