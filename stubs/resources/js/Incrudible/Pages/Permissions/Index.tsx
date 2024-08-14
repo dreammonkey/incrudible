@@ -3,35 +3,15 @@ import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { Button, buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/Incrudible/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/Incrudible/ui/dropdown-menu'
 import { Input } from '@/Incrudible/ui/input'
 import { cn, formatDate } from '@/lib/utils'
-import {
-  Permission,
-  Filters,
-  PageProps,
-  PagedResource,
-  TableAction,
-} from '@/types/incrudible'
+import { Permission, Filters, PageProps, PagedResource, TableAction } from '@/types/incrudible'
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ColumnDef, SortingState } from '@tanstack/react-table'
-import {
-  Eye,
-  MoreHorizontal,
-  Pencil,
-  Plus,
-  Search,
-  Trash,
-  TriangleAlert,
-} from 'lucide-react'
+import { Eye, MoreHorizontal, Pencil, Plus, Search, Trash, TriangleAlert } from 'lucide-react'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-
 
 export const createColumns = (actions: TableAction[], listable: string[] = []): ColumnDef<Permission>[] => {
   const fields = listable.map((field) => {
@@ -118,9 +98,7 @@ export default function PermissionIndex({ auth, listable }: PageProps<{ listable
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-    perPage: params.get('perPage')
-      ? parseInt(params.get('perPage') as string)
-      : 10,
+    perPage: params.get('perPage') ? parseInt(params.get('perPage') as string) : 10,
     orderBy: params.get('orderBy') ?? 'created_at',
     orderDir: params.get('orderDir') ?? 'desc',
     search: '',
@@ -198,9 +176,7 @@ export default function PermissionIndex({ auth, listable }: PageProps<{ listable
 
   const columns = useMemo(() => createColumns(actions, listable), [actions, listable])
 
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: filters.orderBy, desc: filters.orderDir === 'desc' },
-  ]) // can set initial sorting state here
+  const [sorting, setSorting] = useState<SortingState>([{ id: filters.orderBy, desc: filters.orderDir === 'desc' }]) // can set initial sorting state here
 
   useEffect(() => {
     setFilters({
@@ -237,10 +213,7 @@ export default function PermissionIndex({ auth, listable }: PageProps<{ listable
           </form>
           <Link
             href={route(`${routePrefix}.permissions.create`)}
-            className={cn(
-              buttonVariants({ variant: 'outline', size: 'sm' }),
-              'ml-auto',
-            )}
+            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
           >
             <Plus className="h-4 w-4" />
           </Link>
@@ -258,12 +231,7 @@ export default function PermissionIndex({ auth, listable }: PageProps<{ listable
       )}
       {isSuccess && (
         <>
-          <DataTable
-            columns={columns}
-            data={permissions.data ?? []}
-            sorting={sorting}
-            setSorting={setSorting}
-          />
+          <DataTable columns={columns} data={permissions.data ?? []} sorting={sorting} setSorting={setSorting} />
           <TablePagination
             meta={permissions.meta}
             onPageSelect={(page) =>
