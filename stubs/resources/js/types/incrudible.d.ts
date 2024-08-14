@@ -1,5 +1,5 @@
-import { Config } from 'ziggy-js'
 import * as Icons from 'lucide-react'
+import { Config } from 'ziggy-js'
 
 // https://github.com/sveltejs/kit/issues/1997#issuecomment-887614097
 export type Typify<T> = { [K in keyof T]: Typify<T[K]> }
@@ -14,9 +14,9 @@ declare module 'react' {
 
 export interface TableAction {
   label: string
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | null | undefined
   icon: React.ElementType
   route?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: (id: any) => void
 }
 
@@ -156,17 +156,3 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
       query: string | string[][] | Record<string, string> | URLSearchParams | undefined
     }
   }>
-
-interface Flight {
-  id: number
-  name: string
-  number: string
-  departure: string
-  arrival: string
-  departure_time: string
-  arrival_time: string
-  duration: string
-  price: number
-  created_at: string
-  updated_at: string
-}

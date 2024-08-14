@@ -1,4 +1,4 @@
-import { getCrudIndex } from '@/Incrudible/Api/Crud'
+import { getCrudIndex } from '@/Incrudible/Api/services/getCrudIndex'
 import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { Button, buttonVariants } from '@/Incrudible/ui/button'
@@ -18,8 +18,8 @@ import {
   PagedResource,
   TableAction,
 } from '@/types/incrudible'
-import { Head, Link, router, usePage } from '@inertiajs/react'
-import { useQuery } from '@tanstack/react-query'
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ColumnDef, SortingState } from '@tanstack/react-table'
 import {
   Eye,
@@ -75,17 +75,23 @@ export const createColumns = (actions: TableAction[], listable: string[] = []): 
             <DropdownMenuContent align="end">
               {actions.map((action, index) => (
                 <DropdownMenuItem key={index}>
-                  <Link
-                    className={cn(
-                      buttonVariants({ variant: 'ghost', size: 'sm' }),
-                      'w-full justify-start rounded-md text-sm',
-                    )}
-                    onClick={action.onClick?.(item.id) ?? (() => {})}
-                    href={action.route ? route(action.route, {  permission: item.id }) : '#'}
-                  >
-                    <action.icon className="mr-2 h-4 w-4" />
-                    &nbsp;{action.label}
-                  </Link>
+                  {action.onClick ? (
+                    <Button variant={action.variant ?? 'ghost'} onClick={() => action.onClick?.(item.id)}>
+                      <action.icon className="mr-2 size-4" />
+                      &nbsp;{action.label}
+                    </Button>
+                  ) : (
+                    <Link
+                      href={action.route ? route(action.route, { permission: item.id }) : '#'}
+                      className={cn(
+                        buttonVariants({ variant: action.variant ?? 'ghost', size: 'sm' }),
+                        'w-full justify-start rounded-md text-sm',
+                      )}
+                    >
+                      <action.icon className="mr-2 size-4" />
+                      &nbsp;{action.label}
+                    </Link>
+                  )}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -99,13 +105,14 @@ export const createColumns = (actions: TableAction[], listable: string[] = []): 
 export default function PermissionIndex({ auth, listable }: PageProps<{ listable: string[] }>) {
   const props = usePage<PageProps>().props
 
+  const queryClient = useQueryClient()
+
   const {
     incrudible: { routePrefix },
     ziggy: { query, location },
   } = props
 
   const params = new URLSearchParams(query)
-  // console.log(query)
 
   const routeKey = 'permissions.index'
 
@@ -118,7 +125,6 @@ export default function PermissionIndex({ auth, listable }: PageProps<{ listable
     orderDir: params.get('orderDir') ?? 'desc',
     search: '',
   })
-  // console.log({ filters })
 
   // Sync filters state with URL search params
   useLayoutEffect(() => {
@@ -153,27 +159,40 @@ export default function PermissionIndex({ auth, listable }: PageProps<{ listable
     queryFn: () => getCrudIndex(baseRoute, filters),
   })
 
-  // console.log({ permissions })
-  // console.log({ error })
+  const { delete: destroy } = useForm()
 
-  // TODO: actions
-  const actions = [
+  const onDelete = async (id: any) => {
+    if (!confirm('Are you sure you want to delete this item?')) {
+      return
+    }
+
+    destroy(route(`${routePrefix}.permissions.destroy`, { permission: id }), {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [routeKey, filters],
+        })
+      },
+    })
+  }
+
+  const actions: TableAction[] = [
     {
       label: 'Show',
+      variant: 'ghost',
       icon: Eye,
       route: `${routePrefix}.permissions.show`,
     },
     {
       label: 'Edit',
+      variant: 'ghost',
       icon: Pencil,
       route: `${routePrefix}.permissions.edit`,
     },
     {
-      // TODO
       label: 'Delete',
+      variant: 'destructive',
       icon: Trash,
-      route: `${routePrefix}.permissions.edit`,
-      // onClick: (id: any) => console.log('Delete', id),
+      onClick: onDelete,
     },
   ]
 
@@ -182,10 +201,8 @@ export default function PermissionIndex({ auth, listable }: PageProps<{ listable
   const [sorting, setSorting] = useState<SortingState>([
     { id: filters.orderBy, desc: filters.orderDir === 'desc' },
   ]) // can set initial sorting state here
-  // console.log({ sorting })
 
   useEffect(() => {
-    // console.log({ sorting })
     setFilters({
       ...filters,
       orderBy: sorting[0]?.id ?? 'created_at',

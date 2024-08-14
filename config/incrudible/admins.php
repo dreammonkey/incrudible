@@ -92,7 +92,7 @@ return [
                 ],
             ],
         ],
-        'rules' => [
+        'rules' =>  [
             'username' => [
                 'required',
                 'string',
@@ -159,7 +159,7 @@ return [
             //     ],
             // ],
         ],
-        'rules' => [
+        'rules' =>  [
             'username' => [
                 'required',
                 'string',
