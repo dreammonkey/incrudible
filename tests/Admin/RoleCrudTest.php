@@ -1,8 +1,8 @@
 <?php
 
-use App\Incrudible\Models\Role;
 use App\Incrudible\Models\Admin;
 use App\Incrudible\Models\Permission;
+use App\Incrudible\Models\Role;
 
 beforeEach(function () {
     $this->admin = Admin::factory()->create();
