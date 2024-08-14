@@ -31,6 +31,8 @@ You can publish and run the migrations with:
 
 ```bash
 php artisan vendor:publish --tag="incrudible-migrations"
+php artisan vendor:publish --tag="incrudible-routes"
+php artisan vendor:publish --tag="incrudible-config"
 php artisan migrate
 ```
 

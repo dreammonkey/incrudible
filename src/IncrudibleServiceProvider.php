@@ -75,7 +75,8 @@ class IncrudibleServiceProvider extends PackageServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config/incrudible/admins.php' => config_path('incrudible/admins.php'),
-            __DIR__ . '/../config/incrudible/permission.php' => config_path('incrudible/permission.php'),
+            __DIR__ . '/../config/incrudible/roles.php' => config_path('incrudible/roles.php'),
+            __DIR__ . '/../config/incrudible/permissions.php' => config_path('incrudible/permissions.php'),
         ], 'incrudible-config');
 
         $this->loadRoutesFrom(
