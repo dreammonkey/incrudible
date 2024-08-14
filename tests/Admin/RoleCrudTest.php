@@ -1,7 +1,8 @@
 <?php
 
-use App\Incrudible\Models\Admin;
 use App\Incrudible\Models\Role;
+use App\Incrudible\Models\Admin;
+use App\Incrudible\Models\Permission;
 
 beforeEach(function () {
     $this->admin = Admin::factory()->create();
@@ -43,4 +44,23 @@ it('renders the role crud index', function () {
     $this->actingAs($this->admin, incrudible_guard_name())
         ->get(incrudible_route('roles.index'))
         ->assertStatus(200);
+});
+
+it('updates the role permissions with full permission objects', function () {
+    $this->actingAs($this->admin, incrudible_guard_name());
+
+    $role = Role::factory()->create();
+    $permissions = Permission::factory()->count(3)->create();
+
+    $response = $this->put(incrudible_route('roles.permissions.update', $role), [
+        'permissions' => $permissions->toArray(),
+    ]);
+
+    $response->assertStatus(302)
+        ->assertSessionHas('success', 'Permissions updated successfully.');
+
+    $this->assertCount(3, $role->refresh()->permissions);
+    foreach ($permissions as $permission) {
+        $this->assertTrue($role->permissions->contains($permission));
+    }
 });
