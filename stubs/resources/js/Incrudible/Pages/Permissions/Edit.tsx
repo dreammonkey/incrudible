@@ -40,7 +40,9 @@ export default function PermissionEdit({
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit Permission</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Edit Permission
+          </h2>
           <Link
             href={route(`${routePrefix}.permissions.index`)}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}

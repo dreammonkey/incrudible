@@ -27,6 +27,7 @@ class RoleController extends Controller
         if ($request->wantsJson()) {
 
             return RoleResource::collection(
+
                 Pipeline::send(
                     Role::query(),
                 )
@@ -69,7 +70,7 @@ class RoleController extends Controller
                     'enabled' => false,
                     'type' => 'BelongsToMany',
                     'model' => Permission::class,
-                    'routeKey' => Incrudible::routePrefix() . '.permissions.index',
+                    'routeKey' => Incrudible::routePrefix().'.permissions.index',
                     'value' => [],
                 ],
             ],

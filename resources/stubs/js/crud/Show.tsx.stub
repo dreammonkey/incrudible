@@ -1,14 +1,24 @@
+import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { FormMetaData, PageProps } from '@/types/incrudible'
-import { Head, Link, usePage } from '@inertiajs/react'
+import { {{ modelName }}, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft } from 'lucide-react'
+import { useRef } from 'react'
 
-export default function {{ modelName }}Show({ auth, {{ instanceSingular }}, metadata }: PageProps<{ {{ instanceSingular }}: any; metadata: FormMetaData }>) {
-  // console.log({{ instanceSingular }})
-
+export default function {{ modelName }}Show({ 
+  auth,
+  {{ instanceSingular }},
+  fields,
+  rules,
+}: PageProps<{ {{ instanceSingular }}: Resource<{{ modelName }}>; fields: FormField[]; rules: FormRules }>) {
   const { routePrefix } = usePage<PageProps>().props.incrudible
+
+  const { data } = useForm<{{ modelName }}>({{ instanceSingular }}.data)
+  
+  const formRef = useRef<FormRef<{{ modelName }}>>(null!)
+
   return (
     <AuthenticatedLayout
       admin={auth.admin.data}
@@ -27,11 +37,11 @@ export default function {{ modelName }}Show({ auth, {{ instanceSingular }}, meta
     >
       <Head title="{{ modelName }} Show" />
 
-      <div className="rounded-lg border p-4 text-sm sm:p-8">
+      <IncrudibleForm ref={formRef} fields={fields} rules={rules} data={data} readOnly />
+      
+      <div className="rounded-lg border p-2 text-xs sm:p-4">
         <pre>{JSON.stringify({{ instanceSingular }}, null, 2)}</pre>
       </div>
-
-      {/* <IncrudibleForm metadata={metadata} data={{{ instanceSingular }}} /> */}
     </AuthenticatedLayout>
   )
 }

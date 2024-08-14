@@ -10,14 +10,11 @@ use App\Incrudible\Http\Requests\Permission\StorePermissionRequest;
 use App\Incrudible\Http\Requests\Permission\UpdatePermissionRequest;
 use App\Incrudible\Http\Resources\PermissionResource;
 use App\Incrudible\Models\Permission;
-use App\Incrudible\Traits\FormBuilder;
 use Illuminate\Support\Facades\Pipeline;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class PermissionController extends Controller
 {
-    use FormBuilder;
-
     /**
      * Display a listing of the resource.
      */
@@ -26,6 +23,7 @@ class PermissionController extends Controller
         if ($request->wantsJson()) {
 
             return PermissionResource::collection(
+
                 Pipeline::send(
                     Permission::query(),
                 )
@@ -76,12 +74,10 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission)
     {
-        $rules = (new StorePermissionRequest)->rules();
-        $metadata = $this->generateFormMetadata($rules);
-
         return inertia('Permissions/Show', [
             'permission' => $permission->toResource(),
-            'metadata' => $metadata,
+            'fields' => config('incrudible.permissions.update.fields'),
+            'rules' => config('incrudible.permissions.update.rules'),
         ]);
     }
 

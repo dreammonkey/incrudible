@@ -3,7 +3,6 @@
 namespace {{ namespace }};
 
 use App\Incrudible\Models\{{ model_singular_uc_first }};
-use App\Incrudible\Traits\FormBuilder;
 use App\Incrudible\Filters\SearchFilter;
 use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
@@ -16,8 +15,6 @@ use App\Incrudible\Http\Requests\{{ model_singular_uc_first }}\Destroy{{ model_s
 
 class {{ model_singular_uc_first }}Controller extends Controller
 {
-    use FormBuilder;
-
     /**
      * Display a listing of the resource.
      */
@@ -77,12 +74,10 @@ class {{ model_singular_uc_first }}Controller extends Controller
      */
     public function show({{ model_singular_uc_first }} ${{ model_singular }})
     {
-        $rules = (new Store{{ model_singular_uc_first }}Request)->rules();
-        $metadata = $this->generateFormMetadata($rules);
-
         return inertia('{{ model_plural_uc_first }}/Show', [
             '{{ model_singular }}' => ${{ model_singular }}->toResource(),
-            'metadata' => $metadata,
+            'fields' => config('incrudible.{{ model_plural }}.update.fields'),
+            'rules' => config('incrudible.{{ model_plural }}.update.rules'),
         ]);
     }
 

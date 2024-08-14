@@ -2,9 +2,9 @@
 
 namespace App\Incrudible\Models;
 
-use App\Incrudible\Http\Resources\PermissionResource;
 use Database\Factories\PermissionFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Incrudible\Http\Resources\PermissionResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Permission as SpatiePermission;
 
