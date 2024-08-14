@@ -2,8 +2,8 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Incrudible\Models\Admin;
+use Illuminate\Http\Request;
 
 class AdminRoleController extends Controller
 {
