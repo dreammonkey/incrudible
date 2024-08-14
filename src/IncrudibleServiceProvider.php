@@ -70,7 +70,7 @@ class IncrudibleServiceProvider extends PackageServiceProvider
         parent::boot();
 
         $this->publishes([
-            __DIR__ . '/../routes/incrudible.php' => base_path('routes/incrudible.php'),
+            __DIR__.'/../routes/incrudible.php' => base_path('routes/incrudible.php'),
         ], 'incrudible-routes');
 
         $this->publishes([
@@ -81,7 +81,7 @@ class IncrudibleServiceProvider extends PackageServiceProvider
         $this->loadRoutesFrom(
             file_exists(base_path('routes/incrudible.php'))
                 ? base_path('routes/incrudible.php')
-                : __DIR__ . '/../routes/incrudible.php'
+                : __DIR__.'/../routes/incrudible.php'
         );
     }
 
@@ -90,6 +90,6 @@ class IncrudibleServiceProvider extends PackageServiceProvider
      */
     public function loadHelpers()
     {
-        require __DIR__ . '/helpers.php';
+        require __DIR__.'/helpers.php';
     }
 }
