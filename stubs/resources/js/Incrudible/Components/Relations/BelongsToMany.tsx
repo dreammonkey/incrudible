@@ -19,16 +19,9 @@ export const BelongsToMany: React.FC<BelongsToManyProps> = ({ relation, onChange
     queryKey: [relation?.indexRoute],
   })
 
-  const { data, put, setData, isDirty, transform, setDefaults } = useForm<{ permissions: Permission[] }>({
+  const { data, put, setData, isDirty, setDefaults } = useForm<{ permissions: Permission[] }>({
     permissions: relation.value,
   })
-  console.log({ data, isDirty })
-
-  // Transform the data before sending it to the server
-  transform((data) => ({
-    // @ts-expect-error the api only accepts an array of ids
-    permissions: data.permissions.map((permission) => permission.id),
-  }))
 
   const columns: ColumnDef<Permission>[] = [
     {
