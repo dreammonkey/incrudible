@@ -1,6 +1,7 @@
 {
-    "preset": "psr12",
+    "preset": "laravel",
     "rules": {
-        "trailing_comma_in_multiline": true
+        "trailing_comma_in_multiline": true,
+        "concat_space": false
     }
 }

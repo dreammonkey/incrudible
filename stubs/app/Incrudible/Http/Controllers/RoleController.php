@@ -56,7 +56,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $rules = (new StoreRoleRequest())->rules();
+        $rules = (new StoreRoleRequest)->rules();
 
         $metadata = $this->generateFormMetadata($rules);
 
@@ -69,7 +69,7 @@ class RoleController extends Controller
                     'enabled' => false,
                     'type' => 'BelongsToMany',
                     'model' => Permission::class,
-                    'routeKey' => Incrudible::routePrefix().'.permissions.index',
+                    'routeKey' => Incrudible::routePrefix() . '.permissions.index',
                     'value' => [],
                 ],
             ],
@@ -105,7 +105,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $rules = (new StoreRoleRequest())->rules();
+        $rules = (new StoreRoleRequest)->rules();
 
         $metadata = $this->generateFormMetadata($rules);
 

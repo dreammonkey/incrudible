@@ -39,8 +39,8 @@ class HandleIncrudibleRequests extends Middleware
             'auth' => [
                 'admin' => $admin,
             ],
-            'ziggy' => fn () => [
-                ...(new Ziggy())->toArray(),
+            'ziggy' => fn() => [
+                ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
                 'query' => $request->query(),
             ],

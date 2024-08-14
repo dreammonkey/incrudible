@@ -2,8 +2,8 @@
 
 namespace App\Incrudible\Http\Requests\Admin;
 
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class GetAdminsRequest extends FormRequest
