@@ -109,7 +109,7 @@ class RoleController extends Controller
                     // 'model' => Permission::class,
                     'indexRoute' => incrudible_route('permissions.index'),
                     'storeRoute' => incrudible_route('roles.permissions.update', $role),
-                    'value' => PermissionResource::collection($role->permissions)->toArray(request()),
+                    'value' => PermissionResource::collection($role->permissions ?? [])->toArray(request()),
                 ],
             ],
         ]);

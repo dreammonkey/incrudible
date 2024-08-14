@@ -1,5 +1,6 @@
 <?php
 
+use App\Incrudible\Models\Role;
 use App\Incrudible\Models\Admin;
 
 beforeEach(function () {
@@ -134,4 +135,23 @@ it(('prevents admins from deleting themselves'), function () {
     $this->assertDatabaseHas('admins', [
         'id' => $this->admin->id,
     ]);
+});
+
+it('updates the roles for an admin with full role objects', function () {
+    $this->actingAs($this->admin, incrudible_guard_name());
+
+    $admin = Admin::factory()->create();
+    $roles = Role::factory()->count(3)->create();
+
+    $response = $this->put(incrudible_route('admins.roles.update', $admin), [
+        'items' => $roles->toArray(),
+    ]);
+
+    $response->assertStatus(302)
+        ->assertSessionHas('success', 'Roles updated successfully.');
+
+    $this->assertCount(3, $admin->refresh()->roles);
+    foreach ($roles as $role) {
+        $this->assertTrue($admin->roles->contains($role));
+    }
 });

@@ -2,16 +2,17 @@
 
 namespace App\Incrudible\Http\Controllers;
 
+use App\Incrudible\Models\Admin;
 use App\Incrudible\Filters\SearchFilter;
+use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
-use App\Incrudible\Http\Requests\Admin\DestroyAdminRequest;
+use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Resources\RoleResource;
+use App\Incrudible\Http\Resources\AdminResource;
 use App\Incrudible\Http\Requests\Admin\GetAdminsRequest;
 use App\Incrudible\Http\Requests\Admin\StoreAdminRequest;
 use App\Incrudible\Http\Requests\Admin\UpdateAdminRequest;
-use App\Incrudible\Http\Resources\AdminResource;
-use App\Incrudible\Models\Admin;
-use Illuminate\Support\Facades\Pipeline;
-use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Requests\Admin\DestroyAdminRequest;
 
 class AdminController extends Controller
 {
@@ -90,6 +91,16 @@ class AdminController extends Controller
             'admin' => $admin->toResource(),
             'fields' => config('incrudible.admins.update.fields'),
             'rules' => config('incrudible.admins.update.rules'),
+            'relations' => [
+                [
+                    'name' => 'roles',
+                    'enabled' => true,
+                    'type' => 'BelongsToMany',
+                    'indexRoute' => incrudible_route('roles.index'),
+                    'storeRoute' => incrudible_route('admins.roles.update', $admin),
+                    'value' => RoleResource::collection($admin->roles ?? [])->toArray(request()),
+                ],
+            ],
         ]);
     }
 

@@ -1,8 +1,9 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { BelongsToMany } from '@/Incrudible/Components/Relations/BelongsToMany'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Admin, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import { Admin, CrudRelation, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -12,7 +13,8 @@ export default function AdminEdit({
   admin,
   fields,
   rules,
-}: PageProps<{ admin: Resource<Admin>; fields: FormField[]; rules: FormRules }>) {
+  relations,
+}: PageProps<{ admin: Resource<Admin>; fields: FormField[]; rules: FormRules; relations: CrudRelation<any>[] }>) {
   // console.log({ admin })
 
   const { routePrefix } = usePage<PageProps>().props.incrudible
@@ -66,6 +68,28 @@ export default function AdminEdit({
           className=""
         />
       </div>
+
+      {relations?.map((relation) => {
+        switch (relation.type) {
+          case 'BelongsToMany':
+            return (
+              <BelongsToMany
+                key={relation.name}
+                relation={relation}
+                idKey="id"
+                nameKey="name"
+                onChange={(value) =>
+                  setData({
+                    ...data,
+                    [relation.name]: value,
+                  })
+                }
+              />
+            )
+          default:
+            return null
+        }
+      })}
 
       {recentlySuccessful && (
         <div className="flex items-center rounded-xl border px-4 py-3 text-sm">
