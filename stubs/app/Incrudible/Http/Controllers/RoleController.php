@@ -2,16 +2,16 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Models\Role;
 use App\Incrudible\Filters\SearchFilter;
-use Illuminate\Support\Facades\Pipeline;
 use App\Incrudible\Filters\SortingFilter;
-use Incrudible\Incrudible\Facades\Incrudible;
-use App\Incrudible\Http\Resources\RoleResource;
+use App\Incrudible\Http\Requests\Role\DestroyRoleRequest;
 use App\Incrudible\Http\Requests\Role\GetRolesRequest;
 use App\Incrudible\Http\Requests\Role\StoreRoleRequest;
 use App\Incrudible\Http\Requests\Role\UpdateRoleRequest;
-use App\Incrudible\Http\Requests\Role\DestroyRoleRequest;
+use App\Incrudible\Http\Resources\RoleResource;
+use App\Incrudible\Models\Role;
+use Illuminate\Support\Facades\Pipeline;
+use Incrudible\Incrudible\Facades\Incrudible;
 
 class RoleController extends Controller
 {
