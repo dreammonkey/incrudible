@@ -1,18 +1,19 @@
 <?php
 
-use App\Incrudible\Http\Controllers\AdminController;
-use App\Incrudible\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Incrudible\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Incrudible\Http\Controllers\Auth\NewPasswordController;
-use App\Incrudible\Http\Controllers\Auth\PasswordController;
-use App\Incrudible\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Incrudible\Http\Controllers\DashboardController;
-use App\Incrudible\Http\Controllers\PermissionController;
-use App\Incrudible\Http\Controllers\ProfileController;
-use App\Incrudible\Http\Controllers\RoleController;
-use App\Incrudible\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Http\Controllers\RoleController;
+use App\Incrudible\Http\Controllers\AdminController;
+use App\Incrudible\Http\Controllers\ProfileController;
+use App\Incrudible\Http\Controllers\SettingsController;
+use App\Incrudible\Http\Controllers\DashboardController;
+use App\Incrudible\Http\Controllers\PermissionController;
+use App\Incrudible\Http\Controllers\Auth\PasswordController;
+use App\Incrudible\Http\Controllers\RolePermissionController;
+use App\Incrudible\Http\Controllers\Auth\NewPasswordController;
+use App\Incrudible\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Incrudible\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Incrudible\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,7 @@ use Incrudible\Incrudible\Facades\Incrudible;
 */
 
 Route::prefix(Incrudible::routePrefix())
-    ->name(Incrudible::routePrefix().'.')
+    ->name(Incrudible::routePrefix() . '.')
     ->middleware([
         // TODO: order seems to matter :/
         Incrudible::middleware(),
@@ -48,6 +49,8 @@ Route::prefix(Incrudible::routePrefix())
         Route::resource('admins', AdminController::class);
         Route::resource('roles', RoleController::class);
         Route::resource('permissions', PermissionController::class);
+        Route::put('roles/{role}/permissions', [RolePermissionController::class, 'update'])
+            ->name('roles.permissions.update');
 
         // Route::get('verify-email', EmailVerificationPromptController::class)
         //     ->name('verification.notice');
@@ -81,7 +84,7 @@ Route::prefix(Incrudible::routePrefix())
 // AUTH
 
 Route::prefix(Incrudible::routePrefix())
-    ->name(Incrudible::routePrefix().'.auth.')
+    ->name(Incrudible::routePrefix() . '.auth.')
     ->middleware([
         Incrudible::middleware(),
         'guest',

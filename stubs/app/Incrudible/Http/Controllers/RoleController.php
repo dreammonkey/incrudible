@@ -12,6 +12,7 @@ use App\Incrudible\Http\Requests\Role\GetRolesRequest;
 use App\Incrudible\Http\Requests\Role\StoreRoleRequest;
 use App\Incrudible\Http\Requests\Role\UpdateRoleRequest;
 use App\Incrudible\Http\Requests\Role\DestroyRoleRequest;
+use App\Incrudible\Http\Resources\PermissionResource;
 
 class RoleController extends Controller
 {
@@ -108,7 +109,7 @@ class RoleController extends Controller
                     // 'model' => Permission::class,
                     'indexRoute' => incrudible_route('permissions.index'),
                     'storeRoute' => incrudible_route('roles.permissions.update', $role),
-                    'value' => $role->permissions,
+                    'value' => PermissionResource::collection($role->permissions)->toArray(request()),
                 ],
             ],
         ]);

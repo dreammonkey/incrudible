@@ -19,7 +19,7 @@ export const BelongsToMany: React.FC<BelongsToManyProps> = ({ relation, onChange
     queryKey: [relation?.indexRoute],
   })
 
-  const { data, put, setData, isDirty, transform } = useForm<{ permissions: Permission[] }>({
+  const { data, put, setData, isDirty, transform, setDefaults } = useForm<{ permissions: Permission[] }>({
     permissions: relation.value,
   })
   console.log({ data, isDirty })
@@ -73,20 +73,18 @@ export const BelongsToMany: React.FC<BelongsToManyProps> = ({ relation, onChange
 
       <div className="grid gap-4">
         <Combobox
-          multiple
-          value={relation.value}
+          // TODO: make it uncontrolled ?
+          value={undefined as unknown as Permission}
           options={((options?.data as Permission[]) ?? []).filter(
             (option) => !data.permissions.find((d) => d.id === option.id),
           )}
           getKey={(option) => option.id.toString()}
           getLabel={(option) => option.name}
           onChange={(value) => {
-            setData((previousData) => ({
-              permissions: [...previousData.permissions, ...value],
-            }))
-            if (onChange) {
-              onChange([...data.permissions, ...value])
-            }
+            setData({
+              permissions: [...data.permissions, value],
+            })
+            onChange?.([...data.permissions, value])
           }}
           placeholder={`Select ${relation.name}`}
         />
@@ -99,7 +97,15 @@ export const BelongsToMany: React.FC<BelongsToManyProps> = ({ relation, onChange
           <Button
             onClick={() => {
               if (relation.storeRoute) {
-                put(relation.storeRoute, { [relation.name]: data.permissions })
+                put(
+                  relation.storeRoute,
+
+                  {
+                    onSuccess: () => {
+                      setDefaults()
+                    },
+                  },
+                )
               }
             }}
             disabled={!isDirty}
