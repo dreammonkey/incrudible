@@ -7,8 +7,9 @@ import { Button } from '@/Incrudible/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Incrudible/ui/form'
 import { Input } from '@/Incrudible/ui/input'
 import { forwardRef, useImperativeHandle } from 'react'
-import { DateTimeInput } from '../ui/date-time-input'
-import { Switch } from '../ui/switch'
+import { DateTimeInput } from '@/Incrudible/ui/date-time-input'
+import { Switch } from '@/Incrudible/ui/switch'
+import { Textarea } from '@/Incrudible/ui/textarea'
 
 interface FormProps<T> {
   fields: FormFieldType[]
@@ -45,14 +46,7 @@ const renderInput = (
       return <Input {...field} type={fieldData.type} placeholder={fieldData.placeholder} readOnly={readOnly} />
 
     case 'textarea':
-      return (
-        <textarea
-          className="block w-full rounded-md border px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          placeholder={fieldData.placeholder}
-          {...field}
-          readOnly={readOnly}
-        />
-      )
+      return <Textarea {...field} placeholder={fieldData.placeholder} readOnly={readOnly} />
 
     case 'datetime-local':
       // TODO convert php format to date-fns format
