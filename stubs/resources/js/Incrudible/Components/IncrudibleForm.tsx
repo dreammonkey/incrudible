@@ -46,7 +46,7 @@ const renderInput = (
       return <Input {...field} type={fieldData.type} placeholder={fieldData.placeholder} readOnly={readOnly} />
 
     case 'textarea':
-      return <Textarea {...field} placeholder={fieldData.placeholder} readOnly={readOnly} />
+      return <Textarea className="min-h-32" {...field} placeholder={fieldData.placeholder} readOnly={readOnly} />
 
     case 'datetime-local':
       // TODO convert php format to date-fns format
