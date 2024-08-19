@@ -123,7 +123,7 @@ class CrudMakeCommand extends GeneratorCommand
 
         $this->info('There are a few more steps to complete the setup:');
         $this->info('1. Add the following route to your routes/web.php file:');
-        $this->comment("Route::resource('{$table}', '{$model}Controller');");
+        $this->comment("Route::resource('{$table}', {$model}Controller::class);");
         $this->info('2. Add the following line to your resources/js/types/incrudible.d.ts file:');
         $this->comment("interface {$model} { ... }");
     }
