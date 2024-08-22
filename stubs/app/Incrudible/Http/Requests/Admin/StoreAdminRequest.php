@@ -22,38 +22,6 @@ class StoreAdminRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'username' => [
-                'required',
-                'string',
-                'min:8',
-                'max:255',
-            ],
-            'email' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-                'email',
-                'unique:admins,email',
-            ],
-            'password' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-                'required',
-                'min:8',
-            ],
-            'password_confirmation' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-                'required',
-                'min:8',
-                'same:password',
-            ],
-        ];
+        return config('incrudible.admins.store.rules');
     }
 }

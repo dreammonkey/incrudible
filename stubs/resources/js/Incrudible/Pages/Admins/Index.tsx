@@ -1,81 +1,27 @@
-import { getCrudIndex } from '@/Incrudible/Api/Crud'
+import { getCrudIndex } from '@/Incrudible/Api/services/getCrudIndex'
 import { TablePagination } from '@/Incrudible/Components/TablePagination'
+import { createColumns } from '@/Incrudible/Helpers/table-helpers'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
-import { Button, buttonVariants } from '@/Incrudible/ui/button'
+import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/Incrudible/ui/dropdown-menu'
 import { Input } from '@/Incrudible/ui/input'
-import { cn, formatDate } from '@/lib/utils'
-import { Admin, Filters, PageProps, PagedResource, TableAction } from '@/types/incrudible'
+import { cn } from '@/lib/utils'
+import { Admin, Filters, PagedResource, PageProps, PagingConfig, TableActionConfig } from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
-import { useQuery } from '@tanstack/react-query'
-import { ColumnDef, SortingState } from '@tanstack/react-table'
-import { Eye, MoreHorizontal, Pencil, Plus, Search, Trash, TriangleAlert } from 'lucide-react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { SortingState } from '@tanstack/react-table'
+import { Plus, Search, TriangleAlert } from 'lucide-react'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
-export const createColumns = (actions: TableAction[]): ColumnDef<Admin>[] => [
-  {
-    accessorKey: 'id',
-    header: 'Id',
-  },
-  {
-    accessorKey: 'username',
-    header: 'Username',
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email',
-  },
-  {
-    accessorKey: 'created_at',
-    header: 'Created',
-    cell: ({ row }) => formatDate(row.original.created_at),
-  },
-  {
-    accessorKey: 'updated_at',
-    header: 'Updated',
-    cell: ({ row }) => formatDate(row.original.updated_at),
-  },
-  {
-    id: 'actions',
-    header: 'Actions',
-    enableSorting: false,
-    cell: ({ row }) => {
-      const item = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {actions.map((action, index) => (
-              <DropdownMenuItem key={index}>
-                <Link
-                  className={cn(
-                    buttonVariants({ variant: 'ghost', size: 'sm' }),
-                    'w-full justify-start rounded-md text-sm',
-                  )}
-                  onClick={action.onClick?.(item.id) ?? (() => {})}
-                  href={action.route ? route(action.route, { admin: item.id }) : '#'}
-                >
-                  <action.icon className="mr-2 h-4 w-4" />
-                  &nbsp;{action.label}
-                </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
-
-export default function AdminIndex({ auth }: PageProps) {
+export default function AdminIndex({
+  auth,
+  listable,
+  paging,
+  actions,
+}: PageProps<{ listable: string[]; actions: TableActionConfig[]; paging: PagingConfig }>) {
   const props = usePage<PageProps>().props
+
+  const queryClient = useQueryClient()
 
   const {
     incrudible: { routePrefix },
@@ -83,18 +29,16 @@ export default function AdminIndex({ auth }: PageProps) {
   } = props
 
   const params = new URLSearchParams(query)
-  // console.log(query)
 
   const routeKey = 'admins.index'
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-    perPage: params.get('perPage') ? parseInt(params.get('perPage') as string) : 10,
+    perPage: params.get('perPage') ? parseInt(params.get('perPage') as string) : paging.default,
     orderBy: params.get('orderBy') ?? 'created_at',
     orderDir: params.get('orderDir') ?? 'desc',
     search: '',
   })
-  // console.log({ filters })
 
   // Sync filters state with URL search params
   useLayoutEffect(() => {
@@ -129,37 +73,28 @@ export default function AdminIndex({ auth }: PageProps) {
     queryFn: () => getCrudIndex(baseRoute, filters),
   })
 
-  // console.log({ admins })
-  // console.log({ error })
+  // Actions callback
+  const actionsCallback = (action: string, item: Admin) => {
+    if (action === 'destroy') {
+      const url = item.actions.find((a) => a.action === 'destroy')?.url
+      router.delete(url!, {
+        onBefore: () => confirm('Are you sure you want to delete this item?'),
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [routeKey, filters],
+          })
+        },
+      })
+    }
+  }
 
-  // TODO: actions
-  const actions = [
-    {
-      label: 'Show',
-      icon: Eye,
-      route: `${routePrefix}.admins.show`,
-    },
-    {
-      label: 'Edit',
-      icon: Pencil,
-      route: `${routePrefix}.admins.edit`,
-    },
-    {
-      // TODO
-      label: 'Delete',
-      icon: Trash,
-      route: `${routePrefix}.admins.edit`,
-      // onClick: (id: any) => console.log('Delete', id),
-    },
-  ]
+  // Table columns helper
+  const columns = useMemo(() => createColumns<Admin>(actions, listable, actionsCallback), [actions, listable])
 
-  const columns = useMemo(() => createColumns(actions), [actions])
-
+  // Sorting state
   const [sorting, setSorting] = useState<SortingState>([{ id: filters.orderBy, desc: filters.orderDir === 'desc' }]) // can set initial sorting state here
-  // console.log({ sorting })
 
   useEffect(() => {
-    // console.log({ sorting })
     setFilters({
       ...filters,
       orderBy: sorting[0]?.id ?? 'created_at',
@@ -172,7 +107,7 @@ export default function AdminIndex({ auth }: PageProps) {
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Admins</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Admins</h2>
           <form
             className="ml-4 flex-1"
             onChange={(e) => {

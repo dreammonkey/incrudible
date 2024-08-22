@@ -2,39 +2,40 @@ import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { {{ modelName }}, FormMetaData, PageProps } from '@/types/incrudible'
+import { {{ parentImports }}{{ Model }}, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
-import { ArrowLeft, ArrowLeftSquare, ThumbsUp } from 'lucide-react'
+import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
-// import { laravelFormRulesToZodSchema } from '@/lib/utils'
-
-export default function {{ modelName }}Create({ auth, {{ instanceSingular }}, metadata }: PageProps<{ {{ instanceSingular }}: any; metadata: FormMetaData }>) {
-  // console.log({ auth, {{ instanceSingular }}, metadata })
+export default function {{ Model }}Create({ 
+  auth, 
+  {{ parentProps }}
+  fields,
+  rules,
+  }: PageProps<{ 
+    {{ parentPropTypes }}
+    fields: FormField[]; 
+    rules: FormRules 
+  }>) {
+  //
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
-  const { setData, post, data, recentlySuccessful } = useForm<{{ modelName }}>(
-    metadata.fields.reduce((acc, field) => {
+  const { setData, post, data, recentlySuccessful } = useForm<{{ Model }}>(
+    fields.reduce((acc, field) => {
       return { ...acc, [field.name]: '' }
-    }, {} as {{ modelName }}),
+    }, {} as {{ Model }}),
   )
-  // console.log({ data })
 
-  const formRef = useRef<FormRef<{{ modelName }}>>(null!)
+  const formRef = useRef<FormRef<{{ Model }}>>(null!)
 
-  const onSubmit = (data: {{ modelName }}) => {
-    // console.log({ data })
-
-    // TODO: mutation instead of post ??
-
-    // POST `${routePrefix}/{{ instancePlural }}`}`
-    post(route(`${routePrefix}.{{ instancePlural }}.store`), {
+  const onSubmit = (data: {{ Model }}) => {
+    post(route(`${routePrefix}.{{ crudRoute }}.store`, {{ parentRouteParams }}), {
       onSuccess: () => {
-        console.log('{{ modelName }} created successfully')
+        console.log('{{ Model }} created successfully')
         formRef.current?.reset(data)
       },
       onError: (error) => {
-        console.error('Error updating {{ instanceSingular }}', error)
+        console.error('Error updating {{ model }}', error)
       },
     })
   }
@@ -44,9 +45,9 @@ export default function {{ modelName }}Create({ auth, {{ instanceSingular }}, me
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Create {{ modelName }}</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Create {{ Model }}</h2>
           <Link
-            href={route(`${routePrefix}.{{ instancePlural }}.index`)}
+            href={route(`${routePrefix}.{{ crudRoute }}.index`, {{ parentRouteParams }})}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -55,12 +56,13 @@ export default function {{ modelName }}Create({ auth, {{ instanceSingular }}, me
         </>
       }
     >
-      <Head title="Create {{ modelName }}" />
+      <Head title="Create {{ Model }}" />
 
       <div className="grid gap-y-2 rounded-lg border p-4">
         <IncrudibleForm
           ref={formRef}
-          metadata={metadata}
+          fields={fields}
+          rules={rules}
           data={data}
           onFormSubmit={onSubmit}
           onChange={setData}
@@ -69,9 +71,9 @@ export default function {{ modelName }}Create({ auth, {{ instanceSingular }}, me
       </div>
 
       {recentlySuccessful && (
-        <div className="relative justify-center rounded-lg border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-2 inline-block h-5 w-5 text-green-800" />
-          {{ modelName }} created successfully
+        <div className="flex items-center rounded-lg border px-4 py-3 text-sm">
+          <ThumbsUp className="mr-2 inline-block size-4 text-green-800" />
+          {{ Model }} created successfully
         </div>
       )}
     </AuthenticatedLayout>

@@ -76,16 +76,16 @@ return [
                         'icon' => 'Users',
                         'route' => 'admins.index',
                     ],
-                    // [
-                    //     'label' => 'Roles',
-                    //     'icon' => 'Shield',
-                    //     'route' => 'roles.index',
-                    // ],
-                    // [
-                    //     'label' => 'Permissions',
-                    //     'icon' => 'Lock',
-                    //     'route' => 'permissions.index',
-                    // ],
+                    [
+                        'label' => 'Roles',
+                        'icon' => 'Shield',
+                        'route' => 'roles.index',
+                    ],
+                    [
+                        'label' => 'Permissions',
+                        'icon' => 'Lock',
+                        'route' => 'permissions.index',
+                    ],
                 ],
             ],
             [

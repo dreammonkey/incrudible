@@ -32,11 +32,13 @@ function pageList(currentPage: number, maxPages: number, lastPage: number) {
 export function TablePagination<T>({
   meta,
   perPage,
+  perPageOptions = [5, 10, 25, 50, 100],
   onPageSelect,
   onPerPageChange,
 }: {
   meta: PagedResource<T>['meta']
   perPage: number
+  perPageOptions?: number[]
   onPageSelect?: (page: number) => void
   onPerPageChange: (perPage: number) => void
 }) {
@@ -46,8 +48,8 @@ export function TablePagination<T>({
     <Pagination className="flex justify-between">
       <PaginationContent>
         <p className="text-sm">
-          Displaying {meta.from?.toLocaleString()} to{' '}
-          {meta.to?.toLocaleString()} of {meta.total?.toLocaleString()} results
+          Displaying {meta.from?.toLocaleString()} to {meta.to?.toLocaleString()} of {meta.total?.toLocaleString()}{' '}
+          results
         </p>
       </PaginationContent>
 
@@ -58,11 +60,7 @@ export function TablePagination<T>({
             href="#"
             aria-disabled={meta.current_page === 1}
             tabIndex={meta.current_page === 1 ? -1 : undefined}
-            className={
-              meta.current_page === 1
-                ? 'pointer-events-none border-gray-500 opacity-60'
-                : undefined
-            }
+            className={meta.current_page === 1 ? 'pointer-events-none border-gray-500 opacity-60' : undefined}
             onClick={() => onPageSelect?.(1)}
           >
             <ChevronsLeft className="h-4 w-4" />
@@ -75,11 +73,7 @@ export function TablePagination<T>({
             href="#"
             aria-disabled={meta.current_page === 1}
             tabIndex={meta.current_page === 1 ? -1 : undefined}
-            className={
-              meta.current_page === 1
-                ? 'pointer-events-none border-gray-500 opacity-60'
-                : undefined
-            }
+            className={meta.current_page === 1 ? 'pointer-events-none border-gray-500 opacity-60' : undefined}
             onClick={() => onPageSelect?.(1)}
           />
         </PaginationItem>
@@ -92,11 +86,7 @@ export function TablePagination<T>({
               isActive={meta.current_page === page}
               aria-disabled={meta.current_page === page}
               tabIndex={meta.current_page === page ? -1 : undefined}
-              className={
-                meta.current_page === page
-                  ? 'pointer-events-none border-gray-500 opacity-60'
-                  : undefined
-              }
+              className={meta.current_page === page ? 'pointer-events-none border-gray-500 opacity-60' : undefined}
               onClick={() => onPageSelect?.(page)}
             >
               {page}
@@ -111,9 +101,7 @@ export function TablePagination<T>({
             aria-disabled={meta.current_page === meta.last_page}
             tabIndex={meta.current_page === meta.last_page ? -1 : undefined}
             className={
-              meta.current_page === meta.last_page
-                ? 'pointer-events-none border-gray-500 opacity-60'
-                : undefined
+              meta.current_page === meta.last_page ? 'pointer-events-none border-gray-500 opacity-60' : undefined
             }
             onClick={() => onPageSelect?.(meta.current_page + 1)}
           />
@@ -126,9 +114,7 @@ export function TablePagination<T>({
             aria-disabled={meta.current_page === meta.last_page}
             tabIndex={meta.current_page === meta.last_page ? -1 : undefined}
             className={
-              meta.current_page === meta.last_page
-                ? 'pointer-events-none border-gray-500 opacity-60'
-                : undefined
+              meta.current_page === meta.last_page ? 'pointer-events-none border-gray-500 opacity-60' : undefined
             }
             onClick={() => onPageSelect?.(meta.last_page)}
           >
@@ -140,21 +126,18 @@ export function TablePagination<T>({
       <PaginationContent className="flex items-center space-x-2 text-sm">
         <p>Rows per page</p>
 
-        <Select
-          onValueChange={(value) => onPerPageChange(parseInt(value))}
-          defaultValue={perPage.toString()}
-        >
+        <Select onValueChange={(value) => onPerPageChange(parseInt(value))} defaultValue={perPage.toString()}>
           <SelectTrigger className="w-[80px] text-sm">
             <SelectValue placeholder={perPage} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Rows</SelectLabel>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="25">25</SelectItem>
-              <SelectItem value="50">50</SelectItem>
-              <SelectItem value="100">100</SelectItem>
+              {perPageOptions.map((option) => (
+                <SelectItem key={option} value={option.toString()}>
+                  {option}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>

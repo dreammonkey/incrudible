@@ -1,0 +1,47 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Incrudible\Http\Resources\{{ Model }}Resource;
+use Illuminate\Http\Request;
+use App\Incrudible\Models\{{ Parent }};
+use App\Incrudible\Models\{{ Model }};
+
+class {{ class }} extends Controller
+{
+    /**
+     * Retrieve all {{ models }} except the ones already assigned to the {{ parent }}.
+     */
+    public function options({{ Parent }} ${{ parent }})
+    {
+        return {{ Model }}Resource::collection(
+            {{ Model }}::whereNotIn('id', ${{ parent }}->{{ models }}->pluck('id'))->get()
+        );
+    }
+
+    /**
+     * Get all {{ models }} assigned to the {{ parent }}.
+     */
+    public function value({{ Parent }} ${{ parent }})
+    {
+        return {{ Model }}Resource::collection(${{ parent }}->{{ models }});
+    }
+
+    /**
+     * Update the {{ models }} for a specific {{ parent }}.
+     */
+    public function update(Request $request, {{ Parent }} ${{ parent }})
+    {
+        $request->validate([
+            'items' => 'array',
+            'items.*.id' => 'required|exists:{{ models }},id',
+        ]);
+
+        $modelIds = collect($request->input('items'))->pluck('id')->all();
+
+        ${{ parent }}->{{ models }}()->sync($modelIds);
+
+        return redirect()->back()
+            ->with('success', '{{ Models }} updated successfully.');
+    }
+}

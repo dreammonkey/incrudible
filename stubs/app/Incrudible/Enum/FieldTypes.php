@@ -11,6 +11,7 @@ enum FieldTypes: string
     case CHECKBOX = 'checkbox';
     case RADIO = 'radio';
     case SELECT = 'select';
+    case MULTI_SELECT = 'multi-select';
     case TEXTAREA = 'textarea';
     case FILE = 'file';
     case IMAGE = 'image';

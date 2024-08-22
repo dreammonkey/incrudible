@@ -1,22 +1,38 @@
+import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { FormMetaData, PageProps } from '@/types/incrudible'
-import { Head, Link, usePage } from '@inertiajs/react'
+import { {{ parentImports }}{{ Model }}, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft } from 'lucide-react'
+import { useRef } from 'react'
 
-export default function {{ modelName }}Show({ auth, {{ instanceSingular }}, metadata }: PageProps<{ {{ instanceSingular }}: any; metadata: FormMetaData }>) {
-  // console.log({{ instanceSingular }})
-
+export default function {{ Model }}Show({ 
+  auth,
+  {{ parentProps }}
+  {{ model }},
+  fields,
+  rules,
+}: PageProps<{ 
+  {{ parentPropTypes }}
+  {{ model }}: Resource<{{ Model }}> 
+  fields: FormField[] 
+  rules: FormRules
+}>) {
   const { routePrefix } = usePage<PageProps>().props.incrudible
+
+  const { data } = useForm<{{ Model }}>({{ model }}.data)
+  
+  const formRef = useRef<FormRef<{{ Model }}>>(null!)
+
   return (
     <AuthenticatedLayout
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Show {{ modelName }}</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Show {{ Model }}</h2>
           <Link
-            href={route(`${routePrefix}.{{ instancePlural }}.index`)}
+            href={route(`${routePrefix}.{{ crudRoute }}.index`, {{ parentRouteParams }})}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -25,13 +41,13 @@ export default function {{ modelName }}Show({ auth, {{ instanceSingular }}, meta
         </>
       }
     >
-      <Head title="{{ modelName }} Show" />
+      <Head title="{{ Model }} Show" />
 
-      <div className="rounded-lg border p-4 text-sm sm:p-8">
-        <pre>{JSON.stringify({{ instanceSingular }}, null, 2)}</pre>
+      <IncrudibleForm ref={formRef} fields={fields} rules={rules} data={data} readOnly />
+      
+      <div className="rounded-lg border p-2 text-xs sm:p-4">
+        <pre>{JSON.stringify({{ model }}, null, 2)}</pre>
       </div>
-
-      {/* <IncrudibleForm metadata={metadata} data={{{ instanceSingular }}} /> */}
     </AuthenticatedLayout>
   )
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Incrudible\Models\Admin>
  */
 class AdminFactory extends Factory
 {
@@ -23,7 +23,6 @@ class AdminFactory extends Factory
         return [
             'username' => $this->faker->userName(),
             'email' => $this->faker->email(),
-            'email_verified_at' => now(),
             'password' => Hash::make($this->faker->password()),
             'remember_token' => Str::random(10),
         ];

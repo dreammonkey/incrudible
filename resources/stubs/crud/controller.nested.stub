@@ -1,0 +1,124 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Incrudible\Models\{{ Model }};
+{{ parentImports }}
+use App\Incrudible\Filters\SearchFilter;
+use Illuminate\Support\Facades\Pipeline;
+use App\Incrudible\Filters\SortingFilter;
+use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Traits\HandlesCrudRelations;
+use App\Incrudible\Http\Resources\{{ Model }}Resource;
+use App\Incrudible\Http\Requests\{{ Model }}\Get{{ Models }}Request;
+use App\Incrudible\Http\Requests\{{ Model }}\Store{{ ModelRequest }};
+use App\Incrudible\Http\Requests\{{ Model }}\Update{{ ModelRequest }};
+use App\Incrudible\Http\Requests\{{ Model }}\Destroy{{ ModelRequest }};
+
+/*NESTED BABY*/
+
+class {{ class }} extends Controller
+{
+    use HandlesCrudRelations;
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index({{ parentArgs }}, Get{{ Models }}Request $request)
+    {
+        if ($request->wantsJson()) {
+
+            return {{ Model }}Resource::collection(
+
+                Pipeline::send(
+                    {{ directParentInstance }}->{{ models }}()->getQuery(),
+                )
+                    ->through([
+                        new SearchFilter(
+                            search: $request->validated('search'),
+                            fields: config('incrudible.{{ crudRoute }}.index.searchable')
+                        ),
+                        new SortingFilter(
+                            orderBy: $request->validated('orderBy'),
+                            orderDir: $request->validated('orderDir')
+                        ),
+                    ])
+                    ->thenReturn()
+                    ->paginate($request->validated('perPage', 25))
+            );
+        }
+
+        return inertia('{{ Models }}/Index', [
+            {{ parentProps }}
+            ...config('incrudible.{{ crudRoute }}.index'),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create({{ parentArgs }})
+    {
+        return inertia('{{ Models }}/Create', [
+            {{ parentProps }}
+            ...config('incrudible.{{ crudRoute }}.store'),
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Store{{ Model }}Request $request, {{ parentArgs }})
+    {
+        ${{ model }} = {{ Model }}::create($request->validated());
+        $prefix = Incrudible::routePrefix();
+
+        // return redirect()->route("$prefix.{{ crudRoute }}.show", ${{ model }})->with('success', '{{ Model }} created successfully.');
+        return redirect()->back()->with('success', '{{ Model }} created successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show({{ parentArgs }}, {{ Model }} ${{ model }})
+    {
+        return inertia('{{ Models }}/Show', [
+            {{ parentProps }}
+            '{{ model }}' => ${{ model }}->toResource(),
+             ...config('incrudible.{{ crudRoute }}.update'),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit({{ parentArgs }}, {{ Model }} ${{ model }})
+    {
+        return inertia('{{ Models }}/Edit', [
+            {{ parentProps }}
+            '{{ model }}' => ${{ model }}->toResource(),
+            ...config('incrudible.{{ crudRoute }}.update'),
+            'relations' => $this->relations('{{ crudRoute }}'),
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Update{{ Model }}Request $request, {{ parentArgs }}, {{ Model }} ${{ model }})
+    {
+        ${{ model }}->update($request->validated());
+
+        return redirect()->back()->with('success', '{{ Model }} updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Destroy{{ Model }}Request $request, {{ parentArgs }}, {{ Model }} ${{ model }})
+    {
+        ${{ model }}->delete();
+
+        return redirect()->back()->with('success', '{{ Model }} deleted successfully.');
+    }
+}

@@ -1,0 +1,31 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Model;
+use App\Incrudible\Http\Resources\{{ class }}Resource;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class {{ class }} extends Model
+{
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = {{ fillable }};
+
+    /**
+     * Transform model into a resource.
+     */
+    public function toResource(): {{ class }}Resource
+    {
+        return new {{ class }}Resource($this);
+    }
+
+    {{ relationships }}
+}
