@@ -34,14 +34,14 @@ return [
                 'label' => 'Edit',
                 'icon' => 'Edit',
                 'action' => 'edit',
-                'type' => 'link'
+                'type' => 'link',
             ],
             [
                 'label' => 'Delete',
                 'icon' => 'Trash',
                 'action' => 'destroy',
                 'variant' => 'destructive',
-                'type' => 'button'
+                'type' => 'button',
             ],
         ],
     ],

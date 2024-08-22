@@ -2,11 +2,11 @@
 
 namespace Incrudible\Incrudible\Commands\Crud\Request;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesCruds;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class CrudRequestMakeCommand extends GeneratorCommand
 {
@@ -99,6 +99,7 @@ class CrudRequestMakeCommand extends GeneratorCommand
         // For "index", pluralize the model name
         if ($method === 'Index') {
             $modelNamePlural = Str::pluralStudly($modelName);
+
             return "{$namespace}\\Http\\Requests\\{$modelName}\\Get{$modelNamePlural}Request";
         }
 

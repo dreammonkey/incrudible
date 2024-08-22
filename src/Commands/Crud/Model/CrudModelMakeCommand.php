@@ -11,8 +11,8 @@ use Symfony\Component\Console\Input\InputOption;
 
 class CrudModelMakeCommand extends GeneratorCommand
 {
-    use GeneratesFormRules;
     use GeneratesCruds;
+    use GeneratesFormRules;
 
     /**
      * The console command name.
@@ -105,7 +105,7 @@ class CrudModelMakeCommand extends GeneratorCommand
             [
                 $this->getNamespace($name),
                 $class,
-                "/** TODO: Define relationships */",
+                '/** TODO: Define relationships */',
                 VarExporter::export(array_values($fillable), VarExporter::TRAILING_COMMA_IN_ARRAY, indentLevel: 1),
             ],
             $stub
@@ -137,10 +137,10 @@ class CrudModelMakeCommand extends GeneratorCommand
     {
         // Assume the fillable attributes are inferred from the table schema
         $metadata = $this->getFormMetaData($this->getTableName('table'));
-        $fieldNames = array_map(fn($field) => $field['name'], $metadata['fields']);
+        $fieldNames = array_map(fn ($field) => $field['name'], $metadata['fields']);
 
         $fillable = array_filter($fieldNames, function ($field) {
-            return !in_array($field, ['id', 'created_at', 'updated_at']);
+            return ! in_array($field, ['id', 'created_at', 'updated_at']);
         });
 
         return $fillable;

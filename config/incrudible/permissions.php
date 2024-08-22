@@ -28,20 +28,20 @@ return [
                 'label' => 'View',
                 'icon' => 'Eye',
                 'action' => 'show',
-                'type' => 'link'
+                'type' => 'link',
             ],
             [
                 'label' => 'Edit',
                 'icon' => 'Edit',
                 'action' => 'edit',
-                'type' => 'link'
+                'type' => 'link',
             ],
             [
                 'label' => 'Delete',
                 'icon' => 'Trash',
                 'action' => 'destroy',
                 'variant' => 'destructive',
-                'type' => 'button'
+                'type' => 'button',
             ],
         ],
     ],

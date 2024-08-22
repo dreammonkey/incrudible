@@ -25,19 +25,19 @@ class RoleResource extends JsonResource
                 [
                     'action' => 'show',
                     'url' => incrudible_route('roles.show', [
-                        'role' => $this->id
+                        'role' => $this->id,
                     ]),
                 ],
                 [
                     'action' => 'edit',
                     'url' => incrudible_route('roles.edit', [
-                        'role' => $this->id
+                        'role' => $this->id,
                     ]),
                 ],
                 [
                     'action' => 'destroy',
                     'url' => incrudible_route('roles.destroy', [
-                        'role' => $this->id
+                        'role' => $this->id,
                     ]),
                 ],
             ],

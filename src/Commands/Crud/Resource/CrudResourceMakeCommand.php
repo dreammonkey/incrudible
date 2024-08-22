@@ -2,17 +2,17 @@
 
 namespace Incrudible\Incrudible\Commands\Crud\Resource;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesCruds;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class CrudResourceMakeCommand extends GeneratorCommand
 {
-    use GeneratesFormRules;
     use GeneratesCruds;
+    use GeneratesFormRules;
 
     /**
      * The console command name.
@@ -127,7 +127,7 @@ class CrudResourceMakeCommand extends GeneratorCommand
     protected function generateToArray($table, $parents)
     {
         $metadata = $this->getFormMetaData($table);
-        $fieldNames = array_map(fn($field) => $field['name'], $metadata['fields']);
+        $fieldNames = array_map(fn ($field) => $field['name'], $metadata['fields']);
 
         // Generate the fields array part
         $fieldsString = '';
@@ -150,19 +150,19 @@ class CrudResourceMakeCommand extends GeneratorCommand
 [
                 [
                     'action' => 'show',
-                    'url' => incrudible_route('{$this->generateRouteName($table,$parents)}.show', [
+                    'url' => incrudible_route('{$this->generateRouteName($table, $parents)}.show', [
                         {$routeParamsString}
                     ]),
                 ],
                 [
                     'action' => 'edit',
-                    'url' => incrudible_route('{$this->generateRouteName($table,$parents)}.edit', [
+                    'url' => incrudible_route('{$this->generateRouteName($table, $parents)}.edit', [
                         {$routeParamsString}
                     ]),
                 ],
                 [
                     'action' => 'destroy',
-                    'url' => incrudible_route('{$this->generateRouteName($table,$parents)}.destroy', [
+                    'url' => incrudible_route('{$this->generateRouteName($table, $parents)}.destroy', [
                         {$routeParamsString}
                     ]),
                 ],
@@ -183,13 +183,14 @@ EOT;
     /**
      * Generate the route name based on the table and parents.
      *
-     * @param string $table
-     * @param array $parents
+     * @param  string  $table
+     * @param  array  $parents
      * @return string
      */
     protected function generateRouteName($table, $parents)
     {
-        $parentsString = !empty($parents) ? implode('.', $parents) . '.' : '';
+        $parentsString = ! empty($parents) ? implode('.', $parents) . '.' : '';
+
         return $parentsString . Str::plural(Str::lower($table));
     }
 }

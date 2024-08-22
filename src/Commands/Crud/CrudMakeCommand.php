@@ -2,13 +2,14 @@
 
 namespace Incrudible\Incrudible\Commands\Crud;
 
-use function Laravel\Prompts\suggest;
 use Illuminate\Console\GeneratorCommand;
 use Incrudible\Incrudible\Traits\GeneratesCruds;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\suggest;
 
 class CrudMakeCommand extends GeneratorCommand
 {
@@ -77,7 +78,7 @@ class CrudMakeCommand extends GeneratorCommand
         parent::initialize($input, $output);
 
         // Prompt for the model if not provided
-        if (!$input->getArgument('model')) {
+        if (! $input->getArgument('model')) {
             $model = suggest(
                 'What model should this CRUD apply to?',
                 $this->possibleModels()
@@ -136,7 +137,7 @@ class CrudMakeCommand extends GeneratorCommand
         }
 
         // Set the parent models as an argument if there are any
-        if (!empty($parents)) {
+        if (! empty($parents)) {
             $input->setArgument('parents', $parents);
             $input->setOption('nested', true);
         }
@@ -174,7 +175,7 @@ class CrudMakeCommand extends GeneratorCommand
         $this->call('crud:request', ['table' => $table, 'method' => 'index', 'parents' => $parents, '--force' => $force]);
         // ShowRequest
         $this->info("Generating ShowRequest for model: {$model}");
-        $this->call('crud:request', ['table' => $table, 'method' => 'show', 'parents' => $parents, '--force' => $force,]);
+        $this->call('crud:request', ['table' => $table, 'method' => 'show', 'parents' => $parents, '--force' => $force]);
         // StoreRequest
         $this->info("Generating StoreRequest for model: {$model}");
         $this->call('crud:request', ['table' => $table, 'method' => 'store', 'parents' => $parents, '--force' => $force]);

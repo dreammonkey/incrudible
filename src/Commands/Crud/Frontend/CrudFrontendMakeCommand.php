@@ -2,11 +2,11 @@
 
 namespace Incrudible\Incrudible\Commands\Crud\Frontend;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesCruds;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class CrudFrontendMakeCommand extends GeneratorCommand
 {
@@ -160,8 +160,6 @@ class CrudFrontendMakeCommand extends GeneratorCommand
     /**
      * Generate the necessary parent data for use in the component.
      *
-     * @param array $parents
-     * @param string $model
      * @return array
      */
     protected function getParentData(array $parents, string $model)

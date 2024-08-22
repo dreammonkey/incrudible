@@ -25,19 +25,19 @@ class AdminResource extends JsonResource
                 [
                     'action' => 'show',
                     'url' => incrudible_route('admins.show', [
-                        'admin' => $this->id
+                        'admin' => $this->id,
                     ]),
                 ],
                 [
                     'action' => 'edit',
                     'url' => incrudible_route('admins.edit', [
-                        'admin' => $this->id
+                        'admin' => $this->id,
                     ]),
                 ],
                 [
                     'action' => 'destroy',
                     'url' => incrudible_route('admins.destroy', [
-                        'admin' => $this->id
+                        'admin' => $this->id,
                     ]),
                 ],
             ],

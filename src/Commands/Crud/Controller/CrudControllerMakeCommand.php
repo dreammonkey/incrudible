@@ -2,17 +2,17 @@
 
 namespace Incrudible\Incrudible\Commands\Crud\Controller;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesCruds;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class CrudControllerMakeCommand extends GeneratorCommand
 {
-    use GeneratesFormRules;
     use GeneratesCruds;
+    use GeneratesFormRules;
 
     /**
      * The console command name.
@@ -189,8 +189,6 @@ class CrudControllerMakeCommand extends GeneratorCommand
     /**
      * Generate the necessary parent data for use in the component.
      *
-     * @param array $parents
-     * @param string $model
      * @return array
      */
     protected function getParentData(array $parents, string $model)
@@ -218,7 +216,7 @@ class CrudControllerMakeCommand extends GeneratorCommand
 
         return [
             'parentImports' => trim($parentImports, "\n"),
-            'parentArgs' => trim($parentArgs, ", "),
+            'parentArgs' => trim($parentArgs, ', '),
             'parentProps' => trim($parentProps, "\n"),
             'parentRouteParams' => $parentRouteParams,
             'directParent' => $directParent,

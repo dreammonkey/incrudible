@@ -2,12 +2,12 @@
 
 namespace Incrudible\Incrudible\Commands\Crud\Config;
 
-use Illuminate\Support\Str;
 use Brick\VarExporter\VarExporter;
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class CrudConfigMakeCommand extends GeneratorCommand
 {

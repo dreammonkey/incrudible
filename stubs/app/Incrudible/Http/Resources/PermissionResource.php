@@ -20,24 +20,24 @@ class PermissionResource extends JsonResource
             'guard_name' => $this->guard_name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            
+
             'actions' => [
                 [
                     'action' => 'show',
                     'url' => incrudible_route('permissions.show', [
-                        'permission' => $this->id
+                        'permission' => $this->id,
                     ]),
                 ],
                 [
                     'action' => 'edit',
                     'url' => incrudible_route('permissions.edit', [
-                        'permission' => $this->id
+                        'permission' => $this->id,
                     ]),
                 ],
                 [
                     'action' => 'destroy',
                     'url' => incrudible_route('permissions.destroy', [
-                        'permission' => $this->id
+                        'permission' => $this->id,
                     ]),
                 ],
             ],
