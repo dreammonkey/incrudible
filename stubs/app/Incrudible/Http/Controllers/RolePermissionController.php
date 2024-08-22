@@ -2,25 +2,44 @@
 
 namespace App\Incrudible\Http\Controllers;
 
+use App\Incrudible\Http\Resources\PermissionResource;
+use App\Incrudible\Models\Permission;
 use App\Incrudible\Models\Role;
 use Illuminate\Http\Request;
 
 class RolePermissionController extends Controller
 {
-    // Update the permissions for a specific role
+    /**
+     * Retrieve all permissions except the ones already assigned to the role.
+     */
+    public function options(Role $role)
+    {
+        return PermissionResource::collection(
+            Permission::whereNotIn('id', $role->permissions->pluck('id'))->get()
+        );
+    }
+
+    /**
+     * Get all permissions assigned to the role.
+     */
+    public function value(Role $role)
+    {
+        return PermissionResource::collection($role->permissions);
+    }
+
+    /**
+     * Update the permissions for a specific role.
+     */
     public function update(Request $request, Role $role)
     {
-        // Validate that permissions is an array of objects, each with an id
         $request->validate([
             'items' => 'array',
             'items.*.id' => 'required|exists:permissions,id',
         ]);
 
-        // Extract the ids from the full permission objects
-        $permissionIds = collect($request->input('items'))->pluck('id')->all();
+        $modelIds = collect($request->input('items'))->pluck('id')->all();
 
-        // Sync the permissions using the extracted ids
-        $role->permissions()->sync($permissionIds);
+        $role->permissions()->sync($modelIds);
 
         return redirect()->back()
             ->with('success', 'Permissions updated successfully.');

@@ -1,9 +1,9 @@
+import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
-import { BelongsToMany } from '@/Incrudible/Components/Relations/BelongsToMany'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Role, FormField, FormRules, PageProps, Resource, CrudRelation } from '@/types/incrudible'
+import { Role, CrudRelation, CrudResource, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -14,9 +14,12 @@ export default function RoleEdit({
   fields,
   rules,
   relations,
-}: PageProps<{ role: Resource<Role>; fields: FormField[]; rules: FormRules; relations: CrudRelation<any>[] }>) {
-  // console.log({ role })
-
+}: PageProps<{
+  role: Resource<Role>
+  fields: FormField[]
+  rules: FormRules
+  relations: CrudRelation<CrudResource>[]
+}>) {
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
   const { setData, put, data, recentlySuccessful } = useForm<Role>(role.data)
@@ -28,7 +31,6 @@ export default function RoleEdit({
 
     put(route(`${routePrefix}.roles.update`, role.data.id), {
       onSuccess: () => {
-        console.log('Role updated successfully')
         formRef.current?.reset(data)
       },
       onError: (error) => {
@@ -42,9 +44,7 @@ export default function RoleEdit({
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Edit Role
-          </h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit Role</h2>
           <Link
             href={route(`${routePrefix}.roles.index`)}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
@@ -67,31 +67,7 @@ export default function RoleEdit({
           onChange={setData}
           className=""
         />
-
-        {/* <pre className="text-xs">{JSON.stringify(role, null, 2)}</pre> */}
       </div>
-
-      {relations?.map((relation) => {
-        switch (relation.type) {
-          case 'BelongsToMany':
-            return (
-              <BelongsToMany
-                key={relation.name}
-                relation={relation}
-                idKey="id"
-                nameKey="name"
-                onChange={(value) =>
-                  setData({
-                    ...data,
-                    [relation.name]: value,
-                  })
-                }
-              />
-            )
-          default:
-            return null
-        }
-      })}
 
       {recentlySuccessful && (
         <div className="flex items-center rounded-xl border px-4 py-3 text-sm">
@@ -99,6 +75,8 @@ export default function RoleEdit({
           Role updated successfully
         </div>
       )}
+
+      <CrudRelations relations={relations} resource={role} />
     </AuthenticatedLayout>
   )
 }

@@ -1,8 +1,9 @@
+import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Permission, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import { Permission, CrudRelation, CrudResource, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -12,9 +13,13 @@ export default function PermissionEdit({
   permission,
   fields,
   rules,
-}: PageProps<{ permission: Resource<Permission>; fields: FormField[]; rules: FormRules }>) {
-  // console.log({ permission })
-
+  relations,
+}: PageProps<{
+  permission: Resource<Permission>
+  fields: FormField[]
+  rules: FormRules
+  relations: CrudRelation<CrudResource>[]
+}>) {
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
   const { setData, put, data, recentlySuccessful } = useForm<Permission>(permission.data)
@@ -26,7 +31,6 @@ export default function PermissionEdit({
 
     put(route(`${routePrefix}.permissions.update`, permission.data.id), {
       onSuccess: () => {
-        console.log('Permission updated successfully')
         formRef.current?.reset(data)
       },
       onError: (error) => {
@@ -71,6 +75,8 @@ export default function PermissionEdit({
           Permission updated successfully
         </div>
       )}
+
+      <CrudRelations relations={relations} resource={permission} />
     </AuthenticatedLayout>
   )
 }

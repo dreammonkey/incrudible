@@ -18,9 +18,31 @@ return [
             'created_at',
             'updated_at',
         ],
-        'perPage' => [
-            'default' => 25,
+        'paging' => [
+            'default' => 10,
             'options' => [10, 25, 50, 100],
+        ],
+        'create' => true,
+        'actions' => [
+            [
+                'label' => 'View',
+                'icon' => 'Eye',
+                'action' => 'show',
+                'type' => 'link'
+            ],
+            [
+                'label' => 'Edit',
+                'icon' => 'Edit',
+                'action' => 'edit',
+                'type' => 'link'
+            ],
+            [
+                'label' => 'Delete',
+                'icon' => 'Trash',
+                'action' => 'destroy',
+                'variant' => 'destructive',
+                'type' => 'button'
+            ],
         ],
     ],
 
@@ -120,6 +142,17 @@ return [
                 'min:1',
                 'max:255',
             ],
+        ],
+    ],
+
+    // TODO: relations must be added manually
+    'relations' => [
+        [
+            'name' => 'permissions',
+            'type' => 'BelongsToMany',
+            'route' => 'roles.permissions',
+            'idKey' => 'id',
+            'labelKey' => 'name',
         ],
     ],
 ];

@@ -7,10 +7,11 @@ import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
-// import { laravelFormRulesToZodSchema } from '@/lib/utils'
-
-export default function AdminCreate({ auth, fields, rules }: PageProps<{ fields: FormField[]; rules: FormRules }>) {
-  // console.log({ auth, fields, rules })
+export default function AdminCreate({ 
+  auth, 
+  fields,
+  rules,
+  }: PageProps<{ fields: FormField[]; rules: FormRules }>) {
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
   const { setData, post, data, recentlySuccessful } = useForm<Admin>(
@@ -18,13 +19,10 @@ export default function AdminCreate({ auth, fields, rules }: PageProps<{ fields:
       return { ...acc, [field.name]: '' }
     }, {} as Admin),
   )
-  // console.log({ data })
 
   const formRef = useRef<FormRef<Admin>>(null!)
 
   const onSubmit = (data: Admin) => {
-    // console.log({ data })
-
     post(route(`${routePrefix}.admins.store`), {
       onSuccess: () => {
         console.log('Admin created successfully')
@@ -41,9 +39,7 @@ export default function AdminCreate({ auth, fields, rules }: PageProps<{ fields:
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Create Admin
-          </h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Create Admin</h2>
           <Link
             href={route(`${routePrefix}.admins.index`)}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}

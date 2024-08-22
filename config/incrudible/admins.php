@@ -18,9 +18,31 @@ return [
             'created_at',
             'updated_at',
         ],
-        'perPage' => [
-            'default' => 25,
+        'paging' => [
+            'default' => 10,
             'options' => [10, 25, 50, 100],
+        ],
+        'create' => true,
+        'actions' => [
+            [
+                'label' => 'View',
+                'icon' => 'Eye',
+                'action' => 'show',
+                'type' => 'link',
+            ],
+            [
+                'label' => 'Edit',
+                'icon' => 'Edit',
+                'action' => 'edit',
+                'type' => 'link'
+            ],
+            [
+                'label' => 'Delete',
+                'icon' => 'Trash',
+                'action' => 'destroy',
+                'variant' => 'destructive',
+                'type' => 'button'
+            ],
         ],
     ],
 
@@ -70,8 +92,6 @@ return [
                     'string',
                     'min:1',
                     'max:255',
-                    'required',
-                    'min:8',
                 ],
             ],
             [
@@ -172,8 +192,19 @@ return [
             //     'min:1',
             //     'max:255',
             //     'email',
-            //     'unique:admins,email,id',
+            //     'unique:admins,email',
             // ],
+        ],
+    ],
+
+    //
+    'relations' => [
+        [
+            'name' => 'roles',
+            'type' => 'BelongsToMany',
+            'route' => 'admins.roles',
+            'idKey' => 'id',
+            'labelKey' => 'name',
         ],
     ],
 ];

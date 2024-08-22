@@ -2,11 +2,31 @@
 
 namespace App\Incrudible\Http\Controllers;
 
-use App\Incrudible\Models\Admin;
+use App\Incrudible\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
+use App\Incrudible\Models\Admin;
+use App\Incrudible\Models\Role;
 
 class AdminRoleController extends Controller
 {
+    /**
+     * Retrieve all roles except the ones already assigned to the admin.
+     */
+    public function options(Admin $admin)
+    {
+        return RoleResource::collection(
+            Role::whereNotIn('id', $admin->roles->pluck('id'))->get()
+        );
+    }
+
+    /**
+     * Get all roles assigned to the admin.
+     */
+    public function value(Admin $admin)
+    {
+        return RoleResource::collection($admin->roles);
+    }
+
     // Update the roles for a specific admin
     public function update(Request $request, Admin $admin)
     {

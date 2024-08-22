@@ -7,14 +7,11 @@ import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
-// import { laravelFormRulesToZodSchema } from '@/lib/utils'
-
 export default function PermissionCreate({ 
   auth, 
   fields,
   rules,
   }: PageProps<{ fields: FormField[]; rules: FormRules }>) {
-  // console.log({ auth, fields, rules })
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
   const { setData, post, data, recentlySuccessful } = useForm<Permission>(
@@ -22,13 +19,10 @@ export default function PermissionCreate({
       return { ...acc, [field.name]: '' }
     }, {} as Permission),
   )
-  // console.log({ data })
 
   const formRef = useRef<FormRef<Permission>>(null!)
 
   const onSubmit = (data: Permission) => {
-    // console.log({ data })
-
     post(route(`${routePrefix}.permissions.store`), {
       onSuccess: () => {
         console.log('Permission created successfully')

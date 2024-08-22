@@ -8,14 +8,18 @@ use App\Incrudible\Http\Requests\Role\DestroyRoleRequest;
 use App\Incrudible\Http\Requests\Role\GetRolesRequest;
 use App\Incrudible\Http\Requests\Role\StoreRoleRequest;
 use App\Incrudible\Http\Requests\Role\UpdateRoleRequest;
-use App\Incrudible\Http\Resources\PermissionResource;
 use App\Incrudible\Http\Resources\RoleResource;
 use App\Incrudible\Models\Role;
+use App\Incrudible\Traits\HandlesCrudRelations;
 use Illuminate\Support\Facades\Pipeline;
 use Incrudible\Incrudible\Facades\Incrudible;
 
+/*NESTED BABY*/
+
 class RoleController extends Controller
 {
+    use HandlesCrudRelations;
+
     /**
      * Display a listing of the resource.
      */
@@ -44,7 +48,7 @@ class RoleController extends Controller
         }
 
         return inertia('Roles/Index', [
-            'listable' => config('incrudible.roles.index.listable'),
+            ...config('incrudible.roles.index'),
         ]);
     }
 
@@ -54,18 +58,7 @@ class RoleController extends Controller
     public function create()
     {
         return inertia('Roles/Create', [
-            'fields' => config('incrudible.roles.store.fields'),
-            'rules' => config('incrudible.roles.store.rules'),
-            'relations' => [
-                [
-                    'name' => 'permissions',
-                    'enabled' => false,
-                    'type' => 'BelongsToMany',
-                    // 'model' => Permission::class,
-                    // 'routeKey' => Incrudible::routePrefix() . '.permissions.index',
-                    'value' => [],
-                ],
-            ],
+            ...config('incrudible.roles.store'),
         ]);
     }
 
@@ -87,8 +80,7 @@ class RoleController extends Controller
     {
         return inertia('Roles/Show', [
             'role' => $role->toResource(),
-            'fields' => config('incrudible.roles.update.fields'),
-            'rules' => config('incrudible.roles.update.rules'),
+             ...config('incrudible.roles.update'),
         ]);
     }
 
@@ -99,19 +91,8 @@ class RoleController extends Controller
     {
         return inertia('Roles/Edit', [
             'role' => $role->toResource(),
-            'fields' => config('incrudible.roles.update.fields'),
-            'rules' => config('incrudible.roles.update.rules'),
-            'relations' => [
-                [
-                    'name' => 'permissions',
-                    'enabled' => true,
-                    'type' => 'BelongsToMany',
-                    // 'model' => Permission::class,
-                    'indexRoute' => incrudible_route('permissions.index'),
-                    'storeRoute' => incrudible_route('roles.permissions.update', $role),
-                    'value' => PermissionResource::collection($role->permissions ?? [])->toArray(request()),
-                ],
-            ],
+            ...config('incrudible.roles.update'),
+            'relations' => $this->relations('roles'),
         ]);
     }
 
@@ -120,12 +101,6 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        $validated = $request->validated();
-
-        // Sync permissions
-        if (isset($validated['permissions'])) {
-            $role->permissions()->sync($validated['permissions']);
-        }
         $role->update($request->validated());
 
         return redirect()->back()->with('success', 'Role updated successfully.');

@@ -9,13 +9,17 @@ use App\Incrudible\Http\Requests\Admin\GetAdminsRequest;
 use App\Incrudible\Http\Requests\Admin\StoreAdminRequest;
 use App\Incrudible\Http\Requests\Admin\UpdateAdminRequest;
 use App\Incrudible\Http\Resources\AdminResource;
-use App\Incrudible\Http\Resources\RoleResource;
 use App\Incrudible\Models\Admin;
+use App\Incrudible\Traits\HandlesCrudRelations;
 use Illuminate\Support\Facades\Pipeline;
 use Incrudible\Incrudible\Facades\Incrudible;
 
+/*NESTED BABY*/
+
 class AdminController extends Controller
 {
+    use HandlesCrudRelations;
+
     /**
      * Display a listing of the resource.
      */
@@ -44,7 +48,7 @@ class AdminController extends Controller
         }
 
         return inertia('Admins/Index', [
-            'listable' => config('incrudible.admins.index.listable'),
+            ...config('incrudible.admins.index'),
         ]);
     }
 
@@ -54,8 +58,7 @@ class AdminController extends Controller
     public function create()
     {
         return inertia('Admins/Create', [
-            'fields' => config('incrudible.admins.store.fields'),
-            'rules' => config('incrudible.admins.store.rules'),
+            ...config('incrudible.admins.store'),
         ]);
     }
 
@@ -77,8 +80,7 @@ class AdminController extends Controller
     {
         return inertia('Admins/Show', [
             'admin' => $admin->toResource(),
-            'fields' => config('incrudible.admins.update.fields'),
-            'rules' => config('incrudible.admins.update.rules'),
+             ...config('incrudible.admins.update'),
         ]);
     }
 
@@ -89,18 +91,8 @@ class AdminController extends Controller
     {
         return inertia('Admins/Edit', [
             'admin' => $admin->toResource(),
-            'fields' => config('incrudible.admins.update.fields'),
-            'rules' => config('incrudible.admins.update.rules'),
-            'relations' => [
-                [
-                    'name' => 'roles',
-                    'enabled' => true,
-                    'type' => 'BelongsToMany',
-                    'indexRoute' => incrudible_route('roles.index'),
-                    'storeRoute' => incrudible_route('admins.roles.update', $admin),
-                    'value' => RoleResource::collection($admin->roles ?? [])->toArray(request()),
-                ],
-            ],
+            ...config('incrudible.admins.update'),
+            'relations' => $this->relations('admins'),
         ]);
     }
 

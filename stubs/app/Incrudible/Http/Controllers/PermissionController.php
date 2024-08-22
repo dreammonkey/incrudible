@@ -10,11 +10,14 @@ use App\Incrudible\Http\Requests\Permission\StorePermissionRequest;
 use App\Incrudible\Http\Requests\Permission\UpdatePermissionRequest;
 use App\Incrudible\Http\Resources\PermissionResource;
 use App\Incrudible\Models\Permission;
+use App\Incrudible\Traits\HandlesCrudRelations;
 use Illuminate\Support\Facades\Pipeline;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 class PermissionController extends Controller
 {
+    use HandlesCrudRelations;
+
     /**
      * Display a listing of the resource.
      */
@@ -43,7 +46,7 @@ class PermissionController extends Controller
         }
 
         return inertia('Permissions/Index', [
-            'listable' => config('incrudible.permissions.index.listable'),
+            ...config('incrudible.permissions.index'),
         ]);
     }
 
@@ -53,8 +56,7 @@ class PermissionController extends Controller
     public function create()
     {
         return inertia('Permissions/Create', [
-            'fields' => config('incrudible.permissions.store.fields'),
-            'rules' => config('incrudible.permissions.store.rules'),
+            ...config('incrudible.permissions.store'),
         ]);
     }
 
@@ -76,8 +78,7 @@ class PermissionController extends Controller
     {
         return inertia('Permissions/Show', [
             'permission' => $permission->toResource(),
-            'fields' => config('incrudible.permissions.update.fields'),
-            'rules' => config('incrudible.permissions.update.rules'),
+             ...config('incrudible.permissions.update'),
         ]);
     }
 
@@ -88,8 +89,8 @@ class PermissionController extends Controller
     {
         return inertia('Permissions/Edit', [
             'permission' => $permission->toResource(),
-            'fields' => config('incrudible.permissions.update.fields'),
-            'rules' => config('incrudible.permissions.update.rules'),
+            ...config('incrudible.permissions.update'),
+            'relations' => $this->relations('permissions'),
         ]);
     }
 

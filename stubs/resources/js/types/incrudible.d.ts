@@ -1,10 +1,11 @@
+import { CrudRelationType } from '@/Incrudible/Helpers/incrudible'
 import * as Icons from 'lucide-react'
 import { Config } from 'ziggy-js'
 
 // https://github.com/sveltejs/kit/issues/1997#issuecomment-887614097
 export type Typify<T> = { [K in keyof T]: Typify<T[K]> }
 
-// Redecalare forwardRef
+// Redeclare forwardRef
 // SEE: https://fettblog.eu/typescript-react-generic-forward-refs/
 declare module 'react' {
   function forwardRef<T, P = {}>(
@@ -12,12 +13,12 @@ declare module 'react' {
   ): (props: P & React.RefAttributes<T>) => React.ReactNode | null
 }
 
-export interface TableAction {
+export interface TableActionConfig {
   label: string
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | null | undefined
-  icon: React.ElementType
-  route?: string
-  onClick?: (id: any) => void
+  icon: keyof typeof Icons
+  action: string
+  type: 'button' | 'link'
 }
 
 interface FormRules {
@@ -57,40 +58,67 @@ export interface Filters {
   search: string
   orderDir: string
 }
-export interface Resource<T> {
-  data: T
-}
 
 export interface PagedResource<T> {
   data: T[]
-  links: string[]
+  links: {
+    first: string
+    last: string
+    prev: string | null
+    next: string | null
+  }
   meta: {
     current_page: number
     from: number
     last_page: number
-    first_page_url: string
-    last_page_url: string
-    next_page_url: string | null
+    links: {
+      url: string | null
+      label: string
+      active: boolean
+    }[]
     path: string
     per_page: number
-    prev_page_url: string | null
     to: number
     total: number
   }
 }
 
-export interface CrudRelation<T> {
-  name: string
-  type: string
-  model: string
-  enabled: boolean
-  options?: any[]
-  indexRoute?: string
-  storeRoute?: string
-  value: T[]
+export type CrudResource = Record<string, any> & { actions: { action: string; url: string }[] }
+
+export interface Resource<T> {
+  data: T & { actions: { action: string; url: string }[] }
 }
 
-export interface Admin {
+export interface CrudRelationBase<T> {
+  name: CrudRelationType
+  type: string
+  // model: string
+  // enabled: boolean
+}
+
+export interface PagingConfig {
+  default: number
+  options: number[]
+}
+
+export interface HasManyCrudRelation<T> extends CrudRelationBase<T> {
+  type: CrudRelationType.HasMany
+  route: string
+  listable: string[]
+  sortable: string[]
+  paging: PagingConfig
+  actions: TableActionConfig[]
+}
+
+export interface BelongsToManyCrudRelation<T> extends CrudRelationBase<T> {
+  type: CrudRelationType.BelongsToMany
+  route: string
+  idKey: keyof T
+  labelKey: keyof T
+}
+export type CrudRelation<T> = HasManyCrudRelation<T> | BelongsToManyCrudRelation<T>
+
+export interface Admin extends CrudResource {
   id: number
   username: string
   email: string
@@ -99,7 +127,7 @@ export interface Admin {
   updated_at: string
 }
 
-export interface Role {
+export interface Role extends CrudResource {
   id: number
   name: string
   guard_name: string
@@ -108,7 +136,7 @@ export interface Role {
   permissions: Permission[]
 }
 
-export interface Permission {
+export interface Permission extends CrudResource {
   id: number
   name: string
   guard_name: string
@@ -116,7 +144,7 @@ export interface Permission {
   updated_at: string
 }
 
-export interface User {
+export interface User extends CrudResource {
   id: number
   name: string
   email: string
@@ -155,3 +183,20 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
       query: string | string[][] | Record<string, string> | URLSearchParams | undefined
     }
   }>
+
+interface Band extends CrudResource {
+  id: number
+  name: string
+  bio: string
+  created_at: string
+  updated_at: string
+  albums: Album[]
+}
+
+interface Album extends CrudResource {
+  id: number
+  name: string
+  cover: string
+  created_at: string
+  updated_at: string
+}
