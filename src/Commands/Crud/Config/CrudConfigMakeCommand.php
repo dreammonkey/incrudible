@@ -2,14 +2,23 @@
 
 namespace Incrudible\Incrudible\Commands\Crud\Config;
 
+use Illuminate\Support\Str;
 use Brick\VarExporter\VarExporter;
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Str;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
 
 class CrudConfigMakeCommand extends GeneratorCommand
 {
     use GeneratesFormRules;
+
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'crud:config';
 
     /**
      * The type of class being generated.
@@ -23,7 +32,7 @@ class CrudConfigMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'crud:config {table : The table name of the CRUD resource.} {--force : Overwrite existing files.}';
+    // protected $signature = 'crud:config {table : The table name of the CRUD resource.} {parents?* : The parent tables for nested resources (comma-separated).} {--force : Overwrite existing files.}';
 
     /**
      * The console command description.
@@ -31,6 +40,31 @@ class CrudConfigMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $description = 'Create a new CRUD config file';
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['force', 'f', InputOption::VALUE_NONE, 'Create the config even if the file already exists'],
+        ];
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['table', InputArgument::REQUIRED, ' The database table name of the CRUD resource'],
+            ['parents', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The parent table names for nested resources (multiple parents can be specified)'],
+        ];
+    }
 
     /**
      * Get the stub file for the generator.
@@ -52,7 +86,7 @@ class CrudConfigMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : __DIR__.'/../../../../resources'.$stub;
+            : __DIR__ . '/../../../../resources' . $stub;
     }
 
     /**
@@ -75,13 +109,19 @@ class CrudConfigMakeCommand extends GeneratorCommand
     public function handle()
     {
         $name = $this->getNameInput();
-        $path = config_path('incrudible/'.$name.'.php');
+        $parents = $this->argument('parents') ?: [];
+
+        if ($parents) {
+            $name = implode('.', array_merge($parents, [$name]));
+        }
+
+        $path = config_path('incrudible/' . $name . '.php');
 
         if ((! $this->hasOption('force') ||
                 ! $this->option('force')) &&
             $this->alreadyExists($path)
         ) {
-            $this->error($this->type.' already exists!');
+            $this->error($this->type . ' already exists!');
 
             return false;
         }
@@ -90,7 +130,7 @@ class CrudConfigMakeCommand extends GeneratorCommand
 
         $this->files->put($path, $this->buildClass($name));
 
-        $this->info($this->type.' created successfully.');
+        $this->info($this->type . ' created successfully.');
     }
 
     /**

@@ -1,0 +1,116 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Incrudible\Models\{{ Model }};
+use App\Incrudible\Filters\SearchFilter;
+use Illuminate\Support\Facades\Pipeline;
+use App\Incrudible\Filters\SortingFilter;
+use Incrudible\Incrudible\Facades\Incrudible;
+use App\Incrudible\Traits\HandlesCrudRelations;
+use App\Incrudible\Http\Resources\{{ Model }}Resource;
+use App\Incrudible\Http\Requests\{{ Model }}\Get{{ Models }}Request;
+use App\Incrudible\Http\Requests\{{ Model }}\Store{{ ModelRequest }};
+use App\Incrudible\Http\Requests\{{ Model }}\Update{{ ModelRequest }};
+use App\Incrudible\Http\Requests\{{ Model }}\Destroy{{ ModelRequest }};
+
+class {{ class }} extends Controller
+{
+    use HandlesCrudRelations;
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Get{{ Models }}Request $request)
+    {
+        if ($request->wantsJson()) {
+
+            return {{ Model }}Resource::collection(
+
+                Pipeline::send(
+                    {{ Model }}::query(),
+                )
+                    ->through([
+                        new SearchFilter(
+                            search: $request->validated('search'),
+                            fields: config('incrudible.{{ models }}.index.searchable')
+                        ),
+                        new SortingFilter(
+                            orderBy: $request->validated('orderBy'),
+                            orderDir: $request->validated('orderDir')
+                        ),
+                    ])
+                    ->thenReturn()
+                    ->paginate($request->validated('perPage', 25))
+            );
+        }
+
+        return inertia('{{ Models }}/Index', [
+            ...config('incrudible.{{ models }}.index'),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return inertia('{{ Models }}/Create', [
+            ...config('incrudible.{{ models }}.store'),
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Store{{ Model }}Request $request)
+    {
+        ${{ model }} = {{ Model }}::create($request->validated());
+        $prefix = Incrudible::routePrefix();
+
+        return redirect()->route("$prefix.{{ models }}.show", ${{ model }})->with('success', '{{ Model }} created successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show({{ Model }} ${{ model }})
+    {
+        return inertia('{{ Models }}/Show', [
+            '{{ model }}' => ${{ model }}->toResource(),
+             ...config('incrudible.{{ models }}.update'),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit({{ Model }} ${{ model }})
+    {
+        return inertia('{{ Models }}/Edit', [
+            '{{ model }}' => ${{ model }}->toResource(),
+            ...config('incrudible.{{ models }}.update'),
+            'relations' => $this->relations('{{ crudRoute }}'),
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Update{{ Model }}Request $request, {{ Model }} ${{ model }})
+    {
+        ${{ model }}->update($request->validated());
+
+        return redirect()->back()->with('success', '{{ Model }} updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Destroy{{ Model }}Request $request, {{ Model }} ${{ model }})
+    {
+        ${{ model }}->delete();
+
+        return redirect()->back()->with('success', '{{ Model }} deleted successfully.');
+    }
+}

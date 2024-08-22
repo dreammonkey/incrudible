@@ -2,20 +2,22 @@
 
 namespace {{ namespace }};
 
-use App\Incrudible\Http\Resources\{{ class }}Resource;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Incrudible\Http\Resources\{{ class }}Resource;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class {{ class }} extends Model
 {
     use HasFactory;
 
     /**
-     * The attributes that aren't mass assignable.
+     * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $guarded = [];
+    protected $fillable = {{ fillable }};
 
     /**
      * Transform model into a resource.
@@ -24,4 +26,6 @@ class {{ class }} extends Model
     {
         return new {{ class }}Resource($this);
     }
+
+    {{ relationships }}
 }

@@ -2,86 +2,194 @@
 
 namespace Incrudible\Incrudible\Commands\Crud\Frontend;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Incrudible\Incrudible\Traits\GeneratesFormRules;
+use Illuminate\Console\GeneratorCommand;
+use Incrudible\Incrudible\Traits\GeneratesCruds;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 
-class CrudFrontendMakeCommand extends Command
+class CrudFrontendMakeCommand extends GeneratorCommand
 {
-    use GeneratesFormRules;
+    use GeneratesCruds;
 
     /**
-     * The name and signature of the console command.
+     * The console command name.
      *
      * @var string
      */
-    protected $signature = 'crud:frontend {table : The table name of the CRUD resource.}';
+    protected $name = 'crud:frontend';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create all CRUD frontend typescript files';
+    protected $description = 'Create a new CRUD typescript component';
 
     /**
-     * Execute the console command.
+     * The type of class being generated.
+     *
+     * @var string
      */
-    public function handle()
+    protected $type = 'tsx';
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getOptions()
     {
-        $name = Str::lower($this->argument('table'));
-
-        $files = ['Index', 'Create', 'Edit', 'Show'];
-        foreach ($files as $file) {
-            $this->generateFile($name, $file);
-        }
-
-        $this->info('CRUD files created successfully.');
+        return [
+            ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the crud already exists'],
+        ];
     }
 
-    protected function generateFile($name, $fileType)
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
     {
-        $instanceSingular = Str::singular($name);
-        $instancePlural = Str::plural($name);
-        $modelName = ucfirst($instanceSingular);
-        $modelNamePlural = Str::plural($modelName);
+        return [
+            ['table', InputArgument::REQUIRED, 'The database table name that the component is created for'],
+            ['component', InputArgument::REQUIRED, 'The component name, choose from Index, Create, Edit, Show'],
+            ['parents', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The parent models for nested resources (multiple parents can be specified)'],
+        ];
+    }
 
-        $stubPath = __DIR__."/../../../../resources/stubs/js/crud/{$fileType}.tsx.stub";
-        $targetPath = resource_path("js/Incrudible/Pages/{$modelNamePlural}/{$fileType}.tsx");
+    /**
+     * Get the component name.
+     */
+    protected function getComponentName()
+    {
+        return Str::ucfirst($this->argument('component'));
+    }
 
-        $searchableFields = collect($this->getFormRules($instancePlural, 'string'))->keys();
+    /**
+     * Get the destination class path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        $component = $this->getComponentName();
+        $modelStudlyPlural = Str::plural($this->getModelName());
 
-        // TODO: FIX INDENTATION
-        $searchableFields = $searchableFields->map(function ($field) {
-            $header = Str::headline($field);
+        return resource_path("js/Incrudible/Pages/{$modelStudlyPlural}/{$component}.{$this->type}");
+    }
 
-            return "{\naccessorKey: '{$field}',\nheader: '{$header}',\n},";
-        })->implode("\n");
+    /**
+     * Get the desired class name from the input.
+     *
+     * @return string
+     */
+    protected function getNameInput()
+    {
+        $component = $this->getComponentName();
 
-        if (! File::exists(dirname($targetPath))) {
-            File::makeDirectory(dirname($targetPath), 0755, true);
+        return "{$component}.{$this->type}";
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        $component = Str::ucfirst($this->argument('component'));
+        $stub = "/stubs/js/crud/{$component}.{$this->type}.stub";
+
+        return $this->resolveStubPath($stub);
+    }
+
+    protected function buildClass($name)
+    {
+        $stub = $this->files->get($this->getStub());
+
+        return $this->replaceClass($stub, $name);
+    }
+
+    protected function replaceClass($stub, $name)
+    {
+        // TODO: nested resources need access to parent models
+
+        $models = $this->getTableName();
+        $model = Str::singular($models);
+        $Model = $this->getModelName();
+        $Models = Str::plural($Model);
+        $crudRoute = $this->getRouteName();
+
+        // Get parent models for nested resources
+        $parents = $this->getParents();
+        $parentData = $this->getParentData($parents, $model);
+        // dd($parentData);
+
+        return str_replace(
+            [
+                '{{ model }}',
+                '{{ models }}',
+                '{{ Model }}',
+                '{{ Models }}',
+                '{{ crudRoute }}',
+                '{{ parentImports }}',
+                '{{ parentProps }}',
+                '{{ parentPropTypes }}',
+                '{{ parentRouteParams }}',
+                '{{ fullRouteParams }}',
+            ],
+            [
+                $model,
+                $models,
+                $Model,
+                $Models,
+                $crudRoute,
+                $parentData['parentImports'],
+                $parentData['parentProps'],
+                $parentData['parentPropTypes'],
+                $parentData['parentRouteParams'],
+                $parentData['fullRouteParams'],
+            ],
+            $stub
+        );
+    }
+
+    /**
+     * Generate the necessary parent data for use in the component.
+     *
+     * @param array $parents
+     * @param string $model
+     * @return array
+     */
+    protected function getParentData(array $parents, string $model)
+    {
+        $parentImports = '';
+        $parentProps = '';
+        $parentPropTypes = '';
+        $parentRouteParams = '';
+
+        foreach ($parents as $index => $parent) {
+            $parent = Str::singular($parent);
+            $Parent = Str::studly($parent);
+
+            $parentImports .= "{$Parent}, ";
+            $parentProps .= "{$parent},\n";
+            $parentPropTypes .= "{$parent}: Resource<{$Parent}>\n";
+            $parentRouteParams .= "{$parent}.data.id, ";
         }
 
-        $content = File::get($stubPath);
-        $content = str_replace(
-            [
-                '{{ instanceSingular }}',
-                '{{ instancePlural }}',
-                '{{ modelName }}',
-                '{{ modelNamePlural }}',
-                '{{ searchableFields }}',
-            ],
-            [
-                $instanceSingular,
-                $instancePlural,
-                $modelName,
-                $modelNamePlural,
-                $searchableFields,
-            ],
-            $content
-        );
+        // Add the current model id for full route params
+        $fullRouteParams = $parentRouteParams . "{$model}.data.id";
 
-        File::put($targetPath, $content);
+        return [
+            'parentImports' => $parentImports,
+            'parentProps' => trim($parentProps, "\n"),
+            'parentPropTypes' => trim($parentPropTypes, "\n"),
+            'parentRouteParams' => '[' . trim($parentRouteParams, ', ') . ']',
+            'fullRouteParams' => '[' . $fullRouteParams . ']',
+        ];
     }
 }

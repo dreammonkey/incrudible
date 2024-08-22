@@ -22,6 +22,6 @@ class {{ class }} extends FormRequest
      */
     public function rules(): array
     {
-        return config('incrudible.{{ model_plural }}.store.rules');
+        return config('incrudible.{{ crudRoute }}.store.rules');
     }
 }

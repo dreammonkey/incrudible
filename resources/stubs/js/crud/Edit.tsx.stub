@@ -1,36 +1,42 @@
+import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { {{ modelName }}, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import { {{ parentImports }}{{ Model }}, CrudRelation, CrudResource, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
-export default function {{ modelName }}Edit({
+export default function {{ Model }}Edit({
   auth,
-  {{ instanceSingular }},
+  {{ parentProps }}
+  {{ model }},
   fields,
   rules,
-}: PageProps<{ {{ instanceSingular }}: Resource<{{ modelName }}>; fields: FormField[]; rules: FormRules }>) {
-  // console.log({ {{ instanceSingular }} })
-
+  relations,
+}: PageProps<{
+  {{ parentPropTypes }}
+  {{ model }}: Resource<{{ Model }}>
+  fields: FormField[]
+  rules: FormRules
+  relations: CrudRelation<CrudResource>[]
+}>) {
   const { routePrefix } = usePage<PageProps>().props.incrudible
 
-  const { setData, put, data, recentlySuccessful } = useForm<{{ modelName }}>({{ instanceSingular }}.data)
+  const { setData, put, data, recentlySuccessful } = useForm<{{ Model }}>({{ model }}.data)
 
-  const formRef = useRef<FormRef<{{ modelName }}>>(null!)
+  const formRef = useRef<FormRef<{{ Model }}>>(null!)
 
-  const onSubmit = (data: {{ modelName }}) => {
+  const onSubmit = (data: {{ Model }}) => {
     // console.log({ data })
 
-    put(route(`${routePrefix}.{{ instancePlural }}.update`, {{ instanceSingular }}.data.id), {
+    put(route(`${routePrefix}.{{ crudRoute }}.update`, {{ fullRouteParams }}), {
       onSuccess: () => {
-        console.log('{{ modelName }} updated successfully')
         formRef.current?.reset(data)
       },
       onError: (error) => {
-        console.error('Error updating {{ instanceSingular }}', error)
+        console.error('Error updating {{ model }}', error)
       },
     })
   }
@@ -40,9 +46,9 @@ export default function {{ modelName }}Edit({
       admin={auth.admin.data}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit {{ modelName }}</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit {{ Model }}</h2>
           <Link
-            href={route(`${routePrefix}.{{ instancePlural }}.index`)}
+            href={route(`${routePrefix}.{{ crudRoute }}.index`, {{ parentRouteParams }})}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -51,7 +57,7 @@ export default function {{ modelName }}Edit({
         </>
       }
     >
-      <Head title="{{ modelName }} Edit" />
+      <Head title="{{ Model }} Edit" />
 
       <div className="grid gap-y-2 rounded-lg border p-4">
         <IncrudibleForm
@@ -68,9 +74,11 @@ export default function {{ modelName }}Edit({
       {recentlySuccessful && (
         <div className="flex items-center rounded-xl border px-4 py-3 text-sm">
           <ThumbsUp className="mr-2 inline-block size-4 text-green-800" />
-          {{ modelName }} updated successfully
+          {{ Model }} updated successfully
         </div>
       )}
+
+      <CrudRelations relations={relations} resource={{{ model }}} />
     </AuthenticatedLayout>
   )
 }
