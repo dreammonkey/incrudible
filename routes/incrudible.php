@@ -47,13 +47,18 @@ Route::prefix(Incrudible::routePrefix())
         Route::patch('profile', [ProfileController::class, 'update'])
             ->name('profile.update');
 
+        // Admins
         Route::resource('admins', AdminController::class);
-        Route::put('admins/{admin}/roles', [AdminRoleController::class, 'update'])
-            ->name('admins.roles.update');
+        // Admin roles - (route macro)
+        Route::associate('admins.roles', AdminRoleController::class);
+
+        // Roles
         Route::resource('roles', RoleController::class);
+        // Role permissions - (route macro)
+        Route::associate('roles.permissions', RolePermissionController::class);
+
+        // Permissions
         Route::resource('permissions', PermissionController::class);
-        Route::put('roles/{role}/permissions', [RolePermissionController::class, 'update'])
-            ->name('roles.permissions.update');
 
         // Route::get('verify-email', EmailVerificationPromptController::class)
         //     ->name('verification.notice');
