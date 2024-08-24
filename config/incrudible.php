@@ -122,7 +122,5 @@ return [
                 'route' => 'logout',
             ],
         ],
-
     ],
-
 ];

@@ -1,4 +1,5 @@
 import InputError from '@/Incrudible/Components/InputError'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { Button } from '@/Incrudible/ui/button'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
@@ -16,7 +17,7 @@ export default function UpdateProfileInformation({
   status?: string
   className?: string
 }>) {
-  const { routePrefix } = usePage<PageProps>().props.incrudible
+  const { routePrefix } = useIncrudible()
   const admin = usePage<PageProps>().props.auth.admin.data
   console.log(admin)
 
@@ -76,20 +77,20 @@ export default function UpdateProfileInformation({
 
         {mustVerifyEmail && admin.email_verified_at === null && (
           <div>
-            <p className="text-sm mt-2 text-gray-800 dark:text-gray-200">
+            <p className="mt-2 text-sm text-gray-800 dark:text-gray-200">
               Your email address is unverified.
               <Link
                 href={route(`${routePrefix}.auth.verification.send`)}
                 method="post"
                 as="button"
-                className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
               >
                 Click here to re-send the verification email.
               </Link>
             </p>
 
             {status === 'verification-link-sent' && (
-              <div className="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
+              <div className="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
                 A new verification link has been sent to your email address.
               </div>
             )}

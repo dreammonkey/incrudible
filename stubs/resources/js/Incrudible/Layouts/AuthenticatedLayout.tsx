@@ -1,9 +1,10 @@
-import { Admin, PageProps } from '@/types/incrudible'
-import { Link, usePage } from '@inertiajs/react'
+import { Admin, Resource } from '@/types/incrudible'
+import { Link } from '@inertiajs/react'
 import { CircleUser, Menu, Package } from 'lucide-react'
 import { PropsWithChildren, ReactNode, useState } from 'react'
 import { DarkModeToggle } from '../Components/DarkModeToggle'
 import { MainNavigation } from '../Components/MainNavigation'
+import { useIncrudible } from '../Hooks/use-incrudible'
 import { Button } from '../ui/button'
 import {
   DropdownMenu,
@@ -18,11 +19,11 @@ export default function AuthenticatedLayout({
   admin,
   header,
   children,
-}: PropsWithChildren<{ admin: Admin; header?: ReactNode }>) {
+}: PropsWithChildren<{ admin: Resource<Admin>; header?: ReactNode }>) {
   // Toggle mobile menu
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const routePrefix = usePage<PageProps>().props.incrudible.routePrefix
+  const { routePrefix } = useIncrudible()
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">

@@ -78,7 +78,7 @@ class PermissionController extends Controller
     {
         return inertia('Permissions/Show', [
             'permission' => $permission->toResource(),
-            ...config('incrudible.permissions.update'),
+             ...config('incrudible.permissions.update'),
         ]);
     }
 

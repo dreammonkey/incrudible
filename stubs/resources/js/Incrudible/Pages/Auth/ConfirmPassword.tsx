@@ -1,14 +1,14 @@
 import InputError from '@/Incrudible/Components/InputError'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import GuestLayout from '@/Incrudible/Layouts/GuestLayout'
 import { Button } from '@/Incrudible/ui/button'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
-import { PageProps } from '@/types/incrudible'
-import { Head, useForm, usePage } from '@inertiajs/react'
+import { Head, useForm } from '@inertiajs/react'
 import { FormEventHandler, useEffect } from 'react'
 
 export default function ConfirmPassword() {
-  const { routePrefix } = usePage<PageProps>().props.incrudible
+  const { routePrefix } = useIncrudible()
 
   const { data, setData, post, processing, errors, reset } = useForm({
     password: '',
@@ -50,7 +50,7 @@ export default function ConfirmPassword() {
           <InputError message={errors.password} className="mt-2" />
         </div>
 
-        <div className="flex items-center justify-end mt-4">
+        <div className="mt-4 flex items-center justify-end">
           <Button className="ms-4" disabled={processing}>
             Confirm
           </Button>
