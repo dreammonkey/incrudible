@@ -80,7 +80,7 @@ class AdminController extends Controller
     {
         return inertia('Admins/Show', [
             'admin' => $admin->toResource(),
-             ...config('incrudible.admins.update'),
+            ...config('incrudible.admins.update'),
         ]);
     }
 

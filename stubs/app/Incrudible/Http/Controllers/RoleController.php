@@ -80,7 +80,7 @@ class RoleController extends Controller
     {
         return inertia('Roles/Show', [
             'role' => $role->toResource(),
-             ...config('incrudible.roles.update'),
+            ...config('incrudible.roles.update'),
         ]);
     }
 
