@@ -15,7 +15,15 @@ declare module 'react' {
 
 export interface TableActionConfig {
   label: string
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | null | undefined
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
+    | null
+    | undefined
   icon: keyof typeof Icons
   action: string
   type: 'button' | 'link'
@@ -83,7 +91,9 @@ export interface PagedResource<T> {
   }
 }
 
-export type CrudResource = Record<string, any> & { actions: { action: string; url: string }[] }
+export type CrudResource = Record<string, any> & {
+  actions: { action: string; url: string }[]
+}
 
 export interface Resource<T> {
   data: T & { actions: { action: string; url: string }[] }
@@ -116,7 +126,9 @@ export interface BelongsToManyCrudRelation<T> extends CrudRelationBase<T> {
   idKey: keyof T
   labelKey: keyof T
 }
-export type CrudRelation<T> = HasManyCrudRelation<T> | BelongsToManyCrudRelation<T>
+export type CrudRelation<T> =
+  | HasManyCrudRelation<T>
+  | BelongsToManyCrudRelation<T>
 
 export interface Admin extends CrudResource {
   id: number
@@ -160,7 +172,9 @@ export interface MenuItem {
   items: MenuItem[]
 }
 
-export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T &
+export type PageProps<
+  T extends Record<string, unknown> = Record<string, unknown>,
+> = T &
   Readonly<{
     auth: {
       admin: {
@@ -180,23 +194,11 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     }
     ziggy: Config & {
       location: string
-      query: string | string[][] | Record<string, string> | URLSearchParams | undefined
+      query:
+        | string
+        | string[][]
+        | Record<string, string>
+        | URLSearchParams
+        | undefined
     }
   }>
-
-interface Band extends CrudResource {
-  id: number
-  name: string
-  bio: string
-  created_at: string
-  updated_at: string
-  albums: Album[]
-}
-
-interface Album extends CrudResource {
-  id: number
-  name: string
-  cover: string
-  created_at: string
-  updated_at: string
-}
