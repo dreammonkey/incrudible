@@ -3,8 +3,8 @@
 namespace Incrudible\Incrudible\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
+use Illuminate\Filesystem\Filesystem;
 use Incrudible\Incrudible\Traits\BreezeHelpers;
 
 class ScaffoldIncrudible extends Command
@@ -105,7 +105,7 @@ class ScaffoldIncrudible extends Command
                 'tabWidth' => 2,
                 'singleQuote' => true,
                 'trailingComma' => 'all',
-                'printWidth' => 120,
+                'printWidth' => 80,
             ] + $entries;
         }, 'prettier');
 
