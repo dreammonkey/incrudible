@@ -2,18 +2,13 @@
 
 namespace Incrudible\Incrudible\Traits;
 
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 
 trait RegistersRouteMacros
 {
     public function registerRouteMacros(): void
     {
-        Redirect::macro('incrudible_route', function ($name = null, $parameters = [], $status = 302, $headers = []) {
-            return Redirect::to(incrudible_route($name, $parameters), $status, $headers);
-        });
-
         /**
          * Register the associate route macro for usage with BelongsToMany relationships.
          * Usage: Route::associate('admins.roles', AdminRoleController::class);
