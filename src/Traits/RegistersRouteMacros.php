@@ -2,8 +2,8 @@
 
 namespace Incrudible\Incrudible\Traits;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 trait RegistersRouteMacros
 {
