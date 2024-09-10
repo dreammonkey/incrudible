@@ -3,8 +3,8 @@
 namespace Incrudible\Incrudible\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
+use Illuminate\Filesystem\Filesystem;
 use Incrudible\Incrudible\Traits\BreezeHelpers;
 
 class ScaffoldIncrudible extends Command
@@ -26,7 +26,7 @@ class ScaffoldIncrudible extends Command
                 'laravel/sanctum:^4.0',
                 'tightenco/ziggy:^2.0',
                 'laracraft-tech/laravel-schema-rules:^1.4',
-                'spatie/laravel-permission:^6.0',
+                'spatie/laravel-permission:^6.9',
             ])) {
                 return 1;
             }
@@ -37,7 +37,7 @@ class ScaffoldIncrudible extends Command
                 'laravel/sanctum:^3.2',
                 'tightenco/ziggy:^2.0',
                 'laracraft-tech/laravel-schema-rules:^1.4',
-                'spatie/laravel-permission:^6.0',
+                'spatie/laravel-permission:^6.9',
             ])) {
                 return 1;
             }
