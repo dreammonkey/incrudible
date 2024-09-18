@@ -11,12 +11,12 @@ Its setup is unique because it allows full control over the backend as well as o
 
 ## ROADMAP
 
--   Allow username or email for authentication
--   Admin roles integration (via spatie/laravel-permission)
--   Automatic CRUD generation
--   CRUD import and export support (via maatwebsite/excel)
--   Translations management integration.
--   Full fledged component library
+- Allow username or email for authentication
+- Admin roles integration (via spatie/laravel-permission)
+- Automatic CRUD generation
+- CRUD import and export support (via maatwebsite/excel)
+- Translations management integration.
+- Full fledged component library
 
 ## Installation
 
@@ -25,15 +25,6 @@ You can install the package via composer:
 ```bash
 composer require dreammonkey/incrudible
 php artisan incrudible:install
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="incrudible-migrations"
-php artisan vendor:publish --tag="incrudible-routes"
-php artisan vendor:publish --tag="incrudible-config"
-php artisan migrate
 ```
 
 You can scaffold the admin panel code with:
@@ -46,9 +37,28 @@ npm ci && npm run dev
 yarn && yarn dev
 ```
 
+You can publish route files with:
+
+```bash
+php artisan vendor:publish --tag="incrudible-routes"
+```
+
+You can publish the config files with:
+
+```bash
+php artisan vendor:publish --tag="incrudible-config"
+```
+
+You can publish and run the migrations with:
+
+```bash
+php artisan vendor:publish --tag="incrudible-migrations"
+php artisan migrate
+```
+
 ## Usage
 
--   Create an admin user
+- Create an admin user
 
 ```bash
 php artisan incrudible:admin
@@ -76,8 +86,8 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
--   [Diederik van Remoortere](https://github.com/dreammonkey)
--   [All Contributors](../../contributors)
+- [Diederik van Remoortere](https://github.com/dreammonkey)
+- [All Contributors](../../contributors)
 
 ## License
 

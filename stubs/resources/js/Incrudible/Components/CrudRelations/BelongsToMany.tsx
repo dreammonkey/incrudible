@@ -1,9 +1,10 @@
 import { getCrudIndex } from '@/Incrudible/Api/Crud'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { Button } from '@/Incrudible/ui/button'
 import { Combobox } from '@/Incrudible/ui/combobox'
 import { DataTable } from '@/Incrudible/ui/data-table'
-import { BelongsToManyCrudRelation, PagedResource, CrudResource, PageProps, Resource } from '@/types/incrudible'
-import { useForm, usePage } from '@inertiajs/react'
+import { BelongsToManyCrudRelation, CrudResource, PagedResource, Resource } from '@/types/incrudible'
+import { useForm } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
@@ -16,12 +17,9 @@ interface BelongsToManyProps<T> {
 }
 
 export const BelongsToMany = <T extends CrudResource>({ resource, relation, onChange }: BelongsToManyProps<T>) => {
-  // console.log({ resource })
-  // console.log({ relation })
-
   const queryClient = useQueryClient()
 
-  const routePrefix = usePage<PageProps>().props.incrudible.routePrefix
+  const { routePrefix } = useIncrudible()
 
   const { data: values } = useQuery<PagedResource<T>>({
     queryFn: () => getCrudIndex(route(`${routePrefix}.${relation.route}.value`, resource.data.id)),
@@ -30,7 +28,7 @@ export const BelongsToMany = <T extends CrudResource>({ resource, relation, onCh
 
   useEffect(() => {
     if (values?.data) {
-      setData({ items: values.data })
+      setDefaults({ items: values.data })
     }
   }, [values])
 

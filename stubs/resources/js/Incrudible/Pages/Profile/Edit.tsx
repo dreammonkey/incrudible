@@ -12,7 +12,7 @@ export default function Edit({
   console.log(auth)
   return (
     <AuthenticatedLayout
-      admin={auth.admin.data}
+      admin={auth.admin}
       header={<h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Profile</h2>}
     >
       <Head title="Profile" />

@@ -19,11 +19,13 @@ export default function {{ Model }}Index({
   listable,
   paging,
   actions,
+  create: allowCreate,
 }: PageProps<{ 
   {{ parentPropTypes }}
-  listable: string[]; 
-  actions: TableActionConfig[]; 
+  listable: string[] 
+  actions: TableActionConfig[] 
   paging: PagingConfig 
+  create: boolean
 }>) {
   const props = usePage<PageProps>().props
 
@@ -110,7 +112,7 @@ export default function {{ Model }}Index({
 
   return (
     <AuthenticatedLayout
-      admin={auth.admin.data}
+      admin={auth.admin}
       header={
         <>
           <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
@@ -133,15 +135,17 @@ export default function {{ Model }}Index({
               />
             </div>
           </form>
-          <Link
-            href={route(`${routePrefix}.{{ crudRoute }}.create`, {{ parentRouteParams }})}
-            className={cn(
-              buttonVariants({ variant: 'outline', size: 'sm' }),
-              'ml-auto',
-            )}
-          >
-            <Plus className="size-4" />
-          </Link>
+          {allowCreate && (
+            <Link
+              href={route(`${routePrefix}.{{ crudRoute }}.create`, {{ parentRouteParams }})}
+              className={cn(
+                buttonVariants({ variant: 'outline', size: 'sm' }),
+                'ml-auto',
+              )}
+            >
+              <Plus className="size-4" />
+            </Link>
+          )}
         </>
       }
     >

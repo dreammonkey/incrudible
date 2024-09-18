@@ -1,9 +1,18 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Role, CrudRelation, CrudResource, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import {
+  Role,
+  CrudRelation,
+  CrudResource,
+  InputField,
+  FormRules,
+  PageProps,
+  Resource,
+} from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -16,19 +25,17 @@ export default function RoleEdit({
   relations,
 }: PageProps<{
   role: Resource<Role>
-  fields: FormField[]
+  fields: InputField[]
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {
-  const { routePrefix } = usePage<PageProps>().props.incrudible
+  const { routePrefix } = useIncrudible()
 
   const { setData, put, data, recentlySuccessful } = useForm<Role>(role.data)
 
   const formRef = useRef<FormRef<Role>>(null!)
 
   const onSubmit = (data: Role) => {
-    // console.log({ data })
-
     put(route(`${routePrefix}.roles.update`, role.data.id), {
       onSuccess: () => {
         formRef.current?.reset(data)
@@ -41,13 +48,18 @@ export default function RoleEdit({
 
   return (
     <AuthenticatedLayout
-      admin={auth.admin.data}
+      admin={auth.admin}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit Role</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Edit Role
+          </h2>
           <Link
             href={route(`${routePrefix}.roles.index`)}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'ml-auto',
+            )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back
@@ -76,7 +88,7 @@ export default function RoleEdit({
         </div>
       )}
 
-      <CrudRelations relations={relations} resource={role} />
+      <CrudRelations resource={role} relations={relations} />
     </AuthenticatedLayout>
   )
 }

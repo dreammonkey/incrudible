@@ -26,7 +26,7 @@ class ScaffoldIncrudible extends Command
                 'laravel/sanctum:^4.0',
                 'tightenco/ziggy:^2.0',
                 'laracraft-tech/laravel-schema-rules:^1.4',
-                'spatie/laravel-permission:^6.0',
+                'spatie/laravel-permission:^6.9',
             ])) {
                 return 1;
             }
@@ -37,7 +37,7 @@ class ScaffoldIncrudible extends Command
                 'laravel/sanctum:^3.2',
                 'tightenco/ziggy:^2.0',
                 'laracraft-tech/laravel-schema-rules:^1.4',
-                'spatie/laravel-permission:^6.0',
+                'spatie/laravel-permission:^6.9',
             ])) {
                 return 1;
             }
@@ -70,6 +70,7 @@ class ScaffoldIncrudible extends Command
                 '@types/node' => '^18.13.0',
                 '@types/react' => '^18.0.28',
                 '@types/react-dom' => '^18.0.10',
+                '@types/react-input-mask' => '^3.0.5',
                 '@vitejs/plugin-react' => '^4.0.3',
                 'autoprefixer' => '^10.4.12',
                 'axios' => '^1.6.4',
@@ -105,7 +106,7 @@ class ScaffoldIncrudible extends Command
                 'tabWidth' => 2,
                 'singleQuote' => true,
                 'trailingComma' => 'all',
-                'printWidth' => 120,
+                'printWidth' => 80,
             ] + $entries;
         }, 'prettier');
 

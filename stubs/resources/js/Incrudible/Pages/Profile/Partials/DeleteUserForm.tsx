@@ -1,10 +1,10 @@
 import InputError from '@/Incrudible/Components/InputError'
 import Modal from '@/Incrudible/Components/Modal'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { Button } from '@/Incrudible/ui/button'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
-import { PageProps } from '@/types/incrudible'
-import { useForm, usePage } from '@inertiajs/react'
+import { useForm } from '@inertiajs/react'
 import { FormEventHandler, useRef, useState } from 'react'
 
 export default function DeleteUserForm({
@@ -12,7 +12,7 @@ export default function DeleteUserForm({
 }: Readonly<{
   className?: string
 }>) {
-  const { routePrefix } = usePage<PageProps>().props.incrudible
+  const { routePrefix } = useIncrudible()
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false)
   const passwordInput = useRef<HTMLInputElement>()
 

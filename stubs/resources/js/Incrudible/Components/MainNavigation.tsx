@@ -35,22 +35,20 @@ const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
   return item.items ? (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger className={menuItemClasses}>
-        {IconComponent && <IconComponent className="w-4 h-4" />}
+        {IconComponent && <IconComponent className="h-4 w-4" />}
         {item.label}
         {isOpen ? <Icons.ChevronUp className="ml-auto h-4 w-4" /> : <Icons.ChevronDown className="ml-auto h-4 w-4" />}
       </CollapsibleTrigger>
       <CollapsibleContent className="">
-        {item.items?.map((item) => (
-          <MenuItemComponent key={item.label} item={item} />
-        ))}
+        {item.items?.map((item) => <MenuItemComponent key={item.label} item={item} />)}
       </CollapsibleContent>
     </Collapsible>
   ) : (
     <Link
       href={route(`${routePrefix}.${item.route}`)}
-      className={cn(isActive ? 'text-primary bg-muted' : '', menuItemClasses)}
+      className={cn(isActive ? 'bg-muted text-primary' : '', menuItemClasses)}
     >
-      {IconComponent && <IconComponent className="w-4 h-4" />}
+      {IconComponent && <IconComponent className="h-4 w-4" />}
       {item.label}
     </Link>
   )

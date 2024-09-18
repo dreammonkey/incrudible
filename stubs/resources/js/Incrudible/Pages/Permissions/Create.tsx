@@ -1,18 +1,24 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Permission, FormField, FormRules, PageProps } from '@/types/incrudible'
-import { Head, Link, useForm, usePage } from '@inertiajs/react'
+import {
+  InputField,
+  FormRules,
+  PageProps,
+  Permission,
+} from '@/types/incrudible'
+import { Head, Link, useForm } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
-export default function PermissionCreate({ 
-  auth, 
+export default function PermissionCreate({
+  auth,
   fields,
   rules,
-  }: PageProps<{ fields: FormField[]; rules: FormRules }>) {
-  const { routePrefix } = usePage<PageProps>().props.incrudible
+}: PageProps<{ fields: InputField[]; rules: FormRules }>) {
+  const { routePrefix } = useIncrudible()
 
   const { setData, post, data, recentlySuccessful } = useForm<Permission>(
     fields.reduce((acc, field) => {
@@ -36,13 +42,18 @@ export default function PermissionCreate({
 
   return (
     <AuthenticatedLayout
-      admin={auth.admin.data}
+      admin={auth.admin}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Create Permission</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Create Permission
+          </h2>
           <Link
             href={route(`${routePrefix}.permissions.index`)}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'ml-auto',
+            )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back

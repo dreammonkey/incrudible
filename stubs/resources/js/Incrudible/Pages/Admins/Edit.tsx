@@ -1,10 +1,19 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Admin, CrudRelation, CrudResource, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
-import { Head, Link, useForm, usePage } from '@inertiajs/react'
+import {
+  Admin,
+  CrudRelation,
+  CrudResource,
+  InputField,
+  FormRules,
+  PageProps,
+  Resource,
+} from '@/types/incrudible'
+import { Head, Link, useForm } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
@@ -16,19 +25,17 @@ export default function AdminEdit({
   relations,
 }: PageProps<{
   admin: Resource<Admin>
-  fields: FormField[]
+  fields: InputField[]
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {
-  const { routePrefix } = usePage<PageProps>().props.incrudible
+  const { routePrefix } = useIncrudible()
 
   const { setData, put, data, recentlySuccessful } = useForm<Admin>(admin.data)
 
   const formRef = useRef<FormRef<Admin>>(null!)
 
   const onSubmit = (data: Admin) => {
-    // console.log({ data })
-
     put(route(`${routePrefix}.admins.update`, admin.data.id), {
       onSuccess: () => {
         formRef.current?.reset(data)
@@ -41,13 +48,18 @@ export default function AdminEdit({
 
   return (
     <AuthenticatedLayout
-      admin={auth.admin.data}
+      admin={auth.admin}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit Admin</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Edit Admin
+          </h2>
           <Link
             href={route(`${routePrefix}.admins.index`)}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'ml-auto',
+            )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back
@@ -76,7 +88,7 @@ export default function AdminEdit({
         </div>
       )}
 
-      <CrudRelations relations={relations} resource={admin} />
+      <CrudRelations resource={admin} relations={relations} />
     </AuthenticatedLayout>
   )
 }

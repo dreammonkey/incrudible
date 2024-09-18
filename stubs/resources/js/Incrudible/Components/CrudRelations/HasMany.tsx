@@ -1,14 +1,15 @@
 import { getCrudIndex } from '@/Incrudible/Api/Crud'
 import { createColumns } from '@/Incrudible/Helpers/table-helpers'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
+import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
-import { CrudResource, Filters, HasManyCrudRelation, PagedResource, PageProps, Resource } from '@/types/incrudible'
+import { cn } from '@/lib/utils'
+import { CrudResource, Filters, HasManyCrudRelation, PagedResource, Resource } from '@/types/incrudible'
+import { Link } from '@inertiajs/react'
 import { useQuery } from '@tanstack/react-query'
 import { Plus, TriangleAlert } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { TablePagination } from '../TablePagination'
-import { Link, usePage } from '@inertiajs/react'
-import { buttonVariants } from '@/Incrudible/ui/button'
-import { cn } from '@/lib/utils'
 
 interface HasManyProps<T> {
   resource: Resource<T>
@@ -16,7 +17,7 @@ interface HasManyProps<T> {
 }
 
 export const HasMany = <T extends CrudResource>({ resource, relation }: HasManyProps<T>) => {
-  const routePrefix = usePage<PageProps>().props.incrudible.routePrefix
+  const { routePrefix } = useIncrudible()
 
   const [filters, setFilters] = useState<Filters>({
     page: 1,
