@@ -3,7 +3,7 @@ import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { {{ parentImports }}{{ Model }}, CrudRelation, CrudResource, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import { {{ parentImports }}{{ Model }}, CrudRelation, CrudResource, InputField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -18,7 +18,7 @@ export default function {{ Model }}Edit({
 }: PageProps<{
   {{ parentPropTypes }}
   {{ model }}: Resource<{{ Model }}>
-  fields: FormField[]
+  fields: InputField[]
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {

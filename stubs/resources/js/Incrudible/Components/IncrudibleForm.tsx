@@ -1,5 +1,5 @@
 import { convertLaravelToZod } from '@/lib/utils'
-import { FormField as FormFieldType, FormRules } from '@/types/incrudible'
+import { InputField, FormRules } from '@/types/incrudible'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ControllerRenderProps, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -17,9 +17,11 @@ import { forwardRef, useImperativeHandle } from 'react'
 import { DateTimeInput } from '@/Incrudible/ui/date-time-input'
 import { Switch } from '@/Incrudible/ui/switch'
 import { Textarea } from '@/Incrudible/ui/textarea'
+import { Combobox } from '../ui/combobox'
+import { InputFieldType } from '../Enum/Incrudible'
 
 interface FormProps<T> {
-  fields: FormFieldType[]
+  fields: InputField[]
   rules: FormRules
   data?: T
   onFormSubmit?: (data: T) => void
@@ -36,7 +38,7 @@ export interface FormRef<T> {
 }
 
 const renderInput = (
-  fieldData: FormFieldType,
+  fieldData: InputField,
   field: ControllerRenderProps<
     {
       [x: string]: any
@@ -46,10 +48,10 @@ const renderInput = (
   readOnly: boolean = false,
 ) => {
   switch (fieldData.type) {
-    case 'text':
-    case 'number':
-    case 'email':
-    case 'password':
+    case InputFieldType.Text:
+    case InputFieldType.Number:
+    case InputFieldType.Email:
+    case InputFieldType.Password:
       return (
         <Input
           {...field}
@@ -59,7 +61,7 @@ const renderInput = (
         />
       )
 
-    case 'textarea':
+    case InputFieldType.Textarea:
       return (
         <Textarea
           className="min-h-32"
@@ -69,7 +71,7 @@ const renderInput = (
         />
       )
 
-    case 'datetime-local':
+    case InputFieldType.DateTimeLocal:
       // TODO convert php format to date-fns format
       return (
         <DateTimeInput
@@ -79,7 +81,7 @@ const renderInput = (
         />
       )
 
-    case 'checkbox':
+    case InputFieldType.Checkbox:
       return (
         <div className="flex h-10 items-center">
           <Switch
@@ -91,20 +93,18 @@ const renderInput = (
         </div>
       )
 
-    // case 'select':
-    //   return (
-    //     <select
-    //       {...field}
-    //       readOnly={readOnly}
-    //       className="block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-    //     >
-    //       {fieldData.options?.map((option) => (
-    //         <option key={option} value={option}>
-    //           {option}
-    //         </option>
-    //       ))}
-    //     </select>
-    //   )
+    case InputFieldType.Select:
+      return (
+        <Combobox
+          placeholder={fieldData.placeholder}
+          options={fieldData.options}
+          value={field.value}
+          getKey={fieldData.getKey}
+          getValue={fieldData.getValue}
+          getLabel={fieldData.getLabel}
+          onChange={(value) => field.onChange(value)}
+        />
+      )
 
     default:
       return <Input {...field} readOnly={readOnly} />
@@ -112,7 +112,7 @@ const renderInput = (
 }
 
 const IncrudibleForm = forwardRef(
-  <T extends {}>(
+  <T extends object>(
     {
       fields,
       rules,
@@ -142,9 +142,6 @@ const IncrudibleForm = forwardRef(
 
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
-      // Do something with the form values.
-      // ✅ This will be type-safe and validated.
-      // console.log(values)
       onFormSubmit?.(values as T)
     }
 

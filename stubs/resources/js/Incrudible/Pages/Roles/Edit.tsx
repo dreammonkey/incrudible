@@ -4,7 +4,15 @@ import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Role, CrudRelation, CrudResource, FormField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import {
+  Role,
+  CrudRelation,
+  CrudResource,
+  InputField,
+  FormRules,
+  PageProps,
+  Resource,
+} from '@/types/incrudible'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
@@ -17,7 +25,7 @@ export default function RoleEdit({
   relations,
 }: PageProps<{
   role: Resource<Role>
-  fields: FormField[]
+  fields: InputField[]
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {
@@ -48,7 +56,10 @@ export default function RoleEdit({
           </h2>
           <Link
             href={route(`${routePrefix}.roles.index`)}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'ml-auto',
+            )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back

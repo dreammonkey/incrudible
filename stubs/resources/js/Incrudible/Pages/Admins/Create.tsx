@@ -3,12 +3,16 @@ import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Admin, FormField, FormRules, PageProps } from '@/types/incrudible'
+import { Admin, InputField, FormRules, PageProps } from '@/types/incrudible'
 import { Head, Link, useForm } from '@inertiajs/react'
 import { ArrowLeft, ThumbsUp } from 'lucide-react'
 import { useRef } from 'react'
 
-export default function AdminCreate({ auth, fields, rules }: PageProps<{ fields: FormField[]; rules: FormRules }>) {
+export default function AdminCreate({
+  auth,
+  fields,
+  rules,
+}: PageProps<{ fields: InputField[]; rules: FormRules }>) {
   const { routePrefix } = useIncrudible()
 
   const { setData, post, data, recentlySuccessful } = useForm<Admin>(
@@ -41,7 +45,10 @@ export default function AdminCreate({ auth, fields, rules }: PageProps<{ fields:
           </h2>
           <Link
             href={route(`${routePrefix}.admins.index`)}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'ml-auto',
+            )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back
