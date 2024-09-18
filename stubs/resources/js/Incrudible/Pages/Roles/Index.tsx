@@ -6,7 +6,14 @@ import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
 import { Input } from '@/Incrudible/ui/input'
 import { cn } from '@/lib/utils'
-import { Role, Filters, PagedResource, PageProps, PagingConfig, TableActionConfig } from '@/types/incrudible'
+import {
+  Role,
+  Filters,
+  PagedResource,
+  PageProps,
+  PagingConfig,
+  TableActionConfig,
+} from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { SortingState } from '@tanstack/react-table'
@@ -18,7 +25,13 @@ export default function RoleIndex({
   listable,
   paging,
   actions,
-}: PageProps<{ listable: string[]; actions: TableActionConfig[]; paging: PagingConfig }>) {
+  create: allowCreate,
+}: PageProps<{
+  listable: string[]
+  actions: TableActionConfig[]
+  paging: PagingConfig
+  create: boolean
+}>) {
   const props = usePage<PageProps>().props
 
   const queryClient = useQueryClient()
@@ -34,7 +47,9 @@ export default function RoleIndex({
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-    perPage: params.get('perPage') ? parseInt(params.get('perPage') as string) : paging.default,
+    perPage: params.get('perPage')
+      ? parseInt(params.get('perPage') as string)
+      : paging.default,
     orderBy: params.get('orderBy') ?? 'created_at',
     orderDir: params.get('orderDir') ?? 'desc',
     search: '',
@@ -89,10 +104,15 @@ export default function RoleIndex({
   }
 
   // Table columns helper
-  const columns = useMemo(() => createColumns<Role>(actions, listable, actionsCallback), [actions, listable])
+  const columns = useMemo(
+    () => createColumns<Role>(actions, listable, actionsCallback),
+    [actions, listable],
+  )
 
   // Sorting state
-  const [sorting, setSorting] = useState<SortingState>([{ id: filters.orderBy, desc: filters.orderDir === 'desc' }]) // can set initial sorting state here
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: filters.orderBy, desc: filters.orderDir === 'desc' },
+  ]) // can set initial sorting state here
 
   useEffect(() => {
     setFilters({
@@ -107,7 +127,9 @@ export default function RoleIndex({
       admin={auth.admin}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Roles</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Roles
+          </h2>
           <form
             className="ml-4 flex-1"
             onChange={(e) => {
@@ -125,12 +147,17 @@ export default function RoleIndex({
               />
             </div>
           </form>
-          <Link
-            href={route(`${routePrefix}.roles.create`)}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
-          >
-            <Plus className="size-4" />
-          </Link>
+          {allowCreate && (
+            <Link
+              href={route(`${routePrefix}.roles.create`)}
+              className={cn(
+                buttonVariants({ variant: 'outline', size: 'sm' }),
+                'ml-auto',
+              )}
+            >
+              <Plus className="size-4" />
+            </Link>
+          )}
         </>
       }
     >
@@ -145,7 +172,12 @@ export default function RoleIndex({
       )}
       {isSuccess && (
         <>
-          <DataTable columns={columns} data={roles.data ?? []} sorting={sorting} setSorting={setSorting} />
+          <DataTable
+            columns={columns}
+            data={roles.data ?? []}
+            sorting={sorting}
+            setSorting={setSorting}
+          />
           <TablePagination
             meta={roles.meta}
             onPageSelect={(page) =>
