@@ -4,7 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ControllerRenderProps, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/Incrudible/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Incrudible/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/Incrudible/ui/form'
 import { Input } from '@/Incrudible/ui/input'
 import { forwardRef, useImperativeHandle } from 'react'
 import { DateTimeInput } from '@/Incrudible/ui/date-time-input'
@@ -43,14 +50,34 @@ const renderInput = (
     case 'number':
     case 'email':
     case 'password':
-      return <Input {...field} type={fieldData.type} placeholder={fieldData.placeholder} readOnly={readOnly} />
+      return (
+        <Input
+          {...field}
+          type={fieldData.type}
+          placeholder={fieldData.placeholder}
+          readOnly={readOnly}
+        />
+      )
 
     case 'textarea':
-      return <Textarea className="min-h-32" {...field} placeholder={fieldData.placeholder} readOnly={readOnly} />
+      return (
+        <Textarea
+          className="min-h-32"
+          {...field}
+          placeholder={fieldData.placeholder}
+          readOnly={readOnly}
+        />
+      )
 
     case 'datetime-local':
       // TODO convert php format to date-fns format
-      return <DateTimeInput {...field} valueFormat="yyyy-MM-dd HH:mm:ss" readOnly={readOnly} />
+      return (
+        <DateTimeInput
+          {...field}
+          valueFormat="yyyy-MM-dd HH:mm:ss"
+          readOnly={readOnly}
+        />
+      )
 
     case 'checkbox':
       return (
@@ -86,7 +113,15 @@ const renderInput = (
 
 const IncrudibleForm = forwardRef(
   <T extends {}>(
-    { fields, rules, data, onFormSubmit, onChange, className, readOnly = false }: FormProps<T>,
+    {
+      fields,
+      rules,
+      data,
+      onFormSubmit,
+      onChange,
+      className,
+      readOnly = false,
+    }: FormProps<T>,
     ref: React.Ref<FormRef<T>>,
   ) => {
     // console.log(metadata)
@@ -113,14 +148,18 @@ const IncrudibleForm = forwardRef(
       onFormSubmit?.(values as T)
     }
 
-    useImperativeHandle(ref, () => {
-      return {
-        submit: form.handleSubmit(onSubmit),
-        reset: form.reset,
-        clearErrors: form.clearErrors,
-        setError: form.setError,
-      }
-    }, [form, onSubmit])
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          submit: form.handleSubmit(onSubmit),
+          reset: form.reset,
+          clearErrors: form.clearErrors,
+          setError: form.setError,
+        }
+      },
+      [form, onSubmit],
+    )
 
     // console.log(metadata.fields[0])
     // console.log('username' in metadata.rules)
@@ -145,7 +184,9 @@ const IncrudibleForm = forwardRef(
                         <FormLabel htmlFor={fieldData.name}>
                           {fieldData.label + (fieldData.required ? ' *' : '')}
                         </FormLabel>
-                        <FormControl>{renderInput(fieldData, field, readOnly)}</FormControl>
+                        <FormControl>
+                          {renderInput(fieldData, field, readOnly)}
+                        </FormControl>
                         <FormMessage />
                       </div>
                     </FormItem>
@@ -155,7 +196,11 @@ const IncrudibleForm = forwardRef(
             </div>
             <div className="mt-4 flex items-center justify-between">
               {!readOnly && (
-                <Button disabled={!isDirty} type="submit">
+                <Button
+                  isLoading={form.formState.isSubmitting}
+                  disabled={!isDirty}
+                  type="submit"
+                >
                   Save
                 </Button>
               )}
