@@ -17,7 +17,7 @@ import { forwardRef, useImperativeHandle } from 'react'
 import { DateTimeInput } from '@/Incrudible/ui/date-time-input'
 import { Switch } from '@/Incrudible/ui/switch'
 import { Textarea } from '@/Incrudible/ui/textarea'
-import { Combobox } from '../ui/combobox'
+import { Combobox } from '@/Incrudible/ui/combobox'
 import { InputFieldType } from '../Enum/Incrudible'
 
 interface FormProps<T> {

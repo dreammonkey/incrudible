@@ -4,8 +4,13 @@ import { Link } from '@inertiajs/react'
 import { ColumnDef } from '@tanstack/react-table'
 import * as Icons from 'lucide-react'
 import { MoreHorizontal } from 'lucide-react'
-import { Button, buttonVariants } from '../ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { Button, buttonVariants } from '@/Incrudible/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/Incrudible/ui/dropdown-menu'
 
 export const getIcon = (iconName: keyof typeof Icons) => {
   return Icons[iconName] as React.ComponentType<{ className?: string }>
@@ -61,16 +66,25 @@ export const createColumns = <T extends CrudResource>(
                 return (
                   <DropdownMenuItem key={index}>
                     {action.type === 'button' && (
-                      <Button variant={action.variant ?? 'ghost'} onClick={() => callback?.(action.action, item)}>
+                      <Button
+                        variant={action.variant ?? 'ghost'}
+                        onClick={() => callback?.(action.action, item)}
+                      >
                         <IconComponent className="mr-2 h-4 w-4" />
                         &nbsp;{action.label}
                       </Button>
                     )}
                     {action.type === 'link' && (
                       <Link
-                        href={item.actions.find((a) => a.action === action.action)?.url ?? '#'}
+                        href={
+                          item.actions.find((a) => a.action === action.action)
+                            ?.url ?? '#'
+                        }
                         className={cn(
-                          buttonVariants({ variant: action.variant ?? 'ghost', size: 'sm' }),
+                          buttonVariants({
+                            variant: action.variant ?? 'ghost',
+                            size: 'sm',
+                          }),
                           'w-full justify-start rounded-md text-sm',
                         )}
                       >
