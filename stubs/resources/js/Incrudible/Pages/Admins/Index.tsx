@@ -6,30 +6,26 @@ import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
 import { Input } from '@/Incrudible/ui/input'
 import { cn } from '@/lib/utils'
-import {
-  Admin,
-  Filters,
-  PagedResource,
-  PageProps,
-  PagingConfig,
-  TableActionConfig,
-} from '@/types/incrudible'
+import { Admin, Filters, PagedResource, PageProps, PagingConfig, TableActionConfig } from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { SortingState } from '@tanstack/react-table'
+import { useDebounce } from '@uidotdev/usehooks'
 import { Plus, Search, TriangleAlert } from 'lucide-react'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
 export default function AdminIndex({
   auth,
+  
   listable,
   paging,
   actions,
   create: allowCreate,
-}: PageProps<{
-  listable: string[]
-  actions: TableActionConfig[]
-  paging: PagingConfig
+}: PageProps<{ 
+  
+  listable: string[] 
+  actions: TableActionConfig[] 
+  paging: PagingConfig 
   create: boolean
 }>) {
   const props = usePage<PageProps>().props
@@ -47,13 +43,15 @@ export default function AdminIndex({
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-    perPage: params.get('perPage')
+     perPage: params.get('perPage')
       ? parseInt(params.get('perPage') as string)
       : paging.default,
     orderBy: params.get('orderBy') ?? 'created_at',
     orderDir: params.get('orderDir') ?? 'desc',
     search: '',
   })
+
+  const debouncedFilters = useDebounce(filters, 500)
 
   // Sync filters state with URL search params
   useLayoutEffect(() => {
@@ -75,7 +73,7 @@ export default function AdminIndex({
     }
   }, [])
 
-  const baseRoute = route(`${routePrefix}.${routeKey}`)
+  const baseRoute = route(`${routePrefix}.${routeKey}`, [])
 
   const {
     isLoading,
@@ -84,8 +82,8 @@ export default function AdminIndex({
     data: admins,
     error,
   } = useQuery<PagedResource<Admin>, Error>({
-    queryKey: [routeKey, filters],
-    queryFn: () => getCrudIndex(baseRoute, filters),
+    queryKey: [routeKey, debouncedFilters],
+    queryFn: () => getCrudIndex(baseRoute, debouncedFilters),
   })
 
   // Actions callback
@@ -105,7 +103,7 @@ export default function AdminIndex({
 
   // Table columns helper
   const columns = useMemo(
-    () => createColumns<Admin>(actions, listable, actionsCallback),
+    () => createColumns<Band>(actions, listable, actionsCallback),
     [actions, listable],
   )
 
@@ -126,7 +124,7 @@ export default function AdminIndex({
     <AuthenticatedLayout
       admin={auth.admin}
       header={
-        <>
+        <div className="flex w-full flex-row items-center justify-between space-x-2">
           <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
             Admins
           </h2>
@@ -137,28 +135,28 @@ export default function AdminIndex({
               setFilters({ ...filters, search: target.value })
             }}
           >
-            <div className="relative">
-              <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+            <div className="relative min-w-96 md:w-2/3 lg:w-1/2 xl:w-1/4">
+              <Search className="absolute left-2.5 top-3 size-4 text-muted-foreground" />
               <Input
                 defaultValue={filters.search}
                 type="search"
                 placeholder="Search..."
-                className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
+                className="w-full appearance-none bg-background pl-8 shadow-none"
               />
             </div>
           </form>
           {allowCreate && (
             <Link
-              href={route(`${routePrefix}.admins.create`)}
+              href={route(`${routePrefix}.admins.create`, [])}
               className={cn(
                 buttonVariants({ variant: 'outline', size: 'sm' }),
                 'ml-auto',
               )}
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="size-4" />
             </Link>
           )}
-        </>
+        </div>
       }
     >
       <Head title="Admins" />

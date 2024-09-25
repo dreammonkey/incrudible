@@ -1,9 +1,16 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { {{ parentImports }}{{ Model }}, InputField, FormRules, PageProps, Resource } from '@/types/incrudible'
-import { Head, Link, useForm, usePage } from '@inertiajs/react'
+import { 
+  {{ parentImports }}{{ Model }}, 
+  FormRules,
+  InputField,
+  PageProps,
+  Resource,
+} from '@/types/incrudible'
+import { Head, Link } from '@inertiajs/react'
 import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
@@ -19,10 +26,8 @@ export default function {{ Model }}Show({
   fields: InputField[] 
   rules: FormRules
 }>) {
-  const { routePrefix } = usePage<PageProps>().props.incrudible
+  const { routePrefix } = useIncrudible()
 
-  const { data } = useForm<{{ Model }}>({{ model }}.data)
-  
   const formRef = useRef<FormRef<{{ Model }}>>(null!)
 
   return (
@@ -30,10 +35,15 @@ export default function {{ Model }}Show({
       admin={auth.admin}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Show {{ Model }}</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Show {{ Model }}
+          </h2>
           <Link
             href={route(`${routePrefix}.{{ crudRoute }}.index`, {{ parentRouteParams }})}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }), 
+              'ml-auto'
+            )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back
@@ -43,11 +53,17 @@ export default function {{ Model }}Show({
     >
       <Head title="{{ Model }} Show" />
 
-      <IncrudibleForm ref={formRef} fields={fields} rules={rules} data={data} readOnly />
+      <IncrudibleForm
+        ref={formRef}
+        fields={fields}
+        rules={rules} 
+        initialData={{{ model }}.data} 
+        readOnly
+      />
       
-      <div className="rounded-lg border p-2 text-xs sm:p-4">
+      {/* <div className="rounded-lg border p-2 text-xs sm:p-4">
         <pre>{JSON.stringify({{ model }}, null, 2)}</pre>
-      </div>
+      </div> */}
     </AuthenticatedLayout>
   )
 }

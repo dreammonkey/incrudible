@@ -1,7 +1,7 @@
 import { convertLaravelToZod } from '@/lib/utils'
 import { InputField, FormRules } from '@/types/incrudible'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ControllerRenderProps, useForm } from 'react-hook-form'
+import { ControllerRenderProps, useForm, UseFormWatch } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/Incrudible/ui/button'
 import {
@@ -23,9 +23,9 @@ import { InputFieldType } from '../Enum/Incrudible'
 interface FormProps<T> {
   fields: InputField[]
   rules: FormRules
-  data?: T
+  initialData?: T
   onFormSubmit?: (data: T) => void
-  onChange?: (data: T) => void
+  isProcessing?: boolean
   className?: string
   readOnly?: boolean
 }
@@ -35,6 +35,9 @@ export interface FormRef<T> {
   reset: (data: T) => void
   clearErrors: () => void
   setError: (name: string, error: { type: string; message: string }) => void
+  watch: UseFormWatch<{
+    [x: string]: any
+  }>
 }
 
 const renderInput = (
@@ -116,14 +119,15 @@ const IncrudibleForm = forwardRef(
     {
       fields,
       rules,
-      data,
+      initialData,
       onFormSubmit,
-      onChange,
+      isProcessing,
       className,
       readOnly = false,
     }: FormProps<T>,
     ref: React.Ref<FormRef<T>>,
   ) => {
+    // console.log('IncrudibleForm -- render')
     // console.log(metadata)
     // console.log({ metadata, data })
 
@@ -133,11 +137,7 @@ const IncrudibleForm = forwardRef(
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
-      defaultValues: { ...data },
-    })
-
-    form.watch((data) => {
-      onChange?.(form.getValues() as T)
+      defaultValues: initialData,
     })
 
     // 2. Define a submit handler.
@@ -145,18 +145,15 @@ const IncrudibleForm = forwardRef(
       onFormSubmit?.(values as T)
     }
 
-    useImperativeHandle(
-      ref,
-      () => {
-        return {
-          submit: form.handleSubmit(onSubmit),
-          reset: form.reset,
-          clearErrors: form.clearErrors,
-          setError: form.setError,
-        }
-      },
-      [form, onSubmit],
-    )
+    useImperativeHandle(ref, () => {
+      return {
+        submit: form.handleSubmit(onSubmit),
+        reset: form.reset,
+        clearErrors: form.clearErrors,
+        setError: form.setError,
+        watch: form.watch,
+      }
+    }, [form, onSubmit])
 
     // console.log(metadata.fields[0])
     // console.log('username' in metadata.rules)
@@ -193,13 +190,26 @@ const IncrudibleForm = forwardRef(
             </div>
             <div className="mt-4 flex items-center justify-between">
               {!readOnly && (
-                <Button
-                  isLoading={form.formState.isSubmitting}
-                  disabled={!isDirty}
-                  type="submit"
-                >
-                  Save
-                </Button>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    isLoading={isProcessing}
+                    disabled={!isDirty || isProcessing}
+                    type="submit"
+                  >
+                    Save
+                  </Button>
+
+                  {isDirty && (
+                    <Button
+                      variant="link"
+                      disabled={!isDirty || isProcessing}
+                      type="button"
+                      onClick={() => form.reset()}
+                    >
+                      cancel
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
           </form>

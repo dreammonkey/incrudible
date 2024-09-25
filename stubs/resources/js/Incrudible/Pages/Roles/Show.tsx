@@ -3,30 +3,30 @@ import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import {
-  InputField,
+import { 
+  Role, 
   FormRules,
+  InputField,
   PageProps,
   Resource,
-  Role,
 } from '@/types/incrudible'
-import { Head, Link, useForm } from '@inertiajs/react'
+import { Head, Link } from '@inertiajs/react'
 import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
-export default function RoleShow({
+export default function RoleShow({ 
   auth,
+  
   role,
   fields,
   rules,
-}: PageProps<{
-  role: Resource<Role>
-  fields: InputField[]
+}: PageProps<{ 
+  
+  role: Resource<Role> 
+  fields: InputField[] 
   rules: FormRules
 }>) {
   const { routePrefix } = useIncrudible()
-
-  const { data } = useForm<Role>(role.data)
 
   const formRef = useRef<FormRef<Role>>(null!)
 
@@ -39,10 +39,10 @@ export default function RoleShow({
             Show Role
           </h2>
           <Link
-            href={route(`${routePrefix}.roles.index`)}
+            href={route(`${routePrefix}.roles.index`, [])}
             className={cn(
-              buttonVariants({ variant: 'outline', size: 'sm' }),
-              'ml-auto',
+              buttonVariants({ variant: 'outline', size: 'sm' }), 
+              'ml-auto'
             )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -56,14 +56,14 @@ export default function RoleShow({
       <IncrudibleForm
         ref={formRef}
         fields={fields}
-        rules={rules}
-        data={data}
+        rules={rules} 
+        initialData={role.data} 
         readOnly
       />
-
-      <div className="rounded-lg border p-2 text-xs sm:p-4">
+      
+      {/* <div className="rounded-lg border p-2 text-xs sm:p-4">
         <pre>{JSON.stringify(role, null, 2)}</pre>
-      </div>
+      </div> */}
     </AuthenticatedLayout>
   )
 }

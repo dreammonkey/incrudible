@@ -43,7 +43,7 @@ export const BelongsToMany = <T extends CrudResource>({
       setData({ items: values.data })
       setDefaults({ items: values.data })
     }
-  }, [values])
+  }, [values?.data])
 
   const { data: options } = useQuery<PagedResource<T>>({
     queryFn: () =>

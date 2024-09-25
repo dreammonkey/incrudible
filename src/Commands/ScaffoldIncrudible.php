@@ -71,6 +71,7 @@ class ScaffoldIncrudible extends Command
                 '@types/react' => '^18.0.28',
                 '@types/react-dom' => '^18.0.10',
                 '@types/react-input-mask' => '^3.0.5',
+                '@uidotdev/usehooks' => '^2.4.1',
                 '@vitejs/plugin-react' => '^4.0.3',
                 'autoprefixer' => '^10.4.12',
                 'axios' => '^1.6.4',
