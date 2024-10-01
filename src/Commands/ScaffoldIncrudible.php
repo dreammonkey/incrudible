@@ -3,8 +3,8 @@
 namespace Incrudible\Incrudible\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\App;
 use Incrudible\Incrudible\Traits\BreezeHelpers;
 
 class ScaffoldIncrudible extends Command
