@@ -103,7 +103,7 @@ export default function {{ Model }}Index({
 
   // Table columns helper
   const columns = useMemo(
-    () => createColumns<Band>(actions, listable, actionsCallback),
+    () => createColumns<{{ Model }}>(actions, listable, actionsCallback),
     [actions, listable],
   )
 

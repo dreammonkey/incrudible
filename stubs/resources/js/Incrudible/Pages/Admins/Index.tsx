@@ -6,7 +6,14 @@ import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
 import { Input } from '@/Incrudible/ui/input'
 import { cn } from '@/lib/utils'
-import { Admin, Filters, PagedResource, PageProps, PagingConfig, TableActionConfig } from '@/types/incrudible'
+import {
+  Admin,
+  Filters,
+  PagedResource,
+  PageProps,
+  PagingConfig,
+  TableActionConfig,
+} from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { SortingState } from '@tanstack/react-table'
@@ -16,16 +23,15 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
 export default function AdminIndex({
   auth,
-  
+
   listable,
   paging,
   actions,
   create: allowCreate,
-}: PageProps<{ 
-  
-  listable: string[] 
-  actions: TableActionConfig[] 
-  paging: PagingConfig 
+}: PageProps<{
+  listable: string[]
+  actions: TableActionConfig[]
+  paging: PagingConfig
   create: boolean
 }>) {
   const props = usePage<PageProps>().props
@@ -43,7 +49,7 @@ export default function AdminIndex({
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-     perPage: params.get('perPage')
+    perPage: params.get('perPage')
       ? parseInt(params.get('perPage') as string)
       : paging.default,
     orderBy: params.get('orderBy') ?? 'created_at',
@@ -103,7 +109,7 @@ export default function AdminIndex({
 
   // Table columns helper
   const columns = useMemo(
-    () => createColumns<Band>(actions, listable, actionsCallback),
+    () => createColumns<Admin>(actions, listable, actionsCallback),
     [actions, listable],
   )
 
