@@ -1,19 +1,13 @@
 import { getCrudIndex } from '@/Incrudible/Api/services/getCrudIndex'
 import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import { createColumns } from '@/Incrudible/Helpers/table-helpers'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
 import { Input } from '@/Incrudible/ui/input'
 import { cn } from '@/lib/utils'
-import {
-  Role,
-  Filters,
-  PagedResource,
-  PageProps,
-  PagingConfig,
-  TableActionConfig,
-} from '@/types/incrudible'
+import { Role, Filters, PagedResource, PageProps, PagingConfig, TableActionConfig } from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { SortingState } from '@tanstack/react-table'
@@ -23,19 +17,20 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
 export default function RoleIndex({
   auth,
-
+  
   listable,
   paging,
   actions,
   create: allowCreate,
-}: PageProps<{
-  listable: string[]
-  actions: TableActionConfig[]
-  paging: PagingConfig
+}: PageProps<{ 
+  
+  listable: string[] 
+  actions: TableActionConfig[] 
+  paging: PagingConfig 
   create: boolean
 }>) {
   const props = usePage<PageProps>().props
-
+  const { toast } = useToast()
   const queryClient = useQueryClient()
 
   const {
@@ -44,12 +39,11 @@ export default function RoleIndex({
   } = props
 
   const params = new URLSearchParams(query)
-
   const routeKey = 'roles.index'
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-    perPage: params.get('perPage')
+     perPage: params.get('perPage')
       ? parseInt(params.get('perPage') as string)
       : paging.default,
     orderBy: params.get('orderBy') ?? 'created_at',
@@ -96,11 +90,22 @@ export default function RoleIndex({
   const actionsCallback = (action: string, item: Role) => {
     if (action === 'destroy') {
       const url = item.actions.find((a) => a.action === 'destroy')?.url
-      router.delete(url!, {
-        onBefore: () => confirm('Are you sure you want to delete this item?'),
+      if (!url) return
+      router.delete(url, {
+        onBefore: () => confirm('Are you sure you want to delete this role?'),
         onSuccess: () => {
+          toast({
+            title: 'Role successfully deleted',
+          })
           queryClient.invalidateQueries({
             queryKey: [routeKey, filters],
+          })
+        },
+        onError: (error) => {
+          toast({
+            title: 'Error deleting role',
+            description: 'Please try again later',
+            variant: 'destructive',
           })
         },
       })

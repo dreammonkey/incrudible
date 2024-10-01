@@ -1,35 +1,27 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
-import { useRecentlySuccessful } from '@/Incrudible/Hooks/use-recently-successful'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import {
-  Role,
-  InputField,
-  FormRules,
-  PageProps,
-  Resource,
-} from '@/types/incrudible'
+import { Role, InputField, FormRules, PageProps } from '@/types/incrudible'
 import { Head, Link, router } from '@inertiajs/react'
 import { useMutation } from '@tanstack/react-query'
-import { ArrowLeft, ThumbsUp } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
-export default function RoleCreate({
-  auth,
-
+export default function RoleCreate({ 
+  auth, 
+  
   fields,
   rules,
-}: PageProps<{
-  fields: InputField[]
-  rules: FormRules
-}>) {
-  // console.log('RoleCreate', fields, rules)
-  //
+  }: PageProps<{ 
+    
+    fields: InputField[]; 
+    rules: FormRules 
+  }>) {
   const { routePrefix } = useIncrudible()
-  const { recentlySuccessful, triggerSuccess } = useRecentlySuccessful()
-
+  const { toast } = useToast()
   const formRef = useRef<FormRef<Role>>(null!)
 
   const { mutate, status } = useMutation({
@@ -58,12 +50,17 @@ export default function RoleCreate({
   const onSubmit = (data: Role) => {
     mutate(data, {
       onSuccess: () => {
-        // console.log('Role created successfully :)')
         formRef.current?.reset(data)
-        triggerSuccess()
+         toast({
+          title: 'Role successfully created',
+        })
       },
       onError: (error) => {
-        console.error('Error updating role', error)
+        toast({
+          title: 'Error creating role',
+          description: 'Please check the form for errors',
+          variant: 'destructive',
+        })
       },
     })
   }
@@ -73,15 +70,10 @@ export default function RoleCreate({
       admin={auth.admin}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Create Role
-          </h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Create Role</h2>
           <Link
             href={route(`${routePrefix}.roles.index`, [])}
-            className={cn(
-              buttonVariants({ variant: 'outline', size: 'sm' }),
-              'ml-auto',
-            )}
+            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back
@@ -104,13 +96,6 @@ export default function RoleCreate({
           className=""
         />
       </div>
-
-      {recentlySuccessful && (
-        <div className="flex items-center rounded-lg border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-4 inline-block size-4 text-green-800" />
-          Role created successfully
-        </div>
-      )}
     </AuthenticatedLayout>
   )
 }

@@ -1,6 +1,7 @@
 import { getCrudIndex } from '@/Incrudible/Api/services/getCrudIndex'
 import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import { createColumns } from '@/Incrudible/Helpers/table-helpers'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
@@ -35,7 +36,7 @@ export default function PermissionIndex({
   create: boolean
 }>) {
   const props = usePage<PageProps>().props
-
+  const { toast } = useToast()
   const queryClient = useQueryClient()
 
   const {
@@ -44,7 +45,6 @@ export default function PermissionIndex({
   } = props
 
   const params = new URLSearchParams(query)
-
   const routeKey = 'permissions.index'
 
   const [filters, setFilters] = useState<Filters>({
@@ -96,11 +96,23 @@ export default function PermissionIndex({
   const actionsCallback = (action: string, item: Permission) => {
     if (action === 'destroy') {
       const url = item.actions.find((a) => a.action === 'destroy')?.url
-      router.delete(url!, {
-        onBefore: () => confirm('Are you sure you want to delete this item?'),
+      if (!url) return
+      router.delete(url, {
+        onBefore: () =>
+          confirm('Are you sure you want to delete this permission?'),
         onSuccess: () => {
+          toast({
+            title: 'Permission successfully deleted',
+          })
           queryClient.invalidateQueries({
             queryKey: [routeKey, filters],
+          })
+        },
+        onError: (error) => {
+          toast({
+            title: 'Error deleting permission',
+            description: 'Please try again later',
+            variant: 'destructive',
           })
         },
       })

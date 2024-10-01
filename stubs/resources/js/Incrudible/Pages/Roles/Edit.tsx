@@ -1,7 +1,7 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
-import { useRecentlySuccessful } from '@/Incrudible/Hooks/use-recently-successful'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
@@ -16,7 +16,7 @@ import {
 } from '@/types/incrudible'
 import { Head, Link, router } from '@inertiajs/react'
 import { useMutation } from '@tanstack/react-query'
-import { ArrowLeft, ThumbsUp } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
 export default function RoleEdit({
@@ -33,10 +33,7 @@ export default function RoleEdit({
   relations: CrudRelation<CrudResource>[]
 }>) {
   const { routePrefix } = useIncrudible()
-  const { recentlySuccessful, triggerSuccess } = useRecentlySuccessful()
-
-  // const { setData, put, data, recentlySuccessful } = useForm<Role>(role.data)
-
+  const { toast } = useToast()
   const formRef = useRef<FormRef<Role>>(null!)
 
   const { mutate, status } = useMutation({
@@ -64,23 +61,19 @@ export default function RoleEdit({
   const onSubmit = (data: Role) => {
     // console.log({ data })
 
-    /*put(route(`${routePrefix}.roles.update`, [role.data.id]), {
-      onSuccess: () => {
-        formRef.current?.reset(data)
-      },
-      onError: (error) => {
-        console.error('Error updating role', error)
-      },
-    })*/
-
     mutate(data, {
       onSuccess: () => {
-        // console.log('Role updated successfully :)')
         formRef.current?.reset(data)
-        triggerSuccess()
+        toast({
+          title: 'Role successfully updated',
+        })
       },
       onError: (error) => {
-        console.error('Error updating role', error)
+        toast({
+          title: 'Error updating role',
+          description: 'Please check the form for errors',
+          variant: 'destructive',
+        })
       },
     })
   }
@@ -119,13 +112,6 @@ export default function RoleEdit({
           className=""
         />
       </div>
-
-      {recentlySuccessful && (
-        <div className="flex items-center rounded-xl border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-4 inline-block size-4 text-green-800" />
-          Role updated successfully
-        </div>
-      )}
 
       <CrudRelations resource={role} relations={relations} />
     </AuthenticatedLayout>

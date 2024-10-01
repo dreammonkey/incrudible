@@ -1,19 +1,13 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
-import { useRecentlySuccessful } from '@/Incrudible/Hooks/use-recently-successful'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import {
-  Admin,
-  InputField,
-  FormRules,
-  PageProps,
-  Resource,
-} from '@/types/incrudible'
-import { Head, Link, router, usePage } from '@inertiajs/react'
+import { Admin, InputField, FormRules, PageProps } from '@/types/incrudible'
+import { Head, Link, router } from '@inertiajs/react'
 import { useMutation } from '@tanstack/react-query'
-import { ArrowLeft, ThumbsUp } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
 export default function AdminCreate({
@@ -24,11 +18,8 @@ export default function AdminCreate({
   fields: InputField[]
   rules: FormRules
 }>) {
-  // console.log('AdminCreate', fields, rules)
-  //
   const { routePrefix } = useIncrudible()
-  const { recentlySuccessful, triggerSuccess } = useRecentlySuccessful()
-
+  const { toast } = useToast()
   const formRef = useRef<FormRef<Admin>>(null!)
 
   const { mutate, status } = useMutation({
@@ -57,12 +48,17 @@ export default function AdminCreate({
   const onSubmit = (data: Admin) => {
     mutate(data, {
       onSuccess: () => {
-        // console.log('Admin created successfully :)')
         formRef.current?.reset(data)
-        triggerSuccess()
+        toast({
+          title: 'Admin created successfully',
+        })
       },
       onError: (error) => {
-        console.error('Error updating Admin', error)
+        toast({
+          title: 'Error updating admin',
+          description: 'Please check the form for errors',
+          variant: 'destructive',
+        })
       },
     })
   }
@@ -103,13 +99,6 @@ export default function AdminCreate({
           className=""
         />
       </div>
-
-      {recentlySuccessful && (
-        <div className="flex items-center rounded-lg border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-4 inline-block size-4 text-green-800" />
-          Admin created successfully
-        </div>
-      )}
     </AuthenticatedLayout>
   )
 }

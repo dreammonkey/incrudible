@@ -1,10 +1,3 @@
-import { Admin, Resource } from '@/types/incrudible'
-import { Link } from '@inertiajs/react'
-import { CircleUser, Menu, Package } from 'lucide-react'
-import { PropsWithChildren, ReactNode, useState } from 'react'
-import { DarkModeToggle } from '../Components/DarkModeToggle'
-import { MainNavigation } from '../Components/MainNavigation'
-import { useIncrudible } from '../Hooks/use-incrudible'
 import { Button } from '@/Incrudible/ui/button'
 import {
   DropdownMenu,
@@ -14,6 +7,14 @@ import {
   DropdownMenuTrigger,
 } from '@/Incrudible/ui/dropdown-menu'
 import { Sheet, SheetContent, SheetTrigger } from '@/Incrudible/ui/sheet'
+import { Admin, Resource } from '@/types/incrudible'
+import { Link } from '@inertiajs/react'
+import { CircleUser, Menu, Package } from 'lucide-react'
+import { PropsWithChildren, ReactNode } from 'react'
+import { DarkModeToggle } from '../Components/DarkModeToggle'
+import { MainNavigation } from '../Components/MainNavigation'
+import { useIncrudible } from '../Hooks/use-incrudible'
+import { Toaster } from '../ui/toaster'
 
 export default function AuthenticatedLayout({
   admin,
@@ -21,7 +22,6 @@ export default function AuthenticatedLayout({
   children,
 }: PropsWithChildren<{ admin: Resource<Admin>; header?: ReactNode }>) {
   // Toggle mobile menu
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const { routePrefix } = useIncrudible()
 
@@ -165,6 +165,7 @@ export default function AuthenticatedLayout({
           <div className="flex items-center">{header}</div>
           <div className="flex flex-col gap-4">{children}</div>
         </main>
+        <Toaster />
       </div>
     </div>
   )

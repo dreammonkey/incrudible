@@ -3,8 +3,8 @@
 namespace Incrudible\Incrudible\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
+use Illuminate\Filesystem\Filesystem;
 use Incrudible\Incrudible\Traits\BreezeHelpers;
 
 class ScaffoldIncrudible extends Command
@@ -64,6 +64,7 @@ class ScaffoldIncrudible extends Command
                 '@radix-ui/react-select' => '^2.0.0',
                 '@radix-ui/react-slot' => '^1.0.2',
                 '@radix-ui/react-switch' => '^1.1.0',
+                '@radix-ui/react-toast' => '^1.2.1',
                 '@tailwindcss/forms' => '^0.5.3',
                 '@tanstack/react-table' => '^8.17.3',
                 '@tanstack/react-query' => '^5.40.0',
