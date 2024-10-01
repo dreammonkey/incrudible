@@ -61,7 +61,7 @@ export default function PermissionCreate({
       },
       onError: (error) => {
         toast({
-          title: 'Error updating permission',
+          title: 'Error creating permission',
           description: 'Please check the form for errors',
           variant: 'destructive',
         })

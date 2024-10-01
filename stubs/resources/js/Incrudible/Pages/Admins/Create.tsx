@@ -55,7 +55,7 @@ export default function AdminCreate({
       },
       onError: (error) => {
         toast({
-          title: 'Error updating admin',
+          title: 'Error creating admin',
           description: 'Please check the form for errors',
           variant: 'destructive',
         })
