@@ -3,8 +3,8 @@
 namespace Incrudible\Incrudible\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
+use Illuminate\Filesystem\Filesystem;
 use Incrudible\Incrudible\Traits\BreezeHelpers;
 
 class ScaffoldIncrudible extends Command
@@ -86,7 +86,7 @@ class ScaffoldIncrudible extends Command
                 'prettier' => '^3.3.2',
                 'prettier-plugin-tailwindcss' => '^0.6.3',
                 'react' => '^18.2.0',
-                'react-day-picker' => '^9.0.4',
+                'react-day-picker' => '^8.10.1',
                 'react-dom' => '^18.2.0',
                 'react-hook-form' => '^7.51.5',
                 'react-input-mask' => '^2.0.4',
