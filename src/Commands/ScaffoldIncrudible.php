@@ -3,8 +3,8 @@
 namespace Incrudible\Incrudible\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
+use Illuminate\Filesystem\Filesystem;
 use Incrudible\Incrudible\Traits\BreezeHelpers;
 
 class ScaffoldIncrudible extends Command
@@ -96,7 +96,7 @@ class ScaffoldIncrudible extends Command
                 'typescript' => '^5.0.2',
                 'vite' => '^5.0',
                 'web-api-hooks' => '^3.0.2',
-                'ziggy-js' => '^1.8.2',
+                'ziggy-js' => '^2.3.0',
                 'zod' => '^3.23.8',
             ] + $packages;
         }, 'devDependencies');
