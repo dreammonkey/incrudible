@@ -151,7 +151,7 @@ class ScaffoldIncrudible extends Command
         // Tailwind / Vite / Typescript / shadcn...
         copy(__DIR__ . '/../../stubs/resources/css/incrudible.css', resource_path('css/incrudible.css'));
         copy(__DIR__ . '/../../stubs/postcss.config.js', base_path('postcss.config.js'));
-        copy(__DIR__ . '/../../stubs/tailwind.config.js', base_path('tailwind.config.js'));
+        copy(__DIR__ . '/../../stubs/incrudible.tailwind.config.js', base_path('incrudible.tailwind.config.js'));
         copy(__DIR__ . '/../../stubs/vite.config.js', base_path('vite.config.js'));
         copy(__DIR__ . '/../../stubs/tsconfig.json', base_path('tsconfig.json'));
         copy(__DIR__ . '/../../stubs/components.json', base_path('components.json'));
