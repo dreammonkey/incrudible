@@ -1,30 +1,31 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
-import { useRecentlySuccessful } from '@/Incrudible/Hooks/use-recently-successful'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Permission, InputField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import {
+  Permission,
+  InputField,
+  FormRules,
+  PageProps,
+} from '@/types/incrudible'
 import { Head, Link, router } from '@inertiajs/react'
 import { useMutation } from '@tanstack/react-query'
-import { ArrowLeft, ThumbsUp } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
-export default function PermissionCreate({ 
-  auth, 
-  
+export default function PermissionCreate({
+  auth,
+
   fields,
   rules,
-  }: PageProps<{ 
-    
-    fields: InputField[]; 
-    rules: FormRules 
-  }>) {
-  // console.log('PermissionCreate', fields, rules)
-  //
+}: PageProps<{
+  fields: InputField[]
+  rules: FormRules
+}>) {
   const { routePrefix } = useIncrudible()
-  const { recentlySuccessful, triggerSuccess } = useRecentlySuccessful()
-
+  const { toast } = useToast()
   const formRef = useRef<FormRef<Permission>>(null!)
 
   const { mutate, status } = useMutation({
@@ -53,12 +54,17 @@ export default function PermissionCreate({
   const onSubmit = (data: Permission) => {
     mutate(data, {
       onSuccess: () => {
-        // console.log('Permission created successfully :)')
         formRef.current?.reset(data)
-        triggerSuccess()
+        toast({
+          title: 'Permission created successfully',
+        })
       },
       onError: (error) => {
-        console.error('Error updating permission', error)
+        toast({
+          title: 'Error creating permission',
+          description: 'Please check the form for errors',
+          variant: 'destructive',
+        })
       },
     })
   }
@@ -68,10 +74,15 @@ export default function PermissionCreate({
       admin={auth.admin}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Create Permission</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Create Permission
+          </h2>
           <Link
             href={route(`${routePrefix}.permissions.index`, [])}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'ml-auto',
+            )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back
@@ -94,13 +105,6 @@ export default function PermissionCreate({
           className=""
         />
       </div>
-
-      {recentlySuccessful && (
-        <div className="flex items-center rounded-lg border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-4 inline-block size-4 text-green-800" />
-          Permission created successfully
-        </div>
-      )}
     </AuthenticatedLayout>
   )
 }

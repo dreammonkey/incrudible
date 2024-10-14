@@ -1,6 +1,7 @@
 import { getCrudIndex } from '@/Incrudible/Api/services/getCrudIndex'
 import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import { createColumns } from '@/Incrudible/Helpers/table-helpers'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
@@ -29,7 +30,7 @@ export default function RoleIndex({
   create: boolean
 }>) {
   const props = usePage<PageProps>().props
-
+  const { toast } = useToast()
   const queryClient = useQueryClient()
 
   const {
@@ -38,7 +39,6 @@ export default function RoleIndex({
   } = props
 
   const params = new URLSearchParams(query)
-
   const routeKey = 'roles.index'
 
   const [filters, setFilters] = useState<Filters>({
@@ -90,11 +90,22 @@ export default function RoleIndex({
   const actionsCallback = (action: string, item: Role) => {
     if (action === 'destroy') {
       const url = item.actions.find((a) => a.action === 'destroy')?.url
-      router.delete(url!, {
-        onBefore: () => confirm('Are you sure you want to delete this item?'),
+      if (!url) return
+      router.delete(url, {
+        onBefore: () => confirm('Are you sure you want to delete this role?'),
         onSuccess: () => {
+          toast({
+            title: 'Role successfully deleted',
+          })
           queryClient.invalidateQueries({
             queryKey: [routeKey, filters],
+          })
+        },
+        onError: (error) => {
+          toast({
+            title: 'Error deleting role',
+            description: 'Please try again later',
+            variant: 'destructive',
           })
         },
       })
@@ -103,7 +114,7 @@ export default function RoleIndex({
 
   // Table columns helper
   const columns = useMemo(
-    () => createColumns<Band>(actions, listable, actionsCallback),
+    () => createColumns<Role>(actions, listable, actionsCallback),
     [actions, listable],
   )
 

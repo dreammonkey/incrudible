@@ -1,55 +1,64 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
-import { useRecentlySuccessful } from '@/Incrudible/Hooks/use-recently-successful'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { Admin, CrudRelation, CrudResource, InputField, FormRules, PageProps, Resource } from '@/types/incrudible'
+import {
+  Admin,
+  CrudRelation,
+  CrudResource,
+  InputField,
+  FormRules,
+  PageProps,
+  Resource,
+} from '@/types/incrudible'
 import { Head, Link, router } from '@inertiajs/react'
 import { useMutation } from '@tanstack/react-query'
-import { ArrowLeft, ThumbsUp } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
 export default function AdminEdit({
   auth,
-  
   admin,
   fields,
   rules,
   relations,
 }: PageProps<{
-  
   admin: Resource<Admin>
   fields: InputField[]
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {
   const { routePrefix } = useIncrudible()
-  const { recentlySuccessful, triggerSuccess } = useRecentlySuccessful()
 
-  // const { setData, put, data, recentlySuccessful } = useForm<Admin>(admin.data)
+  const { toast } = useToast()
 
   const formRef = useRef<FormRef<Admin>>(null!)
 
   const { mutate, status } = useMutation({
     mutationFn: (data: Admin) => {
       return new Promise<void>((resolve, reject) => {
-        router.put(route(`${routePrefix}.admins.update`, [admin.data.id]), data, {
-          onSuccess: () => {
-            resolve()
+        router.put(
+          route(`${routePrefix}.admins.update`, [admin.data.id]),
+          data,
+          {
+            onSuccess: () => {
+              resolve()
+            },
+            onError: (error) => {
+              for (let key in error) {
+                // console.error(key, error[key])
+                formRef.current?.setError(key, {
+                  type: 'server',
+                  message: error[key],
+                })
+              }
+              reject(error)
+            },
           },
-          onError: (error) => {
-            for (let key in error) {
-              // console.error(key, error[key])
-              formRef.current?.setError(key, {
-                type: 'server',
-                message: error[key],
-              })
-            }
-            reject(error)
-          },
-        })
+        )
       })
     },
   })
@@ -57,23 +66,19 @@ export default function AdminEdit({
   const onSubmit = (data: Admin) => {
     // console.log({ data })
 
-    /*put(route(`${routePrefix}.admins.update`, [admin.data.id]), {
+    mutate(data, {
       onSuccess: () => {
         formRef.current?.reset(data)
+        toast({
+          title: 'Admin updated successfully',
+        })
       },
       onError: (error) => {
-        console.error('Error updating admin', error)
-      },
-    })*/
-
-   mutate(data, {
-      onSuccess: () => {
-        // console.log('Admin updated successfully :)')
-        formRef.current?.reset(data)
-        triggerSuccess()
-      },
-      onError: (error) => {
-        console.error('Error updating admin', error)
+        toast({
+          title: 'Error updating admin',
+          description: 'Please check the form for errors',
+          variant: 'destructive',
+        })
       },
     })
   }
@@ -83,10 +88,15 @@ export default function AdminEdit({
       admin={auth.admin}
       header={
         <>
-          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit Admin</h2>
+          <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+            Edit Admin
+          </h2>
           <Link
             href={route(`${routePrefix}.admins.index`, [])}
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
+            className={cn(
+              buttonVariants({ variant: 'outline', size: 'sm' }),
+              'ml-auto',
+            )}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             &nbsp;Back
@@ -107,13 +117,6 @@ export default function AdminEdit({
           className=""
         />
       </div>
-
-      {recentlySuccessful && (
-        <div className="flex items-center rounded-xl border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-4 inline-block size-4 text-green-800" />
-          Admin updated successfully
-        </div>
-      )}
 
       <CrudRelations resource={admin} relations={relations} />
     </AuthenticatedLayout>

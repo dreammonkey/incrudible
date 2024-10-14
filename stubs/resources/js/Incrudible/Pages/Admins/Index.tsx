@@ -1,12 +1,20 @@
 import { getCrudIndex } from '@/Incrudible/Api/services/getCrudIndex'
 import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import { createColumns } from '@/Incrudible/Helpers/table-helpers'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
 import { Input } from '@/Incrudible/ui/input'
 import { cn } from '@/lib/utils'
-import { Admin, Filters, PagedResource, PageProps, PagingConfig, TableActionConfig } from '@/types/incrudible'
+import {
+  Admin,
+  Filters,
+  PagedResource,
+  PageProps,
+  PagingConfig,
+  TableActionConfig,
+} from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { SortingState } from '@tanstack/react-table'
@@ -16,20 +24,19 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
 export default function AdminIndex({
   auth,
-  
+
   listable,
   paging,
   actions,
   create: allowCreate,
-}: PageProps<{ 
-  
-  listable: string[] 
-  actions: TableActionConfig[] 
-  paging: PagingConfig 
+}: PageProps<{
+  listable: string[]
+  actions: TableActionConfig[]
+  paging: PagingConfig
   create: boolean
 }>) {
   const props = usePage<PageProps>().props
-
+  const { toast } = useToast()
   const queryClient = useQueryClient()
 
   const {
@@ -38,12 +45,11 @@ export default function AdminIndex({
   } = props
 
   const params = new URLSearchParams(query)
-
   const routeKey = 'admins.index'
 
   const [filters, setFilters] = useState<Filters>({
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-     perPage: params.get('perPage')
+    perPage: params.get('perPage')
       ? parseInt(params.get('perPage') as string)
       : paging.default,
     orderBy: params.get('orderBy') ?? 'created_at',
@@ -90,11 +96,22 @@ export default function AdminIndex({
   const actionsCallback = (action: string, item: Admin) => {
     if (action === 'destroy') {
       const url = item.actions.find((a) => a.action === 'destroy')?.url
-      router.delete(url!, {
+      if (!url) return
+      router.delete(url, {
         onBefore: () => confirm('Are you sure you want to delete this item?'),
         onSuccess: () => {
+          toast({
+            title: 'Admin deleted successfully',
+          })
           queryClient.invalidateQueries({
             queryKey: [routeKey, filters],
+          })
+        },
+        onError: (error) => {
+          toast({
+            title: 'Error deleting admin',
+            description: 'Please try again later',
+            variant: 'destructive',
           })
         },
       })
@@ -103,7 +120,7 @@ export default function AdminIndex({
 
   // Table columns helper
   const columns = useMemo(
-    () => createColumns<Band>(actions, listable, actionsCallback),
+    () => createColumns<Admin>(actions, listable, actionsCallback),
     [actions, listable],
   )
 

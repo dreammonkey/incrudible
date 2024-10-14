@@ -1,14 +1,14 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
-import { useRecentlySuccessful } from '@/Incrudible/Hooks/use-recently-successful'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
 import { {{ parentImports }}{{ Model }}, CrudRelation, CrudResource, InputField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, router } from '@inertiajs/react'
 import { useMutation } from '@tanstack/react-query'
-import { ArrowLeft, ThumbsUp } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
 export default function {{ Model }}Edit({
@@ -26,10 +26,7 @@ export default function {{ Model }}Edit({
   relations: CrudRelation<CrudResource>[]
 }>) {
   const { routePrefix } = useIncrudible()
-  const { recentlySuccessful, triggerSuccess } = useRecentlySuccessful()
-
-  // const { setData, put, data, recentlySuccessful } = useForm<{{ Model }}>({{ model }}.data)
-
+  const { toast } = useToast()
   const formRef = useRef<FormRef<{{ Model }}>>(null!)
 
   const { mutate, status } = useMutation({
@@ -57,23 +54,19 @@ export default function {{ Model }}Edit({
   const onSubmit = (data: {{ Model }}) => {
     // console.log({ data })
 
-    /*put(route(`${routePrefix}.{{ crudRoute }}.update`, {{ fullRouteParams }}), {
+    mutate(data, {
       onSuccess: () => {
         formRef.current?.reset(data)
+        toast({
+          title: '{{ Model }} successfully updated',
+        })
       },
       onError: (error) => {
-        console.error('Error updating {{ model }}', error)
-      },
-    })*/
-
-   mutate(data, {
-      onSuccess: () => {
-        // console.log('{{ Model }} updated successfully :)')
-        formRef.current?.reset(data)
-        triggerSuccess()
-      },
-      onError: (error) => {
-        console.error('Error updating {{ model }}', error)
+        toast({
+          title: 'Error updating {{ model }}',
+          description: 'Please check the form for errors',
+          variant: 'destructive',
+        })
       },
     })
   }
@@ -107,13 +100,6 @@ export default function {{ Model }}Edit({
           className=""
         />
       </div>
-
-      {recentlySuccessful && (
-        <div className="flex items-center rounded-xl border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-4 inline-block size-4 text-green-800" />
-          {{ Model }} updated successfully
-        </div>
-      )}
 
       <CrudRelations resource={{{ model }}} relations={relations} />
     </AuthenticatedLayout>

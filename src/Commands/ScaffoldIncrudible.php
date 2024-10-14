@@ -64,6 +64,7 @@ class ScaffoldIncrudible extends Command
                 '@radix-ui/react-select' => '^2.0.0',
                 '@radix-ui/react-slot' => '^1.0.2',
                 '@radix-ui/react-switch' => '^1.1.0',
+                '@radix-ui/react-toast' => '^1.2.1',
                 '@tailwindcss/forms' => '^0.5.3',
                 '@tanstack/react-table' => '^8.17.3',
                 '@tanstack/react-query' => '^5.40.0',
@@ -85,7 +86,7 @@ class ScaffoldIncrudible extends Command
                 'prettier' => '^3.3.2',
                 'prettier-plugin-tailwindcss' => '^0.6.3',
                 'react' => '^18.2.0',
-                'react-day-picker' => '^9.0.4',
+                'react-day-picker' => '^8.10.1',
                 'react-dom' => '^18.2.0',
                 'react-hook-form' => '^7.51.5',
                 'react-input-mask' => '^2.0.4',
@@ -95,7 +96,7 @@ class ScaffoldIncrudible extends Command
                 'typescript' => '^5.0.2',
                 'vite' => '^5.0',
                 'web-api-hooks' => '^3.0.2',
-                'ziggy-js' => '^1.8.2',
+                'ziggy-js' => '^2.3.0',
                 'zod' => '^3.23.8',
             ] + $packages;
         }, 'devDependencies');
