@@ -18,8 +18,15 @@ const isRouteActive = (
   routePrefix: string,
 ): boolean => {
   if (item.route) {
-    return url === route(`${routePrefix}.${item.route}`, undefined, false)
+    const currentRouteUrl = route(
+      `${routePrefix}.${item.route}`,
+      undefined,
+      false,
+    )
+    // Allow partial matching by checking if the current URL starts with the route URL
+    return url.startsWith(currentRouteUrl)
   }
+  // Recursively check if any child route is active
   return (
     item.items?.some((child) => isRouteActive(child, url, routePrefix)) || false
   )
