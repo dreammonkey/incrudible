@@ -4,18 +4,19 @@ import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
 import {
-  InputField,
-  FormRules,
-  PageProps,
   Permission,
+  FormRules,
+  InputField,
+  PageProps,
   Resource,
 } from '@/types/incrudible'
-import { Head, Link, useForm } from '@inertiajs/react'
+import { Head, Link } from '@inertiajs/react'
 import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
 export default function PermissionShow({
   auth,
+
   permission,
   fields,
   rules,
@@ -25,8 +26,6 @@ export default function PermissionShow({
   rules: FormRules
 }>) {
   const { routePrefix } = useIncrudible()
-
-  const { data } = useForm<Permission>(permission.data)
 
   const formRef = useRef<FormRef<Permission>>(null!)
 
@@ -39,7 +38,7 @@ export default function PermissionShow({
             Show Permission
           </h2>
           <Link
-            href={route(`${routePrefix}.permissions.index`)}
+            href={route(`${routePrefix}.permissions.index`, [])}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',
@@ -57,13 +56,13 @@ export default function PermissionShow({
         ref={formRef}
         fields={fields}
         rules={rules}
-        data={data}
+        initialData={permission.data}
         readOnly
       />
 
-      <div className="rounded-lg border p-2 text-xs sm:p-4">
+      {/* <div className="rounded-lg border p-2 text-xs sm:p-4">
         <pre>{JSON.stringify(permission, null, 2)}</pre>
-      </div>
+      </div> */}
     </AuthenticatedLayout>
   )
 }

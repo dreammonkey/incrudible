@@ -5,17 +5,18 @@ import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
 import {
   Admin,
-  InputField,
   FormRules,
+  InputField,
   PageProps,
   Resource,
 } from '@/types/incrudible'
-import { Head, Link, useForm } from '@inertiajs/react'
+import { Head, Link } from '@inertiajs/react'
 import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
 export default function AdminShow({
   auth,
+
   admin,
   fields,
   rules,
@@ -25,8 +26,6 @@ export default function AdminShow({
   rules: FormRules
 }>) {
   const { routePrefix } = useIncrudible()
-
-  const { data } = useForm<Admin>(admin.data)
 
   const formRef = useRef<FormRef<Admin>>(null!)
 
@@ -39,7 +38,7 @@ export default function AdminShow({
             Show Admin
           </h2>
           <Link
-            href={route(`${routePrefix}.admins.index`)}
+            href={route(`${routePrefix}.admins.index`, [])}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',
@@ -57,13 +56,13 @@ export default function AdminShow({
         ref={formRef}
         fields={fields}
         rules={rules}
-        data={data}
+        initialData={admin.data}
         readOnly
       />
 
-      <div className="rounded-lg border p-2 text-xs sm:p-4">
+      {/* <div className="rounded-lg border p-2 text-xs sm:p-4">
         <pre>{JSON.stringify(admin, null, 2)}</pre>
-      </div>
+      </div> */}
     </AuthenticatedLayout>
   )
 }

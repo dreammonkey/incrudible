@@ -1,36 +1,65 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { cn } from '@/lib/utils'
-import { InputField, FormRules, PageProps, Role } from '@/types/incrudible'
-import { Head, Link, useForm } from '@inertiajs/react'
-import { ArrowLeft, ThumbsUp } from 'lucide-react'
+import { Role, InputField, FormRules, PageProps } from '@/types/incrudible'
+import { Head, Link, router } from '@inertiajs/react'
+import { useMutation } from '@tanstack/react-query'
+import { ArrowLeft } from 'lucide-react'
 import { useRef } from 'react'
 
 export default function RoleCreate({
   auth,
+
   fields,
   rules,
-}: PageProps<{ fields: InputField[]; rules: FormRules }>) {
+}: PageProps<{
+  fields: InputField[]
+  rules: FormRules
+}>) {
   const { routePrefix } = useIncrudible()
-
-  const { setData, post, data, recentlySuccessful } = useForm<Role>(
-    fields.reduce((acc, field) => {
-      return { ...acc, [field.name]: '' }
-    }, {} as Role),
-  )
-
+  const { toast } = useToast()
   const formRef = useRef<FormRef<Role>>(null!)
 
+  const { mutate, status } = useMutation({
+    mutationFn: (data: Role) => {
+      /** Inertia js router.* does not support async requests */
+      return new Promise<void>((resolve, reject) => {
+        router.post(route(`${routePrefix}.roles.store`, []), data, {
+          onSuccess: () => {
+            resolve()
+          },
+          onError: (error) => {
+            for (let key in error) {
+              // console.error(key, error[key])
+              formRef.current?.setError(key, {
+                type: 'server',
+                message: error[key],
+              })
+            }
+            reject(error)
+          },
+        })
+      })
+    },
+  })
+
   const onSubmit = (data: Role) => {
-    post(route(`${routePrefix}.roles.store`), {
+    mutate(data, {
       onSuccess: () => {
-        console.log('Role created successfully')
         formRef.current?.reset(data)
+        toast({
+          title: 'Role successfully created',
+        })
       },
       onError: (error) => {
-        console.error('Error updating role', error)
+        toast({
+          title: 'Error creating role',
+          description: 'Please check the form for errors',
+          variant: 'destructive',
+        })
       },
     })
   }
@@ -44,7 +73,7 @@ export default function RoleCreate({
             Create Role
           </h2>
           <Link
-            href={route(`${routePrefix}.roles.index`)}
+            href={route(`${routePrefix}.roles.index`, [])}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',
@@ -63,19 +92,14 @@ export default function RoleCreate({
           ref={formRef}
           fields={fields}
           rules={rules}
-          data={data}
+          initialData={fields.reduce((acc, field) => {
+            return { ...acc, [field.name]: '' }
+          }, {} as Role)}
           onFormSubmit={onSubmit}
-          onChange={setData}
+          isProcessing={status === 'pending'}
           className=""
         />
       </div>
-
-      {recentlySuccessful && (
-        <div className="flex items-center rounded-lg border px-4 py-3 text-sm">
-          <ThumbsUp className="mr-2 inline-block size-4 text-green-800" />
-          Role created successfully
-        </div>
-      )}
     </AuthenticatedLayout>
   )
 }

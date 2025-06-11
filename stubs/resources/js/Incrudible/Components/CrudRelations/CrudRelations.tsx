@@ -12,10 +12,22 @@ export const CrudRelations: React.FC<{
       {relations?.map((relation) => {
         switch (relation.type) {
           case CrudRelationType.BelongsToMany:
-            return <BelongsToMany key={relation.name} relation={relation} resource={resource} />
+            return (
+              <BelongsToMany
+                key={relation.name}
+                relation={relation}
+                resource={resource}
+              />
+            )
 
           case CrudRelationType.HasMany:
-            return <HasMany key={relation.name} relation={relation} resource={resource} />
+            return (
+              <HasMany
+                key={relation.name}
+                relation={relation}
+                resource={resource}
+              />
+            )
 
           default:
             return null

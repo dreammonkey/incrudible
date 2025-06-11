@@ -85,7 +85,7 @@ class IncrudibleServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * Load the Summus helper methods, for convenience.
+     * Load the Incrudible helper methods, for convenience.
      */
     public function loadHelpers()
     {

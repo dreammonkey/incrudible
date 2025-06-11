@@ -14,7 +14,7 @@ use App\Incrudible\Traits\HandlesCrudRelations;
 use Illuminate\Support\Facades\Pipeline;
 use Incrudible\Incrudible\Facades\Incrudible;
 
-/*NESTED BABY*/
+/* NESTED BABY */
 
 class AdminController extends Controller
 {

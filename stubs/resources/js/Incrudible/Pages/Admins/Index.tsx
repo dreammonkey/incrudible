@@ -1,6 +1,7 @@
 import { getCrudIndex } from '@/Incrudible/Api/services/getCrudIndex'
 import { TablePagination } from '@/Incrudible/Components/TablePagination'
 import { createColumns } from '@/Incrudible/Helpers/table-helpers'
+import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
@@ -18,10 +19,11 @@ import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { SortingState } from '@tanstack/react-table'
 import { Plus, Search, TriangleAlert } from 'lucide-react'
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function AdminIndex({
   auth,
+
   listable,
   paging,
   actions,
@@ -33,7 +35,7 @@ export default function AdminIndex({
   create: boolean
 }>) {
   const props = usePage<PageProps>().props
-
+  const { toast } = useToast()
   const queryClient = useQueryClient()
 
   const {
@@ -42,40 +44,43 @@ export default function AdminIndex({
   } = props
 
   const params = new URLSearchParams(query)
-
   const routeKey = 'admins.index'
 
-  const [filters, setFilters] = useState<Filters>({
+  // Extract filters directly from URL params
+  const filters: Filters = {
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
     perPage: params.get('perPage')
       ? parseInt(params.get('perPage') as string)
       : paging.default,
     orderBy: params.get('orderBy') ?? 'created_at',
     orderDir: params.get('orderDir') ?? 'desc',
-    search: '',
-  })
+    search: params.get('search') ?? undefined,
+  }
 
-  // Sync filters state with URL search params
-  useLayoutEffect(() => {
-    const page = params.get('page')
-    if (page && parseInt(page) !== filters.page) {
-      setFilters({ ...filters, page: parseInt(page) })
-    }
-    const perPage = params.get('perPage')
-    if (perPage && parseInt(perPage) !== filters.perPage) {
-      setFilters({ ...filters, perPage: parseInt(perPage) })
-    }
-    const orderBy = params.get('orderBy')
-    if (orderBy && orderBy !== filters.orderBy) {
-      setFilters({ ...filters, orderBy })
-    }
-    const orderDir = params.get('orderDir')
-    if (orderDir && orderDir !== filters.orderDir) {
-      setFilters({ ...filters, orderDir })
-    }
-  }, [])
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateFilters({
+      search: e.target.value || undefined,
+      page: 1, // Reset to first page on search change
+    })
+  }
 
-  const baseRoute = route(`${routePrefix}.${routeKey}`)
+  // Helper function to update URL with new filters
+  const updateFilters = (newFilters: Partial<Filters>) => {
+    const updatedFilters = { ...filters, ...newFilters }
+
+    // Remove empty search param
+    if (!updatedFilters.search) {
+      delete updatedFilters.search
+    }
+
+    router.get(location, updatedFilters, {
+      preserveState: true,
+      preserveScroll: true,
+      replace: true,
+    })
+  }
+
+  const baseRoute = route(`${routePrefix}.${routeKey}`, [])
 
   const {
     isLoading,
@@ -92,11 +97,22 @@ export default function AdminIndex({
   const actionsCallback = (action: string, item: Admin) => {
     if (action === 'destroy') {
       const url = item.actions.find((a) => a.action === 'destroy')?.url
-      router.delete(url!, {
+      if (!url) return
+      router.delete(url, {
         onBefore: () => confirm('Are you sure you want to delete this item?'),
         onSuccess: () => {
+          toast({
+            title: 'Admin deleted successfully',
+          })
           queryClient.invalidateQueries({
             queryKey: [routeKey, filters],
+          })
+        },
+        onError: () => {
+          toast({
+            title: 'Error deleting admin',
+            description: 'Please try again later',
+            variant: 'destructive',
           })
         },
       })
@@ -112,53 +128,52 @@ export default function AdminIndex({
   // Sorting state
   const [sorting, setSorting] = useState<SortingState>([
     { id: filters.orderBy, desc: filters.orderDir === 'desc' },
-  ]) // can set initial sorting state here
+  ])
 
   useEffect(() => {
-    setFilters({
-      ...filters,
-      orderBy: sorting[0]?.id ?? 'created_at',
-      orderDir: sorting[0]?.desc ? 'desc' : 'asc',
-    })
+    const newOrderBy = sorting[0]?.id ?? 'created_at'
+    const newOrderDir = sorting[0]?.desc ? 'desc' : 'asc'
+
+    if (newOrderBy !== filters.orderBy || newOrderDir !== filters.orderDir) {
+      updateFilters({
+        orderBy: newOrderBy,
+        orderDir: newOrderDir,
+      })
+    }
   }, [sorting])
 
   return (
     <AuthenticatedLayout
       admin={auth.admin}
       header={
-        <>
+        <div className="flex w-full flex-row items-center justify-between space-x-2">
           <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
             Admins
           </h2>
-          <form
-            className="ml-4 flex-1"
-            onChange={(e) => {
-              const target = e.target as HTMLInputElement
-              setFilters({ ...filters, search: target.value })
-            }}
-          >
-            <div className="relative">
-              <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
+          <form className="ml-4 flex-1">
+            <div className="relative min-w-96 md:w-2/3 lg:w-1/2 xl:w-1/4">
+              <Search className="absolute left-2.5 top-3 size-4 text-muted-foreground" />
               <Input
-                defaultValue={filters.search}
+                defaultValue={filters.search ?? ''}
+                onChange={handleSearchChange}
                 type="search"
                 placeholder="Search..."
-                className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
+                className="w-full appearance-none bg-background pl-8 shadow-none"
               />
             </div>
           </form>
           {allowCreate && (
             <Link
-              href={route(`${routePrefix}.admins.create`)}
+              href={route(`${routePrefix}.admins.create`, [])}
               className={cn(
                 buttonVariants({ variant: 'outline', size: 'sm' }),
                 'ml-auto',
               )}
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="size-4" />
             </Link>
           )}
-        </>
+        </div>
       }
     >
       <Head title="Admins" />
@@ -180,20 +195,9 @@ export default function AdminIndex({
           />
           <TablePagination
             meta={admins.meta}
-            onPageSelect={(page) =>
-              router.get(location, {
-                ...filters,
-                page,
-              })
-            }
+            onPageSelect={(page) => updateFilters({ page })}
             perPage={filters.perPage}
-            onPerPageChange={(perPage) =>
-              router.get(location, {
-                ...filters,
-                page: 1,
-                perPage,
-              })
-            }
+            onPerPageChange={(perPage) => updateFilters({ page: 1, perPage })}
           />
         </>
       )}

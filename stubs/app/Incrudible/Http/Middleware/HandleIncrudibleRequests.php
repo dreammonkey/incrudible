@@ -41,7 +41,7 @@ class HandleIncrudibleRequests extends Middleware
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
-                'location' => $request->url(),
+                'location' => url()->current(),
                 'query' => $request->query(),
             ],
             'incrudible' => [

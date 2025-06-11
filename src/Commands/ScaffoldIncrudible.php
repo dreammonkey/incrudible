@@ -64,6 +64,7 @@ class ScaffoldIncrudible extends Command
                 '@radix-ui/react-select' => '^2.0.0',
                 '@radix-ui/react-slot' => '^1.0.2',
                 '@radix-ui/react-switch' => '^1.1.0',
+                '@radix-ui/react-toast' => '^1.2.1',
                 '@tailwindcss/forms' => '^0.5.3',
                 '@tanstack/react-table' => '^8.17.3',
                 '@tanstack/react-query' => '^5.40.0',
@@ -71,6 +72,7 @@ class ScaffoldIncrudible extends Command
                 '@types/react' => '^18.0.28',
                 '@types/react-dom' => '^18.0.10',
                 '@types/react-input-mask' => '^3.0.5',
+                '@uidotdev/usehooks' => '^2.4.1',
                 '@vitejs/plugin-react' => '^4.0.3',
                 'autoprefixer' => '^10.4.12',
                 'axios' => '^1.6.4',
@@ -84,7 +86,7 @@ class ScaffoldIncrudible extends Command
                 'prettier' => '^3.3.2',
                 'prettier-plugin-tailwindcss' => '^0.6.3',
                 'react' => '^18.2.0',
-                'react-day-picker' => '^9.0.4',
+                'react-day-picker' => '^8.10.1',
                 'react-dom' => '^18.2.0',
                 'react-hook-form' => '^7.51.5',
                 'react-input-mask' => '^2.0.4',
@@ -94,7 +96,7 @@ class ScaffoldIncrudible extends Command
                 'typescript' => '^5.0.2',
                 'vite' => '^5.0',
                 'web-api-hooks' => '^3.0.2',
-                'ziggy-js' => '^1.8.2',
+                'ziggy-js' => '^2.3.0',
                 'zod' => '^3.23.8',
             ] + $packages;
         }, 'devDependencies');
@@ -148,9 +150,9 @@ class ScaffoldIncrudible extends Command
         );
 
         // Tailwind / Vite / Typescript / shadcn...
-        copy(__DIR__ . '/../../stubs/resources/css/app.css', resource_path('css/app.css'));
+        copy(__DIR__ . '/../../stubs/resources/css/incrudible.css', resource_path('css/incrudible.css'));
         copy(__DIR__ . '/../../stubs/postcss.config.js', base_path('postcss.config.js'));
-        copy(__DIR__ . '/../../stubs/tailwind.config.js', base_path('tailwind.config.js'));
+        copy(__DIR__ . '/../../stubs/incrudible.tailwind.config.js', base_path('incrudible.tailwind.config.js'));
         copy(__DIR__ . '/../../stubs/vite.config.js', base_path('vite.config.js'));
         copy(__DIR__ . '/../../stubs/tsconfig.json', base_path('tsconfig.json'));
         copy(__DIR__ . '/../../stubs/components.json', base_path('components.json'));

@@ -1,19 +1,20 @@
-import { Admin, Resource } from '@/types/incrudible'
-import { Link } from '@inertiajs/react'
-import { CircleUser, Menu, Package } from 'lucide-react'
-import { PropsWithChildren, ReactNode, useState } from 'react'
-import { DarkModeToggle } from '../Components/DarkModeToggle'
-import { MainNavigation } from '../Components/MainNavigation'
-import { useIncrudible } from '../Hooks/use-incrudible'
-import { Button } from '../ui/button'
+import { Button } from '@/Incrudible/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
-import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
+} from '@/Incrudible/ui/dropdown-menu'
+import { Sheet, SheetContent, SheetTrigger } from '@/Incrudible/ui/sheet'
+import { Admin, Resource } from '@/types/incrudible'
+import { Link } from '@inertiajs/react'
+import { CircleUser, Menu, Package } from 'lucide-react'
+import { PropsWithChildren, ReactNode } from 'react'
+import { DarkModeToggle } from '../Components/DarkModeToggle'
+import { MainNavigation } from '../Components/MainNavigation'
+import { useIncrudible } from '../Hooks/use-incrudible'
+import { Toaster } from '../ui/toaster'
 
 export default function AuthenticatedLayout({
   admin,
@@ -21,7 +22,6 @@ export default function AuthenticatedLayout({
   children,
 }: PropsWithChildren<{ admin: Resource<Admin>; header?: ReactNode }>) {
   // Toggle mobile menu
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const { routePrefix } = useIncrudible()
 
@@ -68,7 +68,11 @@ export default function AuthenticatedLayout({
         <header className="flex h-14 items-center gap-2 border-b px-4 md:gap-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+              <Button
+                variant="outline"
+                size="icon"
+                className="shrink-0 md:hidden"
+              >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
@@ -76,7 +80,10 @@ export default function AuthenticatedLayout({
             <SheetContent side="left" className="flex flex-col px-4 py-6">
               {/* Sidebar Mobile */}
               <nav className="grid gap-1">
-                <Link href="/" className="mb-2 flex items-center gap-2 bg-muted/40 p-2 font-semibold">
+                <Link
+                  href="/"
+                  className="mb-2 flex items-center gap-2 bg-muted/40 p-2 font-semibold"
+                >
                   <Package className="h-6 w-6" />
                   <span className="">Incrudible</span>
                 </Link>
@@ -124,18 +131,29 @@ export default function AuthenticatedLayout({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>
-                  <Link className="w-full" href={route(`${routePrefix}.settings`)}>
+                  <Link
+                    className="w-full"
+                    href={route(`${routePrefix}.settings`)}
+                  >
                     Settings
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link className="w-full" href={route(`${routePrefix}.profile.edit`)}>
+                  <Link
+                    className="w-full"
+                    href={route(`${routePrefix}.profile.edit`)}
+                  >
                     Profile
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link method={'post'} as="button" className="w-full text-left" href={route(`${routePrefix}.logout`)}>
+                  <Link
+                    method={'post'}
+                    as="button"
+                    className="w-full text-left"
+                    href={route(`${routePrefix}.logout`)}
+                  >
                     Logout
                   </Link>
                 </DropdownMenuItem>
@@ -147,6 +165,7 @@ export default function AuthenticatedLayout({
           <div className="flex items-center">{header}</div>
           <div className="flex flex-col gap-4">{children}</div>
         </main>
+        <Toaster />
       </div>
     </div>
   )

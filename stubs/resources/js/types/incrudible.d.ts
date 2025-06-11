@@ -109,7 +109,7 @@ export interface Filters {
   orderBy: string
   page: number
   perPage: number
-  search: string
+  search?: string
   orderDir: string
 }
 

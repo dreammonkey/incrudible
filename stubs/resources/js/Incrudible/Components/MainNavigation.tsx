@@ -4,16 +4,35 @@ import { Link, usePage } from '@inertiajs/react'
 import { Collapsible } from '@radix-ui/react-collapsible'
 import * as Icons from 'lucide-react'
 import { useState } from 'react'
-import { CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible'
+import {
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/Incrudible/ui/collapsible'
 
 const menuItemClasses =
   'w-full flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary whitespace-nowrap'
 
-const isRouteActive = (item: MenuItem, url: string, routePrefix: string): boolean => {
+const isRouteActive = (
+  item: MenuItem,
+  url: string,
+  routePrefix: string,
+): boolean => {
   if (item.route) {
-    return url === route(`${routePrefix}.${item.route}`, undefined, false)
+    const currentRouteUrl = route(
+      `${routePrefix}.${item.route}`,
+      undefined,
+      false,
+    )
+    // Allow partial matching by checking if the current URL starts with the route URL
+    return url.startsWith(currentRouteUrl)
   }
-  return item.items?.some((child) => isRouteActive(child, url, routePrefix)) || false
+
+  // For parent items without a route, check if any child route is active
+  if (item.items && item.items.length > 0) {
+    return item.items.some((child) => isRouteActive(child, url, routePrefix))
+  }
+
+  return false
 }
 
 const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
@@ -37,10 +56,16 @@ const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
       <CollapsibleTrigger className={menuItemClasses}>
         {IconComponent && <IconComponent className="h-4 w-4" />}
         {item.label}
-        {isOpen ? <Icons.ChevronUp className="ml-auto h-4 w-4" /> : <Icons.ChevronDown className="ml-auto h-4 w-4" />}
+        {isOpen ? (
+          <Icons.ChevronUp className="ml-auto h-4 w-4" />
+        ) : (
+          <Icons.ChevronDown className="ml-auto h-4 w-4" />
+        )}
       </CollapsibleTrigger>
       <CollapsibleContent className="">
-        {item.items?.map((item) => <MenuItemComponent key={item.label} item={item} />)}
+        {item.items?.map((item) => (
+          <MenuItemComponent key={item.label} item={item} />
+        ))}
       </CollapsibleContent>
     </Collapsible>
   ) : (
@@ -56,5 +81,7 @@ const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
 
 export const MainNavigation: React.FC = () => {
   const { menu } = usePage<PageProps>().props.incrudible
-  return menu?.items.map((item) => <MenuItemComponent key={item.label} item={item} />)
+  return menu?.items.map((item) => (
+    <MenuItemComponent key={item.label} item={item} />
+  ))
 }
