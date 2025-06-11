@@ -26,10 +26,13 @@ const isRouteActive = (
     // Allow partial matching by checking if the current URL starts with the route URL
     return url.startsWith(currentRouteUrl)
   }
-  // Recursively check if any child route is active
-  return (
-    item.items?.some((child) => isRouteActive(child, url, routePrefix)) || false
-  )
+
+  // For parent items without a route, check if any child route is active
+  if (item.items && item.items.length > 0) {
+    return item.items.some((child) => isRouteActive(child, url, routePrefix))
+  }
+
+  return false
 }
 
 const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
