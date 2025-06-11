@@ -7,26 +7,31 @@ import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
 import { Input } from '@/Incrudible/ui/input'
 import { cn } from '@/lib/utils'
-import { Role, Filters, PagedResource, PageProps, PagingConfig, TableActionConfig } from '@/types/incrudible'
+import {
+  Role,
+  Filters,
+  PagedResource,
+  PageProps,
+  PagingConfig,
+  TableActionConfig,
+} from '@/types/incrudible'
 import { Head, Link, router, usePage } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { SortingState } from '@tanstack/react-table'
-import { useDebounce } from '@uidotdev/usehooks'
 import { Plus, Search, TriangleAlert } from 'lucide-react'
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function RoleIndex({
   auth,
-  
+
   listable,
   paging,
   actions,
   create: allowCreate,
-}: PageProps<{ 
-  
-  listable: string[] 
-  actions: TableActionConfig[] 
-  paging: PagingConfig 
+}: PageProps<{
+  listable: string[]
+  actions: TableActionConfig[]
+  paging: PagingConfig
   create: boolean
 }>) {
   const props = usePage<PageProps>().props
@@ -41,37 +46,39 @@ export default function RoleIndex({
   const params = new URLSearchParams(query)
   const routeKey = 'roles.index'
 
-  const [filters, setFilters] = useState<Filters>({
+  // Extract filters directly from URL params
+  const filters: Filters = {
     page: params.get('page') ? parseInt(params.get('page') as string) : 1,
-     perPage: params.get('perPage')
+    perPage: params.get('perPage')
       ? parseInt(params.get('perPage') as string)
       : paging.default,
     orderBy: params.get('orderBy') ?? 'created_at',
     orderDir: params.get('orderDir') ?? 'desc',
-    search: '',
-  })
+    search: params.get('search') ?? undefined,
+  }
 
-  const debouncedFilters = useDebounce(filters, 500)
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateFilters({
+      search: e.target.value || undefined,
+      page: 1, // Reset to first page on search change
+    })
+  }
 
-  // Sync filters state with URL search params
-  useLayoutEffect(() => {
-    const page = params.get('page')
-    if (page && parseInt(page) !== filters.page) {
-      setFilters({ ...filters, page: parseInt(page) })
+  // Helper function to update URL with new filters
+  const updateFilters = (newFilters: Partial<Filters>) => {
+    const updatedFilters = { ...filters, ...newFilters }
+
+    // Remove empty search param
+    if (!updatedFilters.search) {
+      delete updatedFilters.search
     }
-    const perPage = params.get('perPage')
-    if (perPage && parseInt(perPage) !== filters.perPage) {
-      setFilters({ ...filters, perPage: parseInt(perPage) })
-    }
-    const orderBy = params.get('orderBy')
-    if (orderBy && orderBy !== filters.orderBy) {
-      setFilters({ ...filters, orderBy })
-    }
-    const orderDir = params.get('orderDir')
-    if (orderDir && orderDir !== filters.orderDir) {
-      setFilters({ ...filters, orderDir })
-    }
-  }, [])
+
+    router.get(location, updatedFilters, {
+      preserveState: true,
+      preserveScroll: true,
+      replace: true,
+    })
+  }
 
   const baseRoute = route(`${routePrefix}.${routeKey}`, [])
 
@@ -82,8 +89,8 @@ export default function RoleIndex({
     data: roles,
     error,
   } = useQuery<PagedResource<Role>, Error>({
-    queryKey: [routeKey, debouncedFilters],
-    queryFn: () => getCrudIndex(baseRoute, debouncedFilters),
+    queryKey: [routeKey, filters],
+    queryFn: () => getCrudIndex(baseRoute, filters),
   })
 
   // Actions callback
@@ -95,13 +102,13 @@ export default function RoleIndex({
         onBefore: () => confirm('Are you sure you want to delete this role?'),
         onSuccess: () => {
           toast({
-            title: 'Role successfully deleted',
+            title: 'Role deleted successfully',
           })
           queryClient.invalidateQueries({
             queryKey: [routeKey, filters],
           })
         },
-        onError: (error) => {
+        onError: () => {
           toast({
             title: 'Error deleting role',
             description: 'Please try again later',
@@ -121,14 +128,18 @@ export default function RoleIndex({
   // Sorting state
   const [sorting, setSorting] = useState<SortingState>([
     { id: filters.orderBy, desc: filters.orderDir === 'desc' },
-  ]) // can set initial sorting state here
+  ])
 
   useEffect(() => {
-    setFilters({
-      ...filters,
-      orderBy: sorting[0]?.id ?? 'created_at',
-      orderDir: sorting[0]?.desc ? 'desc' : 'asc',
-    })
+    const newOrderBy = sorting[0]?.id ?? 'created_at'
+    const newOrderDir = sorting[0]?.desc ? 'desc' : 'asc'
+
+    if (newOrderBy !== filters.orderBy || newOrderDir !== filters.orderDir) {
+      updateFilters({
+        orderBy: newOrderBy,
+        orderDir: newOrderDir,
+      })
+    }
   }, [sorting])
 
   return (
@@ -139,17 +150,12 @@ export default function RoleIndex({
           <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
             Roles
           </h2>
-          <form
-            className="ml-4 flex-1"
-            onChange={(e) => {
-              const target = e.target as HTMLInputElement
-              setFilters({ ...filters, search: target.value })
-            }}
-          >
+          <form className="ml-4 flex-1">
             <div className="relative min-w-96 md:w-2/3 lg:w-1/2 xl:w-1/4">
               <Search className="absolute left-2.5 top-3 size-4 text-muted-foreground" />
               <Input
-                defaultValue={filters.search}
+                defaultValue={filters.search ?? ''}
+                onChange={handleSearchChange}
                 type="search"
                 placeholder="Search..."
                 className="w-full appearance-none bg-background pl-8 shadow-none"
@@ -189,20 +195,9 @@ export default function RoleIndex({
           />
           <TablePagination
             meta={roles.meta}
-            onPageSelect={(page) =>
-              router.get(location, {
-                ...filters,
-                page,
-              })
-            }
+            onPageSelect={(page) => updateFilters({ page })}
             perPage={filters.perPage}
-            onPerPageChange={(perPage) =>
-              router.get(location, {
-                ...filters,
-                page: 1,
-                perPage,
-              })
-            }
+            onPerPageChange={(perPage) => updateFilters({ page: 1, perPage })}
           />
         </>
       )}
