@@ -14,7 +14,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        // Binding the schema rules interface to the SQLite driver
+        // Binding the schema rules interface to the SQLite driver.
         $this->app->bind(SchemaRulesResolverInterface::class, SchemaRulesResolverSqlite::class);
 
         $this->loadLaravelMigrations();
