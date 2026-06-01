@@ -1,5 +1,7 @@
 <?php
 
+use App\Incrudible\Enum\FieldTypes;
+
 return [
     //
     'index' => [
@@ -54,7 +56,7 @@ return [
         'fields' => [
             [
                 'name' => 'username',
-                'type' => App\Incrudible\Enum\FieldTypes::TEXT,
+                'type' => FieldTypes::TEXT,
                 'label' => 'Username',
                 'placeholder' => 'Username',
                 'options' => null,
@@ -68,7 +70,7 @@ return [
             ],
             [
                 'name' => 'email',
-                'type' => App\Incrudible\Enum\FieldTypes::EMAIL,
+                'type' => FieldTypes::EMAIL,
                 'label' => 'Email',
                 'placeholder' => 'Email',
                 'options' => null,
@@ -82,7 +84,7 @@ return [
             ],
             [
                 'name' => 'password',
-                'type' => App\Incrudible\Enum\FieldTypes::PASSWORD,
+                'type' => FieldTypes::PASSWORD,
                 'label' => 'Password',
                 'placeholder' => 'Password',
                 'options' => null,
@@ -96,7 +98,7 @@ return [
             ],
             [
                 'name' => 'password_confirmation',
-                'type' => App\Incrudible\Enum\FieldTypes::PASSWORD,
+                'type' => FieldTypes::PASSWORD,
                 'label' => 'Password Confirmation',
                 'placeholder' => 'Password Confirmation',
                 'options' => null,
@@ -152,7 +154,7 @@ return [
         'fields' => [
             [
                 'name' => 'username',
-                'type' => App\Incrudible\Enum\FieldTypes::TEXT,
+                'type' => FieldTypes::TEXT,
                 'label' => 'Username',
                 'placeholder' => 'Username',
                 'options' => null,

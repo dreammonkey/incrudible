@@ -1,6 +1,5 @@
 import { getCrudIndex } from '@/Incrudible/Api/Crud'
 import { createColumns } from '@/Incrudible/Helpers/table-helpers'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
 import { cn } from '@/lib/utils'
@@ -17,8 +16,6 @@ interface HasManyProps<T> {
 }
 
 export const HasMany = <T extends CrudResource>({ resource, relation }: HasManyProps<T>) => {
-  const { routePrefix } = useIncrudible()
-
   const [filters, setFilters] = useState<Filters>({
     page: 1,
     perPage: relation.paging.default,
@@ -27,11 +24,10 @@ export const HasMany = <T extends CrudResource>({ resource, relation }: HasManyP
     search: '',
   })
 
-  // console.log('HasMany', resource, relation)
-  // console.log(route(`${routePrefix}.${relation.route}.index`, resource.data.id))
   const { data, isLoading, isError, isSuccess, error } = useQuery<PagedResource<T>>({
-    queryFn: () => getCrudIndex(route(`${routePrefix}.${relation.route}.index`, resource.data.id), filters),
-    queryKey: [relation?.route, filters],
+    queryFn: () => getCrudIndex(relation.urls.index, filters),
+    queryKey: [relation.urls.index, filters],
+    enabled: Boolean(relation.urls.index),
   })
 
   const columns = useMemo(
@@ -47,7 +43,7 @@ export const HasMany = <T extends CrudResource>({ resource, relation }: HasManyP
         </h3>
         <form>{/* TODO: Search */}</form>
         <Link
-          href={route(`${routePrefix}.${relation.route}.create`, resource.data.id)}
+          href={relation.urls.create}
           className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
         >
           <Plus className="size-4" />

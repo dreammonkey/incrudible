@@ -2,6 +2,16 @@
 
 namespace Incrudible\Incrudible;
 
+use Illuminate\Routing\Router;
+use Incrudible\Incrudible\Commands\CreateAdmin;
+use Incrudible\Incrudible\Commands\Crud\Config\CrudConfigMakeCommand;
+use Incrudible\Incrudible\Commands\Crud\Controller\CrudControllerMakeCommand;
+use Incrudible\Incrudible\Commands\Crud\CrudMakeCommand;
+use Incrudible\Incrudible\Commands\Crud\Frontend\CrudFrontendMakeCommand;
+use Incrudible\Incrudible\Commands\Crud\Model\CrudModelMakeCommand;
+use Incrudible\Incrudible\Commands\Crud\Request\CrudRequestMakeCommand;
+use Incrudible\Incrudible\Commands\Crud\Resource\CrudResourceMakeCommand;
+use Incrudible\Incrudible\Commands\ScaffoldIncrudible;
 use Incrudible\Incrudible\Traits\RegistersAuthProvider;
 use Incrudible\Incrudible\Traits\RegistersMiddleware;
 use Incrudible\Incrudible\Traits\RegistersRouteMacros;
@@ -31,15 +41,15 @@ class IncrudibleServiceProvider extends PackageServiceProvider
                 'create_admins_table',
             ])
             ->hasCommands([
-                \Incrudible\Incrudible\Commands\ScaffoldIncrudible::class,
-                \Incrudible\Incrudible\Commands\CreateAdmin::class,
-                \Incrudible\Incrudible\Commands\Crud\CrudMakeCommand::class,
-                \Incrudible\Incrudible\Commands\Crud\Config\CrudConfigMakeCommand::class,
-                \Incrudible\Incrudible\Commands\Crud\Model\CrudModelMakeCommand::class,
-                \Incrudible\Incrudible\Commands\Crud\Controller\CrudControllerMakeCommand::class,
-                \Incrudible\Incrudible\Commands\Crud\Request\CrudRequestMakeCommand::class,
-                \Incrudible\Incrudible\Commands\Crud\Resource\CrudResourceMakeCommand::class,
-                \Incrudible\Incrudible\Commands\Crud\Frontend\CrudFrontendMakeCommand::class,
+                ScaffoldIncrudible::class,
+                CreateAdmin::class,
+                CrudMakeCommand::class,
+                CrudConfigMakeCommand::class,
+                CrudModelMakeCommand::class,
+                CrudControllerMakeCommand::class,
+                CrudRequestMakeCommand::class,
+                CrudResourceMakeCommand::class,
+                CrudFrontendMakeCommand::class,
             ])
             ->hasInstallCommand(function (InstallCommand $command) {
 
@@ -58,8 +68,8 @@ class IncrudibleServiceProvider extends PackageServiceProvider
 
         $this->loadHelpers();
         $this->registerAuthProvider();
-        $this->registerMiddlewareGroup(app()->router);
-        $this->registerMiddlewareAliases(app()->router);
+        $this->registerMiddlewareGroup(app(Router::class));
+        $this->registerMiddlewareAliases(app(Router::class));
         $this->registerRouteMacros();
     }
 

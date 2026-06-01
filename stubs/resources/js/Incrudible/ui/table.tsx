@@ -14,7 +14,6 @@ const Table = React.forwardRef<
     />
   </div>
 ))
-// @ts-expect-error - displayName is a legacy prop
 Table.displayName = 'Table'
 
 const TableHeader = React.forwardRef<
@@ -23,7 +22,6 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
 ))
-// @ts-expect-error - displayName is a legacy prop
 TableHeader.displayName = 'TableHeader'
 
 const TableBody = React.forwardRef<
@@ -36,7 +34,6 @@ const TableBody = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 TableBody.displayName = 'TableBody'
 
 const TableFooter = React.forwardRef<
@@ -52,7 +49,6 @@ const TableFooter = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 TableFooter.displayName = 'TableFooter'
 
 const TableRow = React.forwardRef<
@@ -68,7 +64,6 @@ const TableRow = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 TableRow.displayName = 'TableRow'
 
 const TableHead = React.forwardRef<
@@ -84,7 +79,6 @@ const TableHead = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 TableHead.displayName = 'TableHead'
 
 const TableCell = React.forwardRef<
@@ -97,7 +91,6 @@ const TableCell = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 TableCell.displayName = 'TableCell'
 
 const TableCaption = React.forwardRef<
@@ -110,7 +103,6 @@ const TableCaption = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 TableCaption.displayName = 'TableCaption'
 
 export {

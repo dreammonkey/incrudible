@@ -90,7 +90,7 @@ class PermissionController extends Controller
         return inertia('Permissions/Edit', [
             'permission' => $permission->toResource(),
             ...config('incrudible.permissions.update'),
-            'relations' => $this->relations('permissions'),
+            'relations' => $this->relations('permissions', $permission),
         ]);
     }
 

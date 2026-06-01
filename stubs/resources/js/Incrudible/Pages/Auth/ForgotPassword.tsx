@@ -1,23 +1,22 @@
 import InputError from '@/Incrudible/Components/InputError'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import GuestLayout from '@/Incrudible/Layouts/GuestLayout'
 import { Button } from '@/Incrudible/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Incrudible/ui/card'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
+import AuthenticatedSessionController from '@/actions/App/Incrudible/Http/Controllers/Auth/AuthenticatedSessionController'
+import PasswordResetLinkController from '@/actions/App/Incrudible/Http/Controllers/Auth/PasswordResetLinkController'
 import { Head, Link, useForm } from '@inertiajs/react'
 import { FormEventHandler } from 'react'
 
 export default function ForgotPassword({ status = '' }: Readonly<{ status?: string }>) {
-  const { routePrefix } = useIncrudible()
-
   const { data, setData, post, processing, errors } = useForm({
     email: '',
   })
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
-    post(route(`${routePrefix}.auth.password.email`))
+    post(PasswordResetLinkController.store().url)
   }
 
   const disabled = status?.length > 0
@@ -52,7 +51,7 @@ export default function ForgotPassword({ status = '' }: Readonly<{ status?: stri
 
               <div className="mt-4 flex items-center justify-between">
                 <Link
-                  href={route(`${routePrefix}.auth.login`)}
+                  href={AuthenticatedSessionController.create()}
                   className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
                 >
                   Back to login

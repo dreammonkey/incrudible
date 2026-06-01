@@ -2,6 +2,8 @@
 
 namespace Incrudible\Incrudible\Traits;
 
+use App\Incrudible\Http\Middleware\MustAuthenticate;
+use App\Incrudible\Http\Middleware\MustConfirmPassword;
 use Illuminate\Routing\Router;
 use Incrudible\Incrudible\Facades\Incrudible;
 
@@ -21,11 +23,11 @@ trait RegistersMiddleware
     {
         $router->aliasMiddleware(
             'must-authenticate',
-            \App\Incrudible\Http\Middleware\MustAuthenticate::class
+            MustAuthenticate::class
         );
         $router->aliasMiddleware(
             'must-confirm-password',
-            \App\Incrudible\Http\Middleware\MustConfirmPassword::class
+            MustConfirmPassword::class
         );
     }
 }

@@ -26,7 +26,6 @@ const SheetOverlay = React.forwardRef<
     ref={ref}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 const sheetVariants = cva(
@@ -71,7 +70,6 @@ const SheetContent = React.forwardRef<
     </SheetPrimitive.Content>
   </SheetPortal>
 ))
-// @ts-expect-error - displayName is a legacy prop
 SheetContent.displayName = SheetPrimitive.Content.displayName
 
 const SheetHeader = ({
@@ -115,7 +113,6 @@ const SheetTitle = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 SheetTitle.displayName = SheetPrimitive.Title.displayName
 
 const SheetDescription = React.forwardRef<
@@ -128,7 +125,6 @@ const SheetDescription = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 
 export {

@@ -2,20 +2,21 @@
 
 namespace Database\Factories;
 
+use App\Incrudible\Models\Permission;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Incrudible\Incrudible\Facades\Incrudible;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Incrudible\Models\Permission>
+ * @extends Factory<Permission>
  */
 class PermissionFactory extends Factory
 {
-    protected $model = \App\Incrudible\Models\Permission::class;
+    protected $model = Permission::class;
 
     /**
      * Define the model's default state.
      *
-     * @return array<string, mixed>
+     * @return array{name: string, guard_name: string}
      */
     public function definition(): array
     {

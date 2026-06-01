@@ -4,6 +4,7 @@ namespace Incrudible\Incrudible\Commands\Crud\Model;
 
 use Brick\VarExporter\VarExporter;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Incrudible\Incrudible\Traits\GeneratesCruds;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
 use Symfony\Component\Console\Input\InputArgument;
@@ -93,7 +94,7 @@ class CrudModelMakeCommand extends GeneratorCommand
         // dd($class);
         // $parents = $this->getParents();
 
-        $fillable = $this->generateFillableAttributes($class);
+        $fillable = $this->generateFillableAttributes();
 
         return str_replace(
             [
@@ -118,7 +119,7 @@ class CrudModelMakeCommand extends GeneratorCommand
      * @param  string  $name
      * @return string
      *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     protected function buildClass($name)
     {

@@ -15,21 +15,14 @@ const menuItemClasses =
 const isRouteActive = (
   item: MenuItem,
   url: string,
-  routePrefix: string,
 ): boolean => {
-  if (item.route) {
-    const currentRouteUrl = route(
-      `${routePrefix}.${item.route}`,
-      undefined,
-      false,
-    )
-    // Allow partial matching by checking if the current URL starts with the route URL
-    return url.startsWith(currentRouteUrl)
+  if (item.url) {
+    return url.startsWith(item.url)
   }
 
   // For parent items without a route, check if any child route is active
   if (item.items && item.items.length > 0) {
-    return item.items.some((child) => isRouteActive(child, url, routePrefix))
+    return item.items.some((child) => isRouteActive(child, url))
   }
 
   return false
@@ -37,9 +30,6 @@ const isRouteActive = (
 
 const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
   const {
-    props: {
-      incrudible: { routePrefix },
-    },
     url,
   } = usePage<PageProps>()
 
@@ -47,7 +37,7 @@ const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
     className?: string
   }>
 
-  const isActive = isRouteActive(item, url, routePrefix)
+  const isActive = isRouteActive(item, url)
 
   const [isOpen, setIsOpen] = useState(isActive)
 
@@ -70,7 +60,7 @@ const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
     </Collapsible>
   ) : (
     <Link
-      href={route(`${routePrefix}.${item.route}`)}
+      href={item.url ?? '#'}
       className={cn(isActive ? 'bg-muted text-primary' : '', menuItemClasses)}
     >
       {IconComponent && <IconComponent className="h-4 w-4" />}

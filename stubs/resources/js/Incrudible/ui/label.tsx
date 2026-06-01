@@ -19,7 +19,6 @@ const Label = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 Label.displayName = LabelPrimitive.Root.displayName
 
 export { Label }

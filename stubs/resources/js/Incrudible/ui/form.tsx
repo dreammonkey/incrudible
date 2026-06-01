@@ -82,7 +82,6 @@ const FormItem = React.forwardRef<
     </FormItemContext.Provider>
   )
 })
-// @ts-expect-error - displayName is a legacy prop
 FormItem.displayName = 'FormItem'
 
 const FormLabel = React.forwardRef<
@@ -100,7 +99,6 @@ const FormLabel = React.forwardRef<
     />
   )
 })
-// @ts-expect-error - displayName is a legacy prop
 FormLabel.displayName = 'FormLabel'
 
 const FormControl = React.forwardRef<
@@ -123,7 +121,6 @@ const FormControl = React.forwardRef<
     />
   )
 })
-// @ts-expect-error - displayName is a legacy prop
 FormControl.displayName = 'FormControl'
 
 const FormDescription = React.forwardRef<
@@ -141,7 +138,6 @@ const FormDescription = React.forwardRef<
     />
   )
 })
-// @ts-expect-error - displayName is a legacy prop
 FormDescription.displayName = 'FormDescription'
 
 const FormMessage = React.forwardRef<
@@ -166,7 +162,6 @@ const FormMessage = React.forwardRef<
     </p>
   )
 })
-// @ts-expect-error - displayName is a legacy prop
 FormMessage.displayName = 'FormMessage'
 
 export {

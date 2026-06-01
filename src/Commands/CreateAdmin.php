@@ -2,6 +2,7 @@
 
 namespace Incrudible\Incrudible\Commands;
 
+use App\Incrudible\Models\Admin;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
@@ -32,16 +33,16 @@ class CreateAdmin extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
         // check if the config file has already been published
         if (Incrudible::configNotPublished()) {
-            return $this->warn(
+            $this->warn(
                 'Please publish the config file first by running \'php artisan vendor:publish --provider="Incrudible\IncrudibleServiceProvider" --tag=config\''
             );
+
+            return self::FAILURE;
         }
 
         $this->info('Creating new admin user...');
@@ -61,6 +62,9 @@ class CreateAdmin extends Command
             $password = $this->secret('Password (leave blank to autogenerate)');
         }
 
+        $password = (string) $password;
+        $password_hashed = $password;
+
         if ($this->option('encrypt')) {
             $password = strlen($password) ? $password : Str::random(12);
             $password_hashed = Hash::make($password);
@@ -74,7 +78,7 @@ class CreateAdmin extends Command
         //     }
         // }
 
-        $model = config('incrudible.auth.user_model_fqn', \App\Incrudible\Models\Admin::class);
+        $model = config('incrudible.auth.user_model_fqn', Admin::class);
 
         $admin = new $model;
         $admin->username = $username;
@@ -99,5 +103,7 @@ class CreateAdmin extends Command
                 $this->warn('Most likely a admin user already exists with this email address.');
             }
         }
+
+        return self::SUCCESS;
     }
 }

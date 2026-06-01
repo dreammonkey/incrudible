@@ -1,9 +1,9 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import AdminController from '@/actions/App/Incrudible/Http/Controllers/AdminController'
 import { cn } from '@/lib/utils'
 import {
   Admin,
@@ -31,8 +31,6 @@ export default function AdminEdit({
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {
-  const { routePrefix } = useIncrudible()
-
   const { toast } = useToast()
 
   const formRef = useRef<FormRef<Admin>>(null!)
@@ -41,7 +39,7 @@ export default function AdminEdit({
     mutationFn: (data: Admin) => {
       return new Promise<void>((resolve, reject) => {
         router.put(
-          route(`${routePrefix}.admins.update`, [admin.data.id]),
+          AdminController.update([admin.data.id]),
           data,
           {
             onSuccess: () => {
@@ -92,7 +90,7 @@ export default function AdminEdit({
             Edit Admin
           </h2>
           <Link
-            href={route(`${routePrefix}.admins.index`, [])}
+            href={AdminController.index()}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',

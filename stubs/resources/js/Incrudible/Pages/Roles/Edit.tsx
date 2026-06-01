@@ -1,9 +1,9 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import { useToast } from '@/Incrudible/Hooks/use-toast'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import RoleController from '@/actions/App/Incrudible/Http/Controllers/RoleController'
 import { cn } from '@/lib/utils'
 import {
   Role,
@@ -32,14 +32,13 @@ export default function RoleEdit({
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {
-  const { routePrefix } = useIncrudible()
   const { toast } = useToast()
   const formRef = useRef<FormRef<Role>>(null!)
 
   const { mutate, status } = useMutation({
     mutationFn: (data: Role) => {
       return new Promise<void>((resolve, reject) => {
-        router.put(route(`${routePrefix}.roles.update`, [role.data.id]), data, {
+        router.put(RoleController.update([role.data.id]), data, {
           onSuccess: () => {
             resolve()
           },
@@ -87,7 +86,7 @@ export default function RoleEdit({
             Edit Role
           </h2>
           <Link
-            href={route(`${routePrefix}.roles.index`, [])}
+            href={RoleController.index()}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',

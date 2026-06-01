@@ -1,9 +1,9 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import { useToast } from '@/Incrudible/Hooks/use-toast'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import {{ routeController }} from '{{ routeControllerImport }}'
 import { cn } from '@/lib/utils'
 import { {{ parentImports }}{{ Model }}, CrudRelation, CrudResource, InputField, FormRules, PageProps, Resource } from '@/types/incrudible'
 import { Head, Link, router } from '@inertiajs/react'
@@ -25,14 +25,13 @@ export default function {{ Model }}Edit({
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {
-  const { routePrefix } = useIncrudible()
   const { toast } = useToast()
   const formRef = useRef<FormRef<{{ Model }}>>(null!)
 
   const { mutate, status } = useMutation({
     mutationFn: (data: {{ Model }}) => {
       return new Promise<void>((resolve, reject) => {
-        router.put(route(`${routePrefix}.{{ crudRoute }}.update`, {{ fullRouteParams }}), data, {
+        router.put({{ updateRoute }}, data, {
           onSuccess: () => {
             resolve()
           },
@@ -78,7 +77,7 @@ export default function {{ Model }}Edit({
         <>
           <h2 className="xs:ml-2 px-1 text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Edit {{ Model }}</h2>
           <Link
-            href={route(`${routePrefix}.{{ crudRoute }}.index`, {{ parentRouteParams }})}
+            href={{{ indexRoute }}}
             className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'ml-auto')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />

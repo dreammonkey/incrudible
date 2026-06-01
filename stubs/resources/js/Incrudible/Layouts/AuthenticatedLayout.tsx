@@ -1,4 +1,7 @@
 import { Button } from '@/Incrudible/ui/button'
+import AuthenticatedSessionController from '@/actions/App/Incrudible/Http/Controllers/Auth/AuthenticatedSessionController'
+import ProfileController from '@/actions/App/Incrudible/Http/Controllers/ProfileController'
+import SettingsController from '@/actions/App/Incrudible/Http/Controllers/SettingsController'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +16,6 @@ import { CircleUser, Menu, Package } from 'lucide-react'
 import { PropsWithChildren, ReactNode } from 'react'
 import { DarkModeToggle } from '../Components/DarkModeToggle'
 import { MainNavigation } from '../Components/MainNavigation'
-import { useIncrudible } from '../Hooks/use-incrudible'
 import { Toaster } from '../ui/toaster'
 
 export default function AuthenticatedLayout({
@@ -22,9 +24,6 @@ export default function AuthenticatedLayout({
   children,
 }: PropsWithChildren<{ admin: Resource<Admin>; header?: ReactNode }>) {
   // Toggle mobile menu
-
-  const { routePrefix } = useIncrudible()
-
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -133,7 +132,7 @@ export default function AuthenticatedLayout({
                 <DropdownMenuItem>
                   <Link
                     className="w-full"
-                    href={route(`${routePrefix}.settings`)}
+                    href={SettingsController.settings()}
                   >
                     Settings
                   </Link>
@@ -141,7 +140,7 @@ export default function AuthenticatedLayout({
                 <DropdownMenuItem>
                   <Link
                     className="w-full"
-                    href={route(`${routePrefix}.profile.edit`)}
+                    href={ProfileController.edit()}
                   >
                     Profile
                   </Link>
@@ -149,10 +148,9 @@ export default function AuthenticatedLayout({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Link
-                    method={'post'}
                     as="button"
                     className="w-full text-left"
-                    href={route(`${routePrefix}.logout`)}
+                    href={AuthenticatedSessionController.destroy()}
                   >
                     Logout
                   </Link>

@@ -1,8 +1,9 @@
 import InputError from '@/Incrudible/Components/InputError'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { Button } from '@/Incrudible/ui/button'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
+import EmailVerificationNotificationController from '@/actions/App/Incrudible/Http/Controllers/Auth/EmailVerificationNotificationController'
+import ProfileController from '@/actions/App/Incrudible/Http/Controllers/ProfileController'
 import { PageProps } from '@/types/incrudible'
 import { Transition } from '@headlessui/react'
 import { Link, useForm, usePage } from '@inertiajs/react'
@@ -17,7 +18,6 @@ export default function UpdateProfileInformation({
   status?: string
   className?: string
 }>) {
-  const { routePrefix } = useIncrudible()
   const admin = usePage<PageProps>().props.auth.admin.data
   console.log(admin)
 
@@ -29,7 +29,7 @@ export default function UpdateProfileInformation({
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
 
-    patch(route(`${routePrefix}.profile.update`))
+    patch(ProfileController.update().url)
   }
 
   return (
@@ -80,8 +80,7 @@ export default function UpdateProfileInformation({
             <p className="mt-2 text-sm text-gray-800 dark:text-gray-200">
               Your email address is unverified.
               <Link
-                href={route(`${routePrefix}.auth.verification.send`)}
-                method="post"
+                href={EmailVerificationNotificationController.store()}
                 as="button"
                 className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
               >

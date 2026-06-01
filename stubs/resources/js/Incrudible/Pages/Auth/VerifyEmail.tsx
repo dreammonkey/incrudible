@@ -1,18 +1,17 @@
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import GuestLayout from '@/Incrudible/Layouts/GuestLayout'
 import { Button } from '@/Incrudible/ui/button'
+import AuthenticatedSessionController from '@/actions/App/Incrudible/Http/Controllers/Auth/AuthenticatedSessionController'
+import EmailVerificationNotificationController from '@/actions/App/Incrudible/Http/Controllers/Auth/EmailVerificationNotificationController'
 import { Head, Link, useForm } from '@inertiajs/react'
 import { FormEventHandler } from 'react'
 
 export default function VerifyEmail({ status }: Readonly<{ status?: string }>) {
-  const { routePrefix } = useIncrudible()
-
   const { post, processing } = useForm({})
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
 
-    post(route(`${routePrefix}.verification.send`))
+    post(EmailVerificationNotificationController.store().url)
   }
 
   return (
@@ -35,8 +34,7 @@ export default function VerifyEmail({ status }: Readonly<{ status?: string }>) {
           <Button disabled={processing}>Resend Verification Email</Button>
 
           <Link
-            href={route(`${routePrefix}.auth.logout`)}
-            method="post"
+            href={AuthenticatedSessionController.destroy()}
             as="button"
             className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
           >

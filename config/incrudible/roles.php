@@ -1,5 +1,7 @@
 <?php
 
+use App\Incrudible\Enum\FieldTypes;
+
 return [
     //
     'index' => [
@@ -54,7 +56,7 @@ return [
         'fields' => [
             [
                 'name' => 'name',
-                'type' => App\Incrudible\Enum\FieldTypes::TEXT,
+                'type' => FieldTypes::TEXT,
                 'label' => 'Name',
                 'placeholder' => 'Name',
                 'options' => null,
@@ -68,7 +70,7 @@ return [
             ],
             [
                 'name' => 'guard_name',
-                'type' => App\Incrudible\Enum\FieldTypes::TEXT,
+                'type' => FieldTypes::TEXT,
                 'label' => 'Guard_name',
                 'placeholder' => 'Guard_name',
                 'options' => null,
@@ -102,7 +104,7 @@ return [
         'fields' => [
             [
                 'name' => 'name',
-                'type' => App\Incrudible\Enum\FieldTypes::TEXT,
+                'type' => FieldTypes::TEXT,
                 'label' => 'Name',
                 'placeholder' => 'Name',
                 'options' => null,
@@ -116,7 +118,7 @@ return [
             ],
             [
                 'name' => 'guard_name',
-                'type' => App\Incrudible\Enum\FieldTypes::TEXT,
+                'type' => FieldTypes::TEXT,
                 'label' => 'Guard_name',
                 'placeholder' => 'Guard_name',
                 'options' => null,

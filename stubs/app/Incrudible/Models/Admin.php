@@ -3,6 +3,7 @@
 namespace App\Incrudible\Models;
 
 use App\Incrudible\Http\Resources\AdminResource;
+use App\Incrudible\Notifications\ResetPassword;
 use Database\Factories\AdminFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +11,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property string $username
+ * @property string $email
+ * @property string $password
+ */
 class Admin extends Authenticatable
 {
     use HasFactory, HasRoles, Notifiable;
@@ -48,7 +54,7 @@ class Admin extends Authenticatable
     /**
      * Transform model into a resource.
      */
-    public function toResource(): AdminResource
+    public function toResource(?string $resourceClass = null): AdminResource
     {
         return new AdminResource($this);
     }
@@ -69,6 +75,6 @@ class Admin extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new \App\Incrudible\Notifications\ResetPassword($token));
+        $this->notify(new ResetPassword($token));
     }
 }

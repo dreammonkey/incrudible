@@ -3,8 +3,7 @@
 namespace Incrudible\Incrudible\Tests;
 
 use Incrudible\Incrudible\IncrudibleServiceProvider;
-use LaracraftTech\LaravelSchemaRules\Contracts\SchemaRulesResolverInterface;
-use LaracraftTech\LaravelSchemaRules\Resolvers\SchemaRulesResolverSqlite;
+use Inertia\ServiceProvider as InertiaServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\Permission\PermissionServiceProvider;
 
@@ -14,9 +13,6 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        // Binding the schema rules interface to the SQLite driver
-        $this->app->bind(SchemaRulesResolverInterface::class, SchemaRulesResolverSqlite::class);
-
         $this->loadLaravelMigrations();
 
         $this->withoutVite();
@@ -25,6 +21,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
+            InertiaServiceProvider::class,
             IncrudibleServiceProvider::class,
             PermissionServiceProvider::class,
         ];
@@ -32,10 +29,9 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app)
     {
-        // Make sure the database is in memory
         config()->set('database.default', 'testing');
+        config()->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
 
-        // Manually set the configuration for builtin cruds
         config()->set('incrudible.admins', require __DIR__ . '/../config/incrudible/admins.php');
         config()->set('incrudible.roles', require __DIR__ . '/../config/incrudible/roles.php');
         config()->set('incrudible.permissions', require __DIR__ . '/../config/incrudible/permissions.php');

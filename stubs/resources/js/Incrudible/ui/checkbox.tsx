@@ -23,7 +23,6 @@ const Checkbox = React.forwardRef<
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ))
-// @ts-expect-error - displayName is a legacy prop
 Checkbox.displayName = CheckboxPrimitive.Root.displayName
 
 export { Checkbox }

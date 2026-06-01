@@ -1,8 +1,8 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import RoleController from '@/actions/App/Incrudible/Http/Controllers/RoleController'
 import { cn } from '@/lib/utils'
 import { Role, InputField, FormRules, PageProps } from '@/types/incrudible'
 import { Head, Link, router } from '@inertiajs/react'
@@ -19,7 +19,6 @@ export default function RoleCreate({
   fields: InputField[]
   rules: FormRules
 }>) {
-  const { routePrefix } = useIncrudible()
   const { toast } = useToast()
   const formRef = useRef<FormRef<Role>>(null!)
 
@@ -27,7 +26,7 @@ export default function RoleCreate({
     mutationFn: (data: Role) => {
       /** Inertia js router.* does not support async requests */
       return new Promise<void>((resolve, reject) => {
-        router.post(route(`${routePrefix}.roles.store`, []), data, {
+        router.post(RoleController.store(), data, {
           onSuccess: () => {
             resolve()
           },
@@ -73,7 +72,7 @@ export default function RoleCreate({
             Create Role
           </h2>
           <Link
-            href={route(`${routePrefix}.roles.index`, [])}
+            href={RoleController.index()}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',

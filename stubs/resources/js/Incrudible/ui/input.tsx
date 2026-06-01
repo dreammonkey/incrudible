@@ -17,7 +17,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
     />
   )
 })
-// @ts-expect-error - displayName is a legacy prop
 Input.displayName = 'Input'
 
 export { Input }

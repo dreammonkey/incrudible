@@ -28,7 +28,6 @@ const SelectTrigger = React.forwardRef<
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ))
-// @ts-expect-error - displayName is a legacy prop
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 const SelectScrollUpButton = React.forwardRef<
@@ -46,7 +45,6 @@ const SelectScrollUpButton = React.forwardRef<
     <ChevronUp className="h-4 w-4" />
   </SelectPrimitive.ScrollUpButton>
 ))
-// @ts-expect-error - displayName is a legacy prop
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName
 
 const SelectScrollDownButton = React.forwardRef<
@@ -64,7 +62,6 @@ const SelectScrollDownButton = React.forwardRef<
     <ChevronDown className="h-4 w-4" />
   </SelectPrimitive.ScrollDownButton>
 ))
-// @ts-expect-error - displayName is a legacy prop
 SelectScrollDownButton.displayName =
   SelectPrimitive.ScrollDownButton.displayName
 
@@ -98,7 +95,6 @@ const SelectContent = React.forwardRef<
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ))
-// @ts-expect-error - displayName is a legacy prop
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
 const SelectLabel = React.forwardRef<
@@ -111,7 +107,6 @@ const SelectLabel = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 SelectLabel.displayName = SelectPrimitive.Label.displayName
 
 const SelectItem = React.forwardRef<
@@ -135,7 +130,6 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
 ))
-// @ts-expect-error - displayName is a legacy prop
 SelectItem.displayName = SelectPrimitive.Item.displayName
 
 const SelectSeparator = React.forwardRef<
@@ -148,7 +142,6 @@ const SelectSeparator = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 
 export {

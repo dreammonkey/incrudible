@@ -6,6 +6,7 @@ import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
 import { DataTable } from '@/Incrudible/ui/data-table'
 import { Input } from '@/Incrudible/ui/input'
+import AdminController from '@/actions/App/Incrudible/Http/Controllers/AdminController'
 import { cn } from '@/lib/utils'
 import {
   Admin,
@@ -34,16 +35,11 @@ export default function AdminIndex({
   paging: PagingConfig
   create: boolean
 }>) {
-  const props = usePage<PageProps>().props
+  const { url } = usePage<PageProps>()
   const { toast } = useToast()
   const queryClient = useQueryClient()
 
-  const {
-    incrudible: { routePrefix },
-    ziggy: { query, location },
-  } = props
-
-  const params = new URLSearchParams(query)
+  const params = new URLSearchParams(url.split('?')[1] ?? '')
   const routeKey = 'admins.index'
 
   // Extract filters directly from URL params
@@ -73,14 +69,14 @@ export default function AdminIndex({
       delete updatedFilters.search
     }
 
-    router.get(location, updatedFilters, {
+    router.get(AdminController.index().url, updatedFilters, {
       preserveState: true,
       preserveScroll: true,
       replace: true,
     })
   }
 
-  const baseRoute = route(`${routePrefix}.${routeKey}`, [])
+  const baseRoute = AdminController.index().url
 
   const {
     isLoading,
@@ -164,7 +160,7 @@ export default function AdminIndex({
           </form>
           {allowCreate && (
             <Link
-              href={route(`${routePrefix}.admins.create`, [])}
+              href={AdminController.create()}
               className={cn(
                 buttonVariants({ variant: 'outline', size: 'sm' }),
                 'ml-auto',

@@ -1,18 +1,21 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "default",
+  "style": "new-york",
   "rsc": false,
   "tsx": true,
   "tailwind": {
-    "config": "tailwind.config.js",
-    "css": "resources/css/app.css",
-    "baseColor": "stone",
+    "config": "",
+    "css": "resources/css/incrudible.css",
+    "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
     "components": "@/Incrudible/Components",
     "ui": "@/Incrudible/ui",
-    "utils": "@/lib/utils"
-  }
+    "utils": "@/lib/utils",
+    "lib": "@/lib",
+    "hooks": "@/Incrudible/Hooks"
+  },
+  "iconLibrary": "lucide"
 }

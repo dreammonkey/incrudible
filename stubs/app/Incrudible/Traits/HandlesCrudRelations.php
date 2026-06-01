@@ -9,7 +9,7 @@ trait HandlesCrudRelations
     /**
      * Define relations for the model.
      */
-    public function relations(string $route): array
+    public function relations(string $route, mixed $resource = null): array
     {
         $routePrefix = Incrudible::routePrefix();
         $relationsConfig = config("{$routePrefix}.{$route}.relations");
@@ -25,6 +25,10 @@ trait HandlesCrudRelations
                 case 'HasMany':
                     $relations[] = [
                         ...$config,
+                        'urls' => [
+                            'index' => $this->relationUrl("{$relationRoute}.index", $resource),
+                            'create' => $this->relationUrl("{$relationRoute}.create", $resource),
+                        ],
                         ...config("{$routePrefix}.{$relationRoute}.index"),
                     ];
                     break;
@@ -38,6 +42,11 @@ trait HandlesCrudRelations
                         'enabled' => true,
                         'type' => $config['type'],
                         'route' => $relationRoute,
+                        'urls' => [
+                            'value' => $this->relationUrl("{$relationRoute}.value", $resource),
+                            'options' => $this->relationUrl("{$relationRoute}.options", $resource),
+                            'update' => $this->relationUrl("{$relationRoute}.update", $resource),
+                        ],
                         'idKey' => $config['idKey'],
                         'labelKey' => $config['labelKey'],
                     ];
@@ -49,5 +58,14 @@ trait HandlesCrudRelations
         }
 
         return $relations;
+    }
+
+    private function relationUrl(string $name, mixed $resource = null): string
+    {
+        try {
+            return incrudible_route($name, $resource ? [$resource] : [], false);
+        } catch (\Throwable) {
+            return '';
+        }
     }
 }

@@ -1,15 +1,13 @@
 import InputError from '@/Incrudible/Components/InputError'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import GuestLayout from '@/Incrudible/Layouts/GuestLayout'
 import { Button } from '@/Incrudible/ui/button'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
+import AuthenticatedSessionController from '@/actions/App/Incrudible/Http/Controllers/Auth/AuthenticatedSessionController'
 import { Head, Link, useForm } from '@inertiajs/react'
 import { FormEventHandler, useEffect } from 'react'
 
 export default function Register() {
-  const { routePrefix } = useIncrudible()
-
   const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
     email: '',
@@ -26,7 +24,7 @@ export default function Register() {
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
 
-    post(route(`${routePrefix}.auth.register`))
+    post('#')
   }
 
   return (
@@ -99,7 +97,7 @@ export default function Register() {
 
         <div className="mt-4 flex items-center justify-end">
           <Link
-            href={route(`${routePrefix}.auth.login`)}
+            href={AuthenticatedSessionController.create()}
             className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
           >
             Already registered?

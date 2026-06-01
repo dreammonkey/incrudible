@@ -81,7 +81,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }
   },
 )
-// @ts-expect-error - displayName is a legacy prop
 Button.displayName = 'Button'
 
 export { Button, buttonVariants }

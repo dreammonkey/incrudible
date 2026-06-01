@@ -1,15 +1,13 @@
 import InputError from '@/Incrudible/Components/InputError'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import GuestLayout from '@/Incrudible/Layouts/GuestLayout'
 import { Button } from '@/Incrudible/ui/button'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
+import ConfirmablePasswordController from '@/actions/App/Incrudible/Http/Controllers/Auth/ConfirmablePasswordController'
 import { Head, useForm } from '@inertiajs/react'
 import { FormEventHandler, useEffect } from 'react'
 
 export default function ConfirmPassword() {
-  const { routePrefix } = useIncrudible()
-
   const { data, setData, post, processing, errors, reset } = useForm({
     password: '',
   })
@@ -23,7 +21,7 @@ export default function ConfirmPassword() {
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
 
-    post(route(`${routePrefix}.password.confirm.post`))
+    post(ConfirmablePasswordController.store().url)
   }
 
   return (

@@ -4,9 +4,12 @@ use App\Incrudible\Http\Controllers\AdminController;
 use App\Incrudible\Http\Controllers\AdminRoleController;
 use App\Incrudible\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Incrudible\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Incrudible\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Incrudible\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Incrudible\Http\Controllers\Auth\NewPasswordController;
 use App\Incrudible\Http\Controllers\Auth\PasswordController;
 use App\Incrudible\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Incrudible\Http\Controllers\Auth\VerifyEmailController;
 use App\Incrudible\Http\Controllers\DashboardController;
 use App\Incrudible\Http\Controllers\PermissionController;
 use App\Incrudible\Http\Controllers\ProfileController;
@@ -60,16 +63,16 @@ Route::prefix(Incrudible::routePrefix())
         // Permissions
         Route::resource('permissions', PermissionController::class);
 
-        // Route::get('verify-email', EmailVerificationPromptController::class)
-        //     ->name('verification.notice');
+        Route::get('verify-email', EmailVerificationPromptController::class)
+            ->name('verification.notice');
 
-        // Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-        //     ->middleware(['signed', 'throttle:6,1'])
-        //     ->name('verification.verify');
+        Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+            ->middleware(['signed', 'throttle:6,1'])
+            ->name('verification.verify');
 
-        // Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-        //     ->middleware('throttle:6,1')
-        //     ->name('verification.send');
+        Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+            ->middleware('throttle:6,1')
+            ->name('verification.send');
 
         // Extra secured routes
         Route::get('settings', [SettingsController::class, 'settings'])

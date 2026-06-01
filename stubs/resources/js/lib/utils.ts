@@ -1,11 +1,16 @@
-import { FormRules } from '@/types/incrudible'
+import type { InertiaLinkProps } from '@inertiajs/react'
 import { clsx, type ClassValue } from 'clsx'
 import { format, parseISO } from 'date-fns'
 import { twMerge } from 'tailwind-merge'
 import { z } from 'zod'
+import type { FormRules } from '@/types/incrudible'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function toUrl(url: NonNullable<InertiaLinkProps['href']>): string {
+  return typeof url === 'string' ? url : url.url
 }
 
 export const formatDate = (dateString: string): string => {
@@ -34,7 +39,6 @@ export const convertLaravelToZod = (rules: FormRules): z.ZodObject<any> => {
           message: `${field} must be a valid date`,
         })
       } else if (validation.startsWith('date_format:')) {
-        const dateFormat = validation.split(':')[1]
         schema = z.string().refine((value) => !isNaN(Date.parse(value)), {
           message: `${field} must be a valid date`,
         })

@@ -19,7 +19,6 @@ const Command = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - the displayName is not a standard prop
 Command.displayName = CommandPrimitive.displayName
 
 interface CommandDialogProps extends DialogProps {}
@@ -53,7 +52,6 @@ const CommandInput = React.forwardRef<
   </div>
 ))
 
-// @ts-expect-error - the displayName is not a standard prop
 CommandInput.displayName = CommandPrimitive.Input.displayName
 
 const CommandList = React.forwardRef<
@@ -67,7 +65,6 @@ const CommandList = React.forwardRef<
   />
 ))
 
-// @ts-expect-error - the displayName is not a standard prop
 CommandList.displayName = CommandPrimitive.List.displayName
 
 const CommandEmpty = React.forwardRef<
@@ -75,7 +72,6 @@ const CommandEmpty = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>
 >((props, ref) => <CommandPrimitive.Empty ref={ref} className="py-6 text-center text-sm" {...props} />)
 
-// @ts-expect-error - the displayName is not a standard prop
 CommandEmpty.displayName = CommandPrimitive.Empty.displayName
 
 const CommandGroup = React.forwardRef<
@@ -92,7 +88,6 @@ const CommandGroup = React.forwardRef<
   />
 ))
 
-// @ts-expect-error - the displayName is not a standard prop
 CommandGroup.displayName = CommandPrimitive.Group.displayName
 
 const CommandSeparator = React.forwardRef<
@@ -101,7 +96,6 @@ const CommandSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator ref={ref} className={cn('-mx-1 h-px bg-border', className)} {...props} />
 ))
-// @ts-expect-error - the displayName is not a standard prop
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName
 
 const CommandItem = React.forwardRef<
@@ -118,7 +112,6 @@ const CommandItem = React.forwardRef<
   />
 ))
 
-// @ts-expect-error - the displayName is not a standard prop
 CommandItem.displayName = CommandPrimitive.Item.displayName
 
 const CommandShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {

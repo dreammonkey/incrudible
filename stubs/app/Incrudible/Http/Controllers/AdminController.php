@@ -92,7 +92,7 @@ class AdminController extends Controller
         return inertia('Admins/Edit', [
             'admin' => $admin->toResource(),
             ...config('incrudible.admins.update'),
-            'relations' => $this->relations('admins'),
+            'relations' => $this->relations('admins', $admin),
         ]);
     }
 

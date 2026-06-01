@@ -25,7 +25,7 @@ class Role extends SpatieRole
     /**
      * Transform model into a resource.
      */
-    public function toResource(): RoleResource
+    public function toResource(?string $resourceClass = null): RoleResource
     {
         return new RoleResource($this);
     }

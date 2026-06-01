@@ -126,6 +126,8 @@ class CrudFrontendMakeCommand extends GeneratorCommand
         // Get parent models for nested resources
         $parents = $this->getParents();
         $parentData = $this->getParentData($parents, $model);
+        $controller = $this->getControllerName($parents);
+        $controllerImport = $this->getControllerImport($controller);
         // dd($parentData);
 
         return str_replace(
@@ -140,6 +142,12 @@ class CrudFrontendMakeCommand extends GeneratorCommand
                 '{{ parentPropTypes }}',
                 '{{ parentRouteParams }}',
                 '{{ fullRouteParams }}',
+                '{{ routeController }}',
+                '{{ routeControllerImport }}',
+                '{{ indexRoute }}',
+                '{{ createRoute }}',
+                '{{ storeRoute }}',
+                '{{ updateRoute }}',
             ],
             [
                 $model,
@@ -152,9 +160,41 @@ class CrudFrontendMakeCommand extends GeneratorCommand
                 $parentData['parentPropTypes'],
                 $parentData['parentRouteParams'],
                 $parentData['fullRouteParams'],
+                $controller,
+                $controllerImport,
+                $this->routeMethodCall($controller, 'index', $parentData['parentRouteParams']),
+                $this->routeMethodCall($controller, 'create', $parentData['parentRouteParams']),
+                $this->routeMethodCall($controller, 'store', $parentData['parentRouteParams']),
+                $this->routeMethodCall($controller, 'update', $parentData['fullRouteParams']),
             ],
             $stub
         );
+    }
+
+    private function getControllerName(array $parents): string
+    {
+        $controller = $this->getModelName();
+
+        if ($parents) {
+            $controller = collect($parents)->reduce(function ($carry, $parent) {
+                return Str::studly(Str::singular($parent)) . $carry;
+            }, $controller);
+        }
+
+        return "{$controller}Controller";
+    }
+
+    private function getControllerImport(string $controller): string
+    {
+        $configuredNamespace = config('incrudible.namespace', 'App\\Incrudible');
+        $namespace = str_replace('\\', '/', is_string($configuredNamespace) ? $configuredNamespace : 'App\\Incrudible');
+
+        return "@/actions/{$namespace}/Http/Controllers/{$controller}";
+    }
+
+    private function routeMethodCall(string $controller, string $method, string $params): string
+    {
+        return "{$controller}.{$method}({$params})";
     }
 
     /**
@@ -167,7 +207,7 @@ class CrudFrontendMakeCommand extends GeneratorCommand
         $parentImports = '';
         $parentProps = '';
         $parentPropTypes = '';
-        $parentRouteParams = '';
+        $parentRouteParams = [];
 
         foreach ($parents as $index => $parent) {
             $parent = Str::singular($parent);
@@ -176,18 +216,18 @@ class CrudFrontendMakeCommand extends GeneratorCommand
             $parentImports .= "{$Parent}, ";
             $parentProps .= "{$parent},\n";
             $parentPropTypes .= "{$parent}: Resource<{$Parent}>\n";
-            $parentRouteParams .= "{$parent}.data.id, ";
+            $parentRouteParams[] = "{$parent}.data.id";
         }
 
         // Add the current model id for full route params
-        $fullRouteParams = $parentRouteParams . "{$model}.data.id";
+        $fullRouteParams = [...$parentRouteParams, "{$model}.data.id"];
 
         return [
             'parentImports' => $parentImports,
             'parentProps' => trim($parentProps, "\n"),
             'parentPropTypes' => trim($parentPropTypes, "\n"),
-            'parentRouteParams' => '[' . trim($parentRouteParams, ', ') . ']',
-            'fullRouteParams' => '[' . $fullRouteParams . ']',
+            'parentRouteParams' => count($parentRouteParams) > 0 ? '[' . implode(', ', $parentRouteParams) . ']' : '',
+            'fullRouteParams' => '[' . implode(', ', $fullRouteParams) . ']',
         ];
     }
 }

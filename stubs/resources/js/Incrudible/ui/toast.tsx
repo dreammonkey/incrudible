@@ -20,7 +20,6 @@ const ToastViewport = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error
 ToastViewport.displayName = ToastPrimitives.Viewport.displayName
 
 const toastVariants = cva(
@@ -52,7 +51,6 @@ const Toast = React.forwardRef<
     />
   )
 })
-// @ts-expect-error
 Toast.displayName = ToastPrimitives.Root.displayName
 
 const ToastAction = React.forwardRef<
@@ -68,7 +66,6 @@ const ToastAction = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error
 ToastAction.displayName = ToastPrimitives.Action.displayName
 
 const ToastClose = React.forwardRef<
@@ -87,7 +84,6 @@ const ToastClose = React.forwardRef<
     <X className="h-4 w-4" />
   </ToastPrimitives.Close>
 ))
-// @ts-expect-error
 ToastClose.displayName = ToastPrimitives.Close.displayName
 
 const ToastTitle = React.forwardRef<
@@ -100,7 +96,6 @@ const ToastTitle = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error
 ToastTitle.displayName = ToastPrimitives.Title.displayName
 
 const ToastDescription = React.forwardRef<
@@ -113,7 +108,6 @@ const ToastDescription = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error
 ToastDescription.displayName = ToastPrimitives.Description.displayName
 
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>

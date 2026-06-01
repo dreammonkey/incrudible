@@ -217,6 +217,8 @@ const IncrudibleForm = forwardRef(
       </section>
     )
   },
-)
+) as <T extends object>(
+  props: FormProps<T> & React.RefAttributes<FormRef<T>>,
+) => React.ReactElement
 
 export default IncrudibleForm

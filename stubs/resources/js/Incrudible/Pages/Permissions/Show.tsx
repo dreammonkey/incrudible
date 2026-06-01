@@ -1,7 +1,7 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import PermissionController from '@/actions/App/Incrudible/Http/Controllers/PermissionController'
 import { cn } from '@/lib/utils'
 import {
   Permission,
@@ -25,8 +25,6 @@ export default function PermissionShow({
   fields: InputField[]
   rules: FormRules
 }>) {
-  const { routePrefix } = useIncrudible()
-
   const formRef = useRef<FormRef<Permission>>(null!)
 
   return (
@@ -38,7 +36,7 @@ export default function PermissionShow({
             Show Permission
           </h2>
           <Link
-            href={route(`${routePrefix}.permissions.index`, [])}
+            href={PermissionController.index()}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',

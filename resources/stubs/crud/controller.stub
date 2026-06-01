@@ -90,7 +90,7 @@ class {{ class }} extends Controller
         return inertia('{{ Models }}/Edit', [
             '{{ model }}' => ${{ model }}->toResource(),
             ...config('incrudible.{{ models }}.update'),
-            'relations' => $this->relations('{{ crudRoute }}'),
+            'relations' => $this->relations('{{ crudRoute }}', ${{ model }}),
         ]);
     }
 

@@ -92,7 +92,7 @@ class RoleController extends Controller
         return inertia('Roles/Edit', [
             'role' => $role->toResource(),
             ...config('incrudible.roles.update'),
-            'relations' => $this->relations('roles'),
+            'relations' => $this->relations('roles', $role),
         ]);
     }
 

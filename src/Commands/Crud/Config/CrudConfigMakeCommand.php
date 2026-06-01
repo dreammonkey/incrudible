@@ -4,6 +4,7 @@ namespace Incrudible\Incrudible\Commands\Crud\Config;
 
 use Brick\VarExporter\VarExporter;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
 use Symfony\Component\Console\Input\InputArgument;
@@ -104,7 +105,7 @@ class CrudConfigMakeCommand extends GeneratorCommand
      *
      * @return bool|null
      *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function handle()
     {
@@ -131,6 +132,8 @@ class CrudConfigMakeCommand extends GeneratorCommand
         $this->files->put($path, $this->buildClass($name));
 
         $this->info($this->type . ' created successfully.');
+
+        return true;
     }
 
     /**
@@ -139,7 +142,7 @@ class CrudConfigMakeCommand extends GeneratorCommand
      * @param  string  $name
      * @return string
      *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     protected function buildClass($name)
     {

@@ -73,7 +73,7 @@ class CrudMakeCommand extends GeneratorCommand
         return '';
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         parent::initialize($input, $output);
 
@@ -206,5 +206,7 @@ class CrudMakeCommand extends GeneratorCommand
         $this->info('3. Add the necessary relationships to your models.');
         $this->info('4. Add the necessary relationships to your crud\'s config file.');
         $this->info('5. (optional) Create a pull request to make any of the aforementioned steps automatic.');
+
+        return true;
     }
 }

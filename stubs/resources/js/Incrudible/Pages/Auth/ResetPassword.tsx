@@ -1,10 +1,10 @@
 import InputError from '@/Incrudible/Components/InputError'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import GuestLayout from '@/Incrudible/Layouts/GuestLayout'
 import { Button } from '@/Incrudible/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Incrudible/ui/card'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
+import NewPasswordController from '@/actions/App/Incrudible/Http/Controllers/Auth/NewPasswordController'
 import { Head, useForm } from '@inertiajs/react'
 import { FormEventHandler, useEffect } from 'react'
 
@@ -15,8 +15,6 @@ export default function ResetPassword({
   token: string
   email: string
 }>) {
-  const { routePrefix } = useIncrudible()
-
   const { data, setData, post, processing, errors, reset } = useForm({
     token: token,
     email: email,
@@ -32,7 +30,7 @@ export default function ResetPassword({
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
-    post(route(`${routePrefix}.auth.password.store`))
+    post(NewPasswordController.store().url)
   }
 
   return (

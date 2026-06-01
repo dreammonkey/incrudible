@@ -71,6 +71,8 @@ const DateTimeInput = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref,
   ) => {
+    const { children: _children, ...inputProps } = props
+
     // Use this as a starting point for the calendar when the input is empty/invalid
     const [month, setMonth] = React.useState(new Date())
 
@@ -223,8 +225,6 @@ const DateTimeInput = React.forwardRef<HTMLInputElement, InputProps>(
           'group flex h-10 w-full items-center justify-start rounded-md border border-input bg-background px-3 ring-offset-background placeholder:text-muted-foreground focus-within:ring-2 focus-within:ring-black focus-within:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
           className,
         )}
-        ref={ref}
-        {...props}
       >
         <Popover>
           <PopoverTrigger disabled={disabled || readOnly}>
@@ -239,7 +239,8 @@ const DateTimeInput = React.forwardRef<HTMLInputElement, InputProps>(
             value={dateInputValue}
             onChange={handleDateInputChange}
             onBlur={validateDateInput}
-            {...props}
+            inputRef={ref}
+            {...inputProps}
           />
           <PopoverContent className="w-auto p-0">
             <Calendar
@@ -291,6 +292,6 @@ const DateTimeInput = React.forwardRef<HTMLInputElement, InputProps>(
     )
   },
 )
-;(DateTimeInput as React.FC<InputProps>).displayName = 'DateTimeInput'
+DateTimeInput.displayName = 'DateTimeInput'
 
 export { DateTimeInput }

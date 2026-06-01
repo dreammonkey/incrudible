@@ -1,5 +1,4 @@
 import { getCrudIndex } from '@/Incrudible/Api/Crud'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { Button } from '@/Incrudible/ui/button'
 import { Combobox } from '@/Incrudible/ui/combobox'
 import { DataTable } from '@/Incrudible/ui/data-table'
@@ -13,12 +12,16 @@ import { useForm } from '@inertiajs/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ColumnDef } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface BelongsToManyProps<T> {
   resource: Resource<T>
   relation: BelongsToManyCrudRelation<T>
   onChange?: (value: T[]) => void
+}
+
+type RelationFormItem = {
+  id: string | number
 }
 
 export const BelongsToMany = <T extends CrudResource>({
@@ -27,38 +30,38 @@ export const BelongsToMany = <T extends CrudResource>({
   onChange,
 }: BelongsToManyProps<T>) => {
   const queryClient = useQueryClient()
+  const [items, setItems] = useState<T[]>([])
 
-  const { routePrefix } = useIncrudible()
+  const formItems = (selectedItems: T[]): RelationFormItem[] =>
+    selectedItems.map((item) => ({
+      id: item[relation.idKey] as string | number,
+    }))
 
   const { data: values } = useQuery<PagedResource<T>>({
-    queryFn: () =>
-      getCrudIndex(
-        route(`${routePrefix}.${relation.route}.value`, resource.data.id),
-      ),
-    queryKey: [`${routePrefix}.${relation.route}.value`, resource.data.id],
+    queryFn: () => getCrudIndex(relation.urls.value),
+    queryKey: [relation.urls.value],
+    enabled: Boolean(relation.urls.value),
   })
 
   useEffect(() => {
     if (values?.data) {
-      setData({ items: values.data })
-      setDefaults({ items: values.data })
+      setItems(values.data)
+      setData({ items: formItems(values.data) })
+      setDefaults({ items: formItems(values.data) })
     }
   }, [values?.data])
 
   const { data: options } = useQuery<PagedResource<T>>({
-    queryFn: () =>
-      getCrudIndex(
-        route(`${routePrefix}.${relation.route}.options`, resource.data.id),
-      ),
-    queryKey: [`${routePrefix}.${relation.route}.options`, resource.data.id],
+    queryFn: () => getCrudIndex(relation.urls.options),
+    queryKey: [relation.urls.options],
+    enabled: Boolean(relation.urls.options),
   })
 
-  const updateRoute = route(
-    `${routePrefix}.${relation.route}.update`,
-    resource.data.id,
-  )
+  const updateRoute = relation.urls.update
 
-  const { data, put, setData, isDirty, setDefaults } = useForm<{ items: T[] }>({
+  const { put, setData, isDirty, setDefaults } = useForm<{
+    items: RelationFormItem[]
+  }>({
     items: [],
   })
 
@@ -76,13 +79,15 @@ export const BelongsToMany = <T extends CrudResource>({
         return (
           <div className="flex justify-end">
             <Button
-              onClick={() =>
-                setData({
-                  items: data.items.filter(
-                    (d) => d[relation.idKey] !== item[relation.idKey],
-                  ),
-                })
-              }
+              onClick={() => {
+                const nextItems = items.filter(
+                  (d) => d[relation.idKey] !== item[relation.idKey],
+                )
+
+                setItems(nextItems)
+                setData({ items: formItems(nextItems) })
+                onChange?.(nextItems)
+              }}
               variant="destructive"
               size="sm"
               className="mr-2"
@@ -113,23 +118,24 @@ export const BelongsToMany = <T extends CrudResource>({
           // filter out options that have already been selected (but have not yet been saved)
           options={((options?.data ?? []) as T[]).filter(
             (option) =>
-              !data.items.find(
+              !items.find(
                 (d) => d[relation.idKey] === option[relation.idKey],
               ),
           )}
           getKey={(option) => option[relation.idKey].toString()}
           getLabel={(option) => option[relation.labelKey]}
           onChange={(value) => {
-            setData({
-              items: [...data.items, value],
-            })
-            onChange?.([...data.items, value])
+            const nextItems = [...items, value]
+
+            setItems(nextItems)
+            setData({ items: formItems(nextItems) })
+            onChange?.(nextItems)
           }}
           placeholder={`Select ${relation.name}`}
         />
 
         <div>
-          <DataTable data={data.items} columns={columns} />
+          <DataTable data={items} columns={columns} />
         </div>
 
         <div>
@@ -141,16 +147,10 @@ export const BelongsToMany = <T extends CrudResource>({
                   setDefaults()
                   // invalidate queries
                   queryClient.invalidateQueries({
-                    queryKey: [
-                      `${routePrefix}.${relation.route}.value`,
-                      resource.data.id,
-                    ],
+                    queryKey: [relation.urls.value],
                   })
                   queryClient.invalidateQueries({
-                    queryKey: [
-                      `${routePrefix}.${relation.route}.options`,
-                      resource.data.id,
-                    ],
+                    queryKey: [relation.urls.options],
                   })
                 },
               })

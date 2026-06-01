@@ -23,7 +23,6 @@ const PaginationContent = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 PaginationContent.displayName = 'PaginationContent'
 
 const PaginationItem = React.forwardRef<
@@ -32,7 +31,6 @@ const PaginationItem = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <li ref={ref} className={cn('', className)} {...props} />
 ))
-// @ts-expect-error - displayName is a legacy prop
 PaginationItem.displayName = 'PaginationItem'
 
 type PaginationLinkProps = {

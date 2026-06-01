@@ -3,6 +3,7 @@
 namespace Incrudible\Incrudible\Commands\Crud\Resource;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
 use Incrudible\Incrudible\Traits\GeneratesCruds;
 use Incrudible\Incrudible\Traits\GeneratesFormRules;
@@ -114,7 +115,7 @@ class CrudResourceMakeCommand extends GeneratorCommand
      * @param  string  $name
      * @return string
      *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     protected function buildClass($name)
     {

@@ -172,4 +172,13 @@ function ComboboxInner<V, Option, Multiple extends boolean = false>(
   )
 }
 
-export const Combobox = forwardRef(ComboboxInner)
+export const Combobox = forwardRef(ComboboxInner) as <
+  V,
+  Option,
+  Multiple extends boolean = false,
+>(
+  props: UseSelectParams<V, Option, Multiple> &
+    UseSelectOptionsParams<V, Option> &
+    SelectProps &
+    React.RefAttributes<HTMLButtonElement>,
+) => React.ReactElement

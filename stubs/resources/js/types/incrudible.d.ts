@@ -1,18 +1,9 @@
 import { InputFieldType } from '@/Incrudible/Enum/Incrudible'
 import { CrudRelationType } from '@/Incrudible/Helpers/incrudible'
 import * as Icons from 'lucide-react'
-import { Config } from 'ziggy-js'
 
 // https://github.com/sveltejs/kit/issues/1997#issuecomment-887614097
 export type Typify<T> = { [K in keyof T]: Typify<T[K]> }
-
-// Redeclare forwardRef
-// SEE: https://fettblog.eu/typescript-react-generic-forward-refs/
-declare module 'react' {
-  function forwardRef<T, P = {}>(
-    render: (props: P, ref: React.Ref<T>) => React.ReactNode | null,
-  ): (props: P & React.RefAttributes<T>) => React.ReactNode | null
-}
 
 export interface TableActionConfig {
   label: string
@@ -160,6 +151,10 @@ export interface PagingConfig {
 export interface HasManyCrudRelation<T> extends CrudRelationBase<T> {
   type: CrudRelationType.HasMany
   route: string
+  urls: {
+    index: string
+    create: string
+  }
   listable: string[]
   sortable: string[]
   paging: PagingConfig
@@ -169,6 +164,11 @@ export interface HasManyCrudRelation<T> extends CrudRelationBase<T> {
 export interface BelongsToManyCrudRelation<T> extends CrudRelationBase<T> {
   type: CrudRelationType.BelongsToMany
   route: string
+  urls: {
+    value: string
+    options: string
+    update: string
+  }
   idKey: keyof T
   labelKey: keyof T
 }
@@ -215,7 +215,8 @@ export interface MenuItem {
   label: string
   icon: keyof typeof Icons
   route?: string
-  items: MenuItem[]
+  url?: string | null
+  items?: MenuItem[]
 }
 
 export type PageProps<
@@ -229,23 +230,16 @@ export type PageProps<
     }
     incrudible: {
       routePrefix: string
-      currentRouteName: string
+      currentRouteName: string | null
+      currentUrl: string
       menu: {
         items: MenuItem[]
         top_right_items: {
           label: string
           route: string
+          url?: string | null
         }[]
       }
       tenantId: string
-    }
-    ziggy: Config & {
-      location: string
-      query:
-        | string
-        | string[][]
-        | Record<string, string>
-        | URLSearchParams
-        | undefined
     }
   }>

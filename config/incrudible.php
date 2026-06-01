@@ -1,5 +1,12 @@
 <?php
 
+use App\Incrudible\Http\Middleware\HandleIncrudibleRequests;
+use App\Incrudible\Models\Admin;
+use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+
 // config for Incrudible/Incrudible
 return [
 
@@ -31,15 +38,15 @@ return [
     'auth' => [
 
         // Fully qualified namespace of the Admin model
-        'user_model_fqn' => App\Incrudible\Models\Admin::class,
+        'user_model_fqn' => Admin::class,
 
         // The classes for the middleware to check if the visitor is an admin
         'middleware_classes' => [
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Incrudible\Http\Middleware\HandleIncrudibleRequests::class,
-            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            StartSession::class,
+            ShareErrorsFromSession::class,
+            HandleIncrudibleRequests::class,
+            AddLinkHeadersForPreloadedAssets::class,
+            SubstituteBindings::class,
         ],
 
         // Alias for that middleware

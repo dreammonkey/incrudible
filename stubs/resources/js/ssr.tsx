@@ -1,28 +1,28 @@
-import ReactDOMServer from 'react-dom/server';
-import { createInertiaApp } from '@inertiajs/react';
-import createServer from '@inertiajs/react/server';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { route } from '../../vendor/tightenco/ziggy';
-import { RouteName } from 'ziggy-js';
+import './bootstrap'
+import '../css/incrudible.css'
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+import { ThemeProvider } from '@/Incrudible/Context/theme-provider'
+import { createInertiaApp } from '@inertiajs/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-createServer((page) =>
-    createInertiaApp({
-        page,
-        render: ReactDOMServer.renderToString,
-        title: (title) => `${title} - ${appName}`,
-        resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
-        setup: ({ App, props }) => {
-            global.route<RouteName> = (name, params, absolute) =>
-                route(name, params as any, absolute, {
-                    // @ts-expect-error
-                    ...page.props.ziggy,
-                    // @ts-expect-error
-                    location: new URL(page.props.ziggy.location),
-                });
+const appName = import.meta.env.VITE_APP_NAME || 'Incrudible'
 
-            return <App {...props} />;
-        },
-    })
-);
+const queryClient = new QueryClient()
+
+createInertiaApp({
+  pages: './Incrudible/Pages',
+  title: (title) => (title ? `${title} - ${appName}` : appName),
+  strictMode: true,
+  withApp(app) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          {app}
+        </ThemeProvider>
+      </QueryClientProvider>
+    )
+  },
+  progress: {
+    color: '#4B5563',
+  },
+})

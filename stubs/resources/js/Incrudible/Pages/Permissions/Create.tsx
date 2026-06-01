@@ -1,8 +1,8 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import PermissionController from '@/actions/App/Incrudible/Http/Controllers/PermissionController'
 import { cn } from '@/lib/utils'
 import {
   Permission,
@@ -24,7 +24,6 @@ export default function PermissionCreate({
   fields: InputField[]
   rules: FormRules
 }>) {
-  const { routePrefix } = useIncrudible()
   const { toast } = useToast()
   const formRef = useRef<FormRef<Permission>>(null!)
 
@@ -32,7 +31,7 @@ export default function PermissionCreate({
     mutationFn: (data: Permission) => {
       /** Inertia js router.* does not support async requests */
       return new Promise<void>((resolve, reject) => {
-        router.post(route(`${routePrefix}.permissions.store`, []), data, {
+        router.post(PermissionController.store(), data, {
           onSuccess: () => {
             resolve()
           },
@@ -78,7 +77,7 @@ export default function PermissionCreate({
             Create Permission
           </h2>
           <Link
-            href={route(`${routePrefix}.permissions.index`, [])}
+            href={PermissionController.index()}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',

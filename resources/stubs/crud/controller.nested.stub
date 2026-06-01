@@ -98,7 +98,7 @@ class {{ class }} extends Controller
             {{ parentProps }}
             '{{ model }}' => ${{ model }}->toResource(),
             ...config('incrudible.{{ crudRoute }}.update'),
-            'relations' => $this->relations('{{ crudRoute }}'),
+            'relations' => $this->relations('{{ crudRoute }}', ${{ model }}),
         ]);
     }
 

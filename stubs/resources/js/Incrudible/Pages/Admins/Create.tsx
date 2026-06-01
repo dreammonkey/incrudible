@@ -1,8 +1,8 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { useToast } from '@/Incrudible/Hooks/use-toast'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import AdminController from '@/actions/App/Incrudible/Http/Controllers/AdminController'
 import { cn } from '@/lib/utils'
 import { Admin, InputField, FormRules, PageProps } from '@/types/incrudible'
 import { Head, Link, router } from '@inertiajs/react'
@@ -18,7 +18,6 @@ export default function AdminCreate({
   fields: InputField[]
   rules: FormRules
 }>) {
-  const { routePrefix } = useIncrudible()
   const { toast } = useToast()
   const formRef = useRef<FormRef<Admin>>(null!)
 
@@ -26,7 +25,7 @@ export default function AdminCreate({
     mutationFn: (data: Admin) => {
       /** Inertia js router.* does not support async requests */
       return new Promise<void>((resolve, reject) => {
-        router.post(route(`${routePrefix}.admins.store`, []), data, {
+        router.post(AdminController.store(), data, {
           onSuccess: () => {
             resolve()
           },
@@ -72,7 +71,7 @@ export default function AdminCreate({
             Create Admin
           </h2>
           <Link
-            href={route(`${routePrefix}.admins.index`, [])}
+            href={AdminController.index()}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',

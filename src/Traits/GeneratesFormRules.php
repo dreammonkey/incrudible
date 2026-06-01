@@ -5,7 +5,7 @@ namespace Incrudible\Incrudible\Traits;
 use App\Incrudible\Enum\FieldTypes;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use LaracraftTech\LaravelSchemaRules\Contracts\SchemaRulesResolverInterface;
+use Incrudible\Incrudible\Schema\SchemaRulesResolver;
 
 trait GeneratesFormRules
 {
@@ -22,10 +22,7 @@ trait GeneratesFormRules
      */
     public function getFormRules(string $table, ?string $filter = null): array
     {
-        $rules = app()->make(SchemaRulesResolverInterface::class, [
-            'table' => $table,
-            'columns' => [],
-        ])->generate();
+        $rules = (new SchemaRulesResolver($table))->generate();
 
         if ($filter) {
             $rules = collect($rules)->filter(function ($rules) use ($filter) {
@@ -100,15 +97,15 @@ trait GeneratesFormRules
         // For example, you can use the field's data type or any custom logic
 
         if (in_array($field, ['password', 'password_confirmation'])) {
-            return FieldTypes::PASSWORD;
+            return FieldTypes::PASSWORD->value;
         }
 
         if (in_array($field, ['email'])) {
-            return FieldTypes::EMAIL;
+            return FieldTypes::EMAIL->value;
         }
 
         if (in_array('date', $rules)) {
-            return FieldTypes::DATE;
+            return FieldTypes::DATE->value;
         }
 
         // Define common date and datetime formats
@@ -136,26 +133,26 @@ trait GeneratesFormRules
             if (strpos($rule, 'date_format:') === 0) {
                 $format = str_replace('date_format:', '', $rule);
                 if (in_array($format, $dateTimeFormats)) {
-                    return FieldTypes::DATETIME;
+                    return FieldTypes::DATETIME->value;
                 }
                 if (in_array($format, $dateFormats)) {
-                    return FieldTypes::DATE;
+                    return FieldTypes::DATE->value;
                 }
                 if (in_array($format, $timeFormats)) {
-                    return FieldTypes::TIME;
+                    return FieldTypes::TIME->value;
                 }
             }
         }
 
         if (in_array('integer', $rules)) {
-            return FieldTypes::NUMBER;
+            return FieldTypes::NUMBER->value;
         }
 
         if (in_array('boolean', $rules)) {
-            return FieldTypes::CHECKBOX;
+            return FieldTypes::CHECKBOX->value;
         }
 
-        return FieldTypes::TEXT;
+        return FieldTypes::TEXT->value;
     }
 
     /**

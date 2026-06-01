@@ -20,7 +20,9 @@ class Incrudible
      */
     public function admin(): ?Admin
     {
-        return Auth::guard(self::guardName())->user();
+        $admin = Auth::guard(self::guardName())->user();
+
+        return $admin instanceof Admin ? $admin : null;
     }
 
     /**
@@ -73,13 +75,59 @@ class Incrudible
     }
 
     /**
+     * Resolve menu route names to URLs before sharing them with the browser.
+     */
+    private function menuWithUrls(array $menu): array
+    {
+        if (isset($menu['items']) && is_array($menu['items'])) {
+            $menu['items'] = $this->menuItemsWithUrls($menu['items']);
+        }
+
+        if (isset($menu['top_right_items']) && is_array($menu['top_right_items'])) {
+            $menu['top_right_items'] = $this->menuItemsWithUrls($menu['top_right_items']);
+        }
+
+        return $menu;
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $items
+     * @return array<int, array<string, mixed>>
+     */
+    private function menuItemsWithUrls(array $items): array
+    {
+        return array_map(function (array $item): array {
+            if (isset($item['route']) && is_string($item['route'])) {
+                $item['url'] = $this->menuRouteUrl($item['route']);
+            }
+
+            if (isset($item['items']) && is_array($item['items'])) {
+                $item['items'] = $this->menuItemsWithUrls($item['items']);
+            }
+
+            return $item;
+        }, $items);
+    }
+
+    private function menuRouteUrl(string $route): ?string
+    {
+        try {
+            return route(self::routePrefix().'.'.$route, [], false);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
      * Convert this Incrudible class to an array.
      */
     public function toArray(): array
     {
         return [
             'routePrefix' => self::routePrefix(),
-            'menu' => self::menu(),
+            'currentRouteName' => request()->route()?->getName(),
+            'currentUrl' => request()->getRequestUri(),
+            'menu' => $this->menuWithUrls(self::menu()),
         ];
     }
 }

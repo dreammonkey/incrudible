@@ -10,20 +10,20 @@ trait GeneratesCruds
      * Get the default namespace for the class.
      *
      * @param  string  $rootNamespace
-     * @return string
      */
-    protected function getDefaultNamespace($rootNamespace)
+    protected function getDefaultNamespace($rootNamespace): string
     {
-        return config('incrudible.namespace');
+        $namespace = config('incrudible.namespace', 'App\\Incrudible');
+
+        return is_string($namespace) ? $namespace : 'App\\Incrudible';
     }
 
     /**
      * Resolve the fully-qualified path to the stub.
      *
      * @param  string  $stub
-     * @return string
      */
-    protected function resolveStubPath($stub)
+    protected function resolveStubPath($stub): string
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
@@ -32,18 +32,22 @@ trait GeneratesCruds
 
     /**
      * Format model argument to studly case.
-     *
-     * @return array
      */
-    protected function getModelName($argument = 'table')
+    protected function getModelName($argument = 'table'): string
     {
-        return Str::studly(Str::singular($this->argument($argument)));
+        $value = $this->argument($argument);
+
+        if (is_array($value)) {
+            $value = reset($value) ?: '';
+        }
+
+        return Str::studly(Str::singular((string) $value));
     }
 
     /**
      * Format the database table name
      */
-    protected function getTableName($argument = 'table')
+    protected function getTableName($argument = 'table'): string
     {
         return Str::plural(Str::lower($this->getModelName($argument)));
     }
@@ -51,7 +55,7 @@ trait GeneratesCruds
     /**
      * Create the crud route name.
      */
-    protected function getRouteName()
+    protected function getRouteName(): string
     {
         $parents = $this->getParents();
 
@@ -68,13 +72,17 @@ trait GeneratesCruds
 
     /**
      * Format parents argument to array of pluralized lowercase strings.
-     *
-     * @return array
      */
-    protected function getParents()
+    protected function getParents(): array
     {
+        $parents = $this->argument('parents') ?? [];
+
+        if (! is_array($parents)) {
+            $parents = [$parents];
+        }
+
         return array_map(function ($parent) {
-            return Str::plural(Str::lower($parent));
-        }, $this->argument('parents') ?? []);
+            return Str::plural(Str::lower((string) $parent));
+        }, $parents);
     }
 }

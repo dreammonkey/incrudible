@@ -19,32 +19,35 @@ trait RegistersAuthProvider
     public function registerAuthProvider()
     {
         // add the incrudible_users authentication provider to the configuration
-        app()->config['auth.providers'] = app()->config['auth.providers'] +
-            [
+        config([
+            'auth.providers' => config('auth.providers', []) + [
                 Incrudible::guardName() => [
                     'driver' => 'eloquent',
                     'model' => config('incrudible.auth.user_model_fqn'),
                 ],
-            ];
+            ],
+        ]);
 
         // add the incrudible guard to the configuration
-        app()->config['auth.guards'] = app()->config['auth.guards'] +
-            [
+        config([
+            'auth.guards' => config('auth.guards', []) + [
                 Incrudible::guardName() => [
                     'driver' => 'session',
                     'provider' => Incrudible::guardName(),
                 ],
-            ];
+            ],
+        ]);
 
         // add the incrudible password provider to the configuration
-        app()->config['auth.passwords'] = app()->config['auth.passwords'] +
-            [
+        config([
+            'auth.passwords' => config('auth.passwords', []) + [
                 Incrudible::guardName() => [
                     'provider' => Incrudible::guardName(),
                     'table' => 'password_reset_tokens',
                     'expire' => 60,
                     'throttle' => 60,
                 ],
-            ];
+            ],
+        ]);
     }
 }

@@ -25,7 +25,7 @@ class Permission extends SpatiePermission
     /**
      * Transform model into a resource.
      */
-    public function toResource(): PermissionResource
+    public function toResource(?string $resourceClass = null): PermissionResource
     {
         return new PermissionResource($this);
     }

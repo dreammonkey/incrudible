@@ -1,7 +1,7 @@
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import AdminController from '@/actions/App/Incrudible/Http/Controllers/AdminController'
 import { cn } from '@/lib/utils'
 import {
   Admin,
@@ -25,8 +25,6 @@ export default function AdminShow({
   fields: InputField[]
   rules: FormRules
 }>) {
-  const { routePrefix } = useIncrudible()
-
   const formRef = useRef<FormRef<Admin>>(null!)
 
   return (
@@ -38,7 +36,7 @@ export default function AdminShow({
             Show Admin
           </h2>
           <Link
-            href={route(`${routePrefix}.admins.index`, [])}
+            href={AdminController.index()}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',

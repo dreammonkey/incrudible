@@ -4,7 +4,6 @@ namespace Incrudible\Incrudible\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\App;
 use Incrudible\Incrudible\Traits\BreezeHelpers;
 
 class ScaffoldIncrudible extends Command
@@ -18,90 +17,50 @@ class ScaffoldIncrudible extends Command
 
     public function handle(): int
     {
-        // composer require...
-        if (version_compare(App::version(), '11.0.0', '>=')) {
-            // Laravel >= 11
-            if (! $this->requireComposerPackages([
-                'inertiajs/inertia-laravel:^1.0',
-                'laravel/sanctum:^4.0',
-                'tightenco/ziggy:^2.0',
-                'laracraft-tech/laravel-schema-rules:^1.4',
-                'spatie/laravel-permission:^6.9',
-            ])) {
-                return 1;
-            }
-        } else {
-            // Laravel < 11
-            if (! $this->requireComposerPackages([
-                'inertiajs/inertia-laravel:^0.6.8',
-                'laravel/sanctum:^3.2',
-                'tightenco/ziggy:^2.0',
-                'laracraft-tech/laravel-schema-rules:^1.4',
-                'spatie/laravel-permission:^6.9',
-            ])) {
-                return 1;
-            }
+        if (! $this->requireComposerPackages([
+            'inertiajs/inertia-laravel:^3.0',
+            'laravel/sanctum:^4.0',
+            'spatie/laravel-permission:^7.0',
+            'laravel/wayfinder:^0.1',
+        ])) {
+            return 1;
         }
 
-        // Publish vendor assets...
         $this->call('vendor:publish', [
             '--provider' => "Spatie\Permission\PermissionServiceProvider",
         ]);
 
-        // NPM Packages...
         $this->updatePackageJson(function ($packages) {
             return [
-                // TODO: drop headlessui/react, using shadcn instead
-                '@headlessui/react' => '^2.0.0',
-                '@hookform/resolvers' => '^3.4.2',
-                '@inertiajs/react' => '^1.0.0',
-                '@radix-ui/react-checkbox' => '^1.0.4',
-                '@radix-ui/react-collapsible' => '^1.0.3',
-                '@radix-ui/react-dialog' => '^1.0.5',
-                '@radix-ui/react-dropdown-menu' => '^2.0.6',
-                '@radix-ui/react-label' => '^2.0.2',
-                '@radix-ui/react-popover' => '^1.1.1',
-                '@radix-ui/react-select' => '^2.0.0',
-                '@radix-ui/react-slot' => '^1.0.2',
-                '@radix-ui/react-switch' => '^1.1.0',
-                '@radix-ui/react-toast' => '^1.2.1',
-                '@tailwindcss/forms' => '^0.5.3',
-                '@tanstack/react-table' => '^8.17.3',
-                '@tanstack/react-query' => '^5.40.0',
-                '@types/node' => '^18.13.0',
-                '@types/react' => '^18.0.28',
-                '@types/react-dom' => '^18.0.10',
-                '@types/react-input-mask' => '^3.0.5',
-                '@uidotdev/usehooks' => '^2.4.1',
-                '@vitejs/plugin-react' => '^4.0.3',
-                'autoprefixer' => '^10.4.12',
-                'axios' => '^1.6.4',
-                'class-variance-authority' => '^0.7.0',
-                'clsx' => '^2.1.0',
-                'cmdk' => '1.0.0',
-                'date-fns' => '^3.6.0',
-                'laravel-vite-plugin' => '^1.0',
-                'lucide-react' => '^0.368.0',
-                'postcss' => '^8.4.31',
-                'prettier' => '^3.3.2',
-                'prettier-plugin-tailwindcss' => '^0.6.3',
-                'react' => '^18.2.0',
-                'react-day-picker' => '^8.10.1',
-                'react-dom' => '^18.2.0',
-                'react-hook-form' => '^7.51.5',
-                'react-input-mask' => '^2.0.4',
-                'tailwind-merge' => '^2.2.2',
-                'tailwindcss' => '^3.2.1',
-                'tailwindcss-animate' => '^1.0.7',
-                'typescript' => '^5.0.2',
-                'vite' => '^5.0',
-                'web-api-hooks' => '^3.0.2',
-                'ziggy-js' => '^2.3.0',
-                'zod' => '^3.23.8',
+                '@inertiajs/react' => '^3.0',
+                '@inertiajs/vite' => '^3.0',
+                '@laravel/vite-plugin-wayfinder' => '^0.1',
+                '@tailwindcss/vite' => '^4.0',
+                '@tanstack/react-query' => '^5',
+                '@tanstack/react-table' => '^8',
+                '@types/react' => '^19.0',
+                '@types/react-dom' => '^19.0',
+                '@vitejs/plugin-react' => '^6.0',
+                'babel-plugin-react-compiler' => '^1.0',
+                'class-variance-authority' => '^0.7',
+                'clsx' => '^2',
+                'date-fns' => '^3',
+                'laravel-vite-plugin' => '^3.0',
+                'lucide-react' => '^0.475',
+                'prettier' => '^3.3',
+                'prettier-plugin-tailwindcss' => '^0.6',
+                'react' => '^19.0',
+                'react-dom' => '^19.0',
+                'react-hook-form' => '^7',
+                'sonner' => '^2.0',
+                'tailwind-merge' => '^3',
+                'tailwindcss' => '^4.0',
+                'typescript' => '^5.7',
+                'vite' => '^8.0',
+                'zod' => '^3',
             ] + $packages;
         }, 'devDependencies');
 
-        // Prettier
         $this->updatePackageJson(function ($entries) {
             return [
                 'semi' => false,
@@ -112,21 +71,12 @@ class ScaffoldIncrudible extends Command
             ] + $entries;
         }, 'prettier');
 
-        // Copy Incrudible App...
         (new Filesystem)->ensureDirectoryExists(app_path('Incrudible'));
         (new Filesystem)->copyDirectory(
             __DIR__ . '/../../stubs/app/Incrudible',
             app_path('Incrudible')
         );
 
-        // // Views...
-        // copy(
-        //     __DIR__ . '/../../stubs/resources/views/incrudible.blade.php',
-        //     resource_path('views/incrudible.blade.php')
-        // );
-
-        // Resources...
-        // Components + Pages...
         (new Filesystem)->ensureDirectoryExists(resource_path('js/Incrudible'));
         (new Filesystem)->copyDirectory(
             __DIR__ . '/../../stubs/resources/js/Incrudible',
@@ -149,15 +99,12 @@ class ScaffoldIncrudible extends Command
             resource_path('js/bootstrap.ts')
         );
 
-        // Tailwind / Vite / Typescript / shadcn...
         copy(__DIR__ . '/../../stubs/resources/css/incrudible.css', resource_path('css/incrudible.css'));
-        copy(__DIR__ . '/../../stubs/postcss.config.js', base_path('postcss.config.js'));
-        copy(__DIR__ . '/../../stubs/incrudible.tailwind.config.js', base_path('incrudible.tailwind.config.js'));
-        copy(__DIR__ . '/../../stubs/vite.config.js', base_path('vite.config.js'));
+        copy(__DIR__ . '/../../stubs/vite.config.ts', base_path('vite.config.ts'));
         copy(__DIR__ . '/../../stubs/tsconfig.json', base_path('tsconfig.json'));
         copy(__DIR__ . '/../../stubs/components.json', base_path('components.json'));
 
-        $this->replaceInFile('"vite build"', '"vite build && vite build --ssr"', base_path('package.json'));
+        $this->call('wayfinder:generate');
 
         $this->comment('All done');
 

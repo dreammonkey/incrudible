@@ -1,9 +1,9 @@
 import { CrudRelations } from '@/Incrudible/Components/CrudRelations/CrudRelations'
 import IncrudibleForm, { FormRef } from '@/Incrudible/Components/IncrudibleForm'
 import { useToast } from '@/Incrudible/Hooks/use-toast'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import AuthenticatedLayout from '@/Incrudible/Layouts/AuthenticatedLayout'
 import { buttonVariants } from '@/Incrudible/ui/button'
+import PermissionController from '@/actions/App/Incrudible/Http/Controllers/PermissionController'
 import { cn } from '@/lib/utils'
 import {
   Permission,
@@ -32,7 +32,6 @@ export default function PermissionEdit({
   rules: FormRules
   relations: CrudRelation<CrudResource>[]
 }>) {
-  const { routePrefix } = useIncrudible()
   const { toast } = useToast()
   const formRef = useRef<FormRef<Permission>>(null!)
 
@@ -40,7 +39,7 @@ export default function PermissionEdit({
     mutationFn: (data: Permission) => {
       return new Promise<void>((resolve, reject) => {
         router.put(
-          route(`${routePrefix}.permissions.update`, [permission.data.id]),
+          PermissionController.update([permission.data.id]),
           data,
           {
             onSuccess: () => {
@@ -91,7 +90,7 @@ export default function PermissionEdit({
             Edit Permission
           </h2>
           <Link
-            href={route(`${routePrefix}.permissions.index`, [])}
+            href={PermissionController.index()}
             className={cn(
               buttonVariants({ variant: 'outline', size: 'sm' }),
               'ml-auto',

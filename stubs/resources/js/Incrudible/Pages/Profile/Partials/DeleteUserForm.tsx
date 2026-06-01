@@ -1,6 +1,5 @@
 import InputError from '@/Incrudible/Components/InputError'
 import Modal from '@/Incrudible/Components/Modal'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { Button } from '@/Incrudible/ui/button'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
@@ -12,9 +11,8 @@ export default function DeleteUserForm({
 }: Readonly<{
   className?: string
 }>) {
-  const { routePrefix } = useIncrudible()
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false)
-  const passwordInput = useRef<HTMLInputElement>()
+  const passwordInput = useRef<HTMLInputElement>(null)
 
   const {
     data,
@@ -34,7 +32,7 @@ export default function DeleteUserForm({
   const deleteUser: FormEventHandler = (e) => {
     e.preventDefault()
 
-    destroy(route(`${routePrefix}.auth.profile.destroy`), {
+    destroy('#', {
       preserveScroll: true,
       onSuccess: () => closeModal(),
       onError: () => passwordInput.current?.focus(),

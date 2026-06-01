@@ -1,8 +1,8 @@
 import InputError from '@/Incrudible/Components/InputError'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import { Button } from '@/Incrudible/ui/button'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
+import PasswordController from '@/actions/App/Incrudible/Http/Controllers/Auth/PasswordController'
 import { Transition } from '@headlessui/react'
 import { useForm } from '@inertiajs/react'
 import { FormEventHandler, useRef } from 'react'
@@ -12,8 +12,6 @@ export default function UpdatePasswordForm({
 }: Readonly<{
   className?: string
 }>) {
-  const { routePrefix } = useIncrudible()
-
   const passwordInput = useRef<HTMLInputElement>(null!)
   const currentPasswordInput = useRef<HTMLInputElement>(null!)
 
@@ -26,7 +24,7 @@ export default function UpdatePasswordForm({
   const updatePassword: FormEventHandler = (e) => {
     e.preventDefault()
 
-    put(route(`${routePrefix}.password.update`), {
+    put(PasswordController.update().url, {
       preserveScroll: true,
       onSuccess: () => reset(),
       onError: (errors) => {

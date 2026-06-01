@@ -5,7 +5,6 @@ namespace App\Incrudible\Http\Middleware;
 use Illuminate\Http\Request;
 use Incrudible\Incrudible\Facades\Incrudible;
 use Inertia\Middleware;
-use Tighten\Ziggy\Ziggy;
 
 class HandleIncrudibleRequests extends Middleware
 {
@@ -38,11 +37,6 @@ class HandleIncrudibleRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'admin' => $admin,
-            ],
-            'ziggy' => fn () => [
-                ...(new Ziggy)->toArray(),
-                'location' => url()->current(),
-                'query' => $request->query(),
             ],
             'incrudible' => [
                 ...(Incrudible::toArray()),

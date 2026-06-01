@@ -110,7 +110,6 @@ trait BreezeHelpers
     /**
      * Update the "package.json" file.
      *
-     * @param  bool  $dev
      * @return void
      */
     protected static function updatePackageJson(callable $callback, $configurationKey = 'devDependencies')

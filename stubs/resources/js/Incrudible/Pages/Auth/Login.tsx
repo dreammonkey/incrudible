@@ -1,11 +1,12 @@
 import InputError from '@/Incrudible/Components/InputError'
-import { useIncrudible } from '@/Incrudible/Hooks/use-incrudible'
 import GuestLayout from '@/Incrudible/Layouts/GuestLayout'
 import { Button } from '@/Incrudible/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Incrudible/ui/card'
 import { Checkbox } from '@/Incrudible/ui/checkbox'
 import { Input } from '@/Incrudible/ui/input'
 import { Label } from '@/Incrudible/ui/label'
+import AuthenticatedSessionController from '@/actions/App/Incrudible/Http/Controllers/Auth/AuthenticatedSessionController'
+import PasswordResetLinkController from '@/actions/App/Incrudible/Http/Controllers/Auth/PasswordResetLinkController'
 import { Head, Link, useForm } from '@inertiajs/react'
 import { FormEventHandler, useEffect } from 'react'
 
@@ -18,8 +19,6 @@ export default function Login({
   canResetPassword: boolean
   canRegister?: boolean
 }>) {
-  const { routePrefix } = useIncrudible()
-
   const { data, setData, post, processing, errors, reset } = useForm({
     email: '',
     password: '',
@@ -34,7 +33,7 @@ export default function Login({
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
-    post(route(`${routePrefix}.auth.login`))
+    post(AuthenticatedSessionController.store().url)
   }
 
   return (
@@ -70,7 +69,7 @@ export default function Login({
                   <Label htmlFor="password">Password</Label>
                   <Link
                     disabled={!canResetPassword}
-                    href={route(`${routePrefix}.auth.password.request`)}
+                    href={PasswordResetLinkController.create()}
                     className="ml-auto inline-block text-sm underline"
                   >
                     Forgot your password?
@@ -118,7 +117,6 @@ export default function Login({
               Don&apos;t have an account?{' '}
               <Link
                 href="#"
-                // href={route(`${routePrefix}.register`)}
                 className="underline"
               >
                 Sign up

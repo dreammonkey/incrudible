@@ -31,10 +31,7 @@ You can scaffold the admin panel code with:
 
 ```bash
 php artisan incrudible:scaffold
-# npm:
-npm ci && npm run dev
-# yarn:
-yarn && yarn dev
+pnpm install && pnpm dev
 ```
 
 You can publish route files with:

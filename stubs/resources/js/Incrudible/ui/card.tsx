@@ -15,7 +15,6 @@ const Card = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 Card.displayName = 'Card'
 
 const CardHeader = React.forwardRef<
@@ -28,7 +27,6 @@ const CardHeader = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 CardHeader.displayName = 'CardHeader'
 
 const CardTitle = React.forwardRef<
@@ -44,7 +42,6 @@ const CardTitle = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 CardTitle.displayName = 'CardTitle'
 
 const CardDescription = React.forwardRef<
@@ -57,7 +54,6 @@ const CardDescription = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 CardDescription.displayName = 'CardDescription'
 
 const CardContent = React.forwardRef<
@@ -66,7 +62,6 @@ const CardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
 ))
-// @ts-expect-error - displayName is a legacy prop
 CardContent.displayName = 'CardContent'
 
 const CardFooter = React.forwardRef<
@@ -79,7 +74,6 @@ const CardFooter = React.forwardRef<
     {...props}
   />
 ))
-// @ts-expect-error - displayName is a legacy prop
 CardFooter.displayName = 'CardFooter'
 
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
